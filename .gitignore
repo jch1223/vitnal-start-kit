@@ -8,13 +8,13 @@ dev-debug.log
 
 # Dependency directories
 node_modules/
+dist/
 
 # Environment variables
 .env
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -23,3 +23,6 @@ node_modules/
 
 # OS specific
 .DS_Store
+
+# Build output
+/dist

@@ -1,0 +1,46 @@
+{
+  "name": "vitnal-start-kit",
+  "version": "1.0.0",
+  "description": "CLI to bootstrap a React + TypeScript project with opinionated defaults.",
+  "type": "commonjs",
+  "main": "dist/cli.js",
+  "bin": {
+    "create-vitnal": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --check \"src/**/*.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jch1223/vitnal-start-kit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "bugs": {
+    "url": "https://github.com/jch1223/vitnal-start-kit/issues"
+  },
+  "homepage": "https://github.com/jch1223/vitnal-start-kit#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.2"
+  }
+}
