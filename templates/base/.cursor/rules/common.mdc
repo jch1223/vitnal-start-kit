@@ -280,7 +280,7 @@ export const SubmitButton = ({ onSubmit }: { onSubmit: () => void }) => (
 
 - **Function Header Comment** — At the start of each function, summarize **what** it does and any non-obvious **why**. (함수 헤더 주석)
 - **JSDoc for JS** — Use JSDoc for JavaScript modules; TypeScript should rely on types and concise comments. (JS에는 JSDoc 사용)
-- **Intent \> Syntax** — Comments explain rationale, assumptions, caveats. (의도 중심 주석)
+- **Intent > Syntax** — Comments explain rationale, assumptions, caveats. (의도 중심 주석)
 
 ---
 
@@ -387,7 +387,7 @@ export const SubmitButton = ({ onSubmit }: { onSubmit: () => void }) => (
 
 ## Implementation Guidelines (React / Next.js / TypeScript / Tailwind) (구현 가이드라인)
 
-- **Readable \> Clever**; simplify with **early returns**. (가독성 우선)
+- **Readable > Clever**; simplify with **early returns**. (가독성 우선)
 - Prefer **arrow functions** (`const fn = () => {}`) over `function`. (화살표 함수 선호)
 - **Tailwind-only** styling; avoid separate CSS / inline `<style>`. (Tailwind 스타일링)
 - Handlers use **`handleXxx`** naming. (핸들러 명명 규칙)
@@ -405,19 +405,6 @@ export const SubmitButton = ({ onSubmit }: { onSubmit: () => void }) => (
 
 ---
 
-## Consistency Prompt (Preface When Implementing) (일관성 프롬프트 - 구현 전)
-
-Before implementing this feature, I will:
-
-1.  analyze the existing style conventions,
-2.  create a brief style profile,
-3.  implement the feature following that profile, and
-4.  verify the result maintains consistency with the codebase.
-
-> Provide a **concise high-level plan** (pseudocode outline) before code. Avoid revealing internal step-by-step reasoning; keep the plan short and actionable.
-
----
-
 ## File Analysis Hints & Adaptation Techniques (파일 분석 힌트 및 적응 기법)
 
 **Hints** — check most-recent files, similar features, widely used utilities/helpers, tests, and import patterns. (힌트: 최신 파일, 유사 기능, 유틸리티, 테스트 확인)
@@ -428,7 +415,7 @@ Before implementing this feature, I will:
 
 When adding or using external libraries, the AI must strictly adhere to the following principles regarding **currency and stability**.
 
-## 1\. Installation Principles (설치 원칙)
+## 1. Installation Principles (설치 원칙)
 
 - **Latest Stable Version Essential** (최신 안정 버전 필수)
   - Always install the **most recent stable release** of a package.
@@ -439,7 +426,7 @@ When adding or using external libraries, the AI must strictly adhere to the foll
   - Do not suggest libraries that are **deprecated** or have been unmaintained (abandonware) for several years.
   - Prioritize suggesting modern, actively maintained alternatives.
 
-## 2\. Documentation & Code Generation (문서 및 코드 생성)
+## 2. Documentation & Code Generation (문서 및 코드 생성)
 
 - **Latest Official Docs First** (최신 공식 문서 우선)
   - When generating code, prioritize **current official documentation** over the AI's internal training data (which may be outdated).
@@ -449,12 +436,12 @@ When adding or using external libraries, the AI must strictly adhere to the foll
 - **Avoid Legacy Patterns** (레거시 패턴 지양)
   - Do not use patterns marked as **Deprecated** or **Not Recommended** in the official documentation.
 
-## 3\. Version Compatibility Check (버전 호환성 확인)
+## 3. Version Compatibility Check (버전 호환성 확인)
 
 - When adding a new library, verify its compatibility with the versions of core frameworks (React, Next.js, Node.js, etc.) defined in the current project's `package.json`.
 - Alert the user in advance if there is a potential for `peerDependencies` warnings.
 
-## 4\. Execution Examples (실행 예시)
+## 4. Execution Examples (실행 예시)
 
 - **Do:** `npm install tanstack-query@latest` (After confirming stable version)
 - **Don't:** `npm install tanstack-query@beta` (No unstable versions)
@@ -465,18 +452,18 @@ When adding or using external libraries, the AI must strictly adhere to the foll
 
 To ensure the code changes align with the user's intent, follow this workflow for every request:
 
-## 1\. Analyze & Plan (분석 및 계획)
+## 1. Analyze & Plan (분석 및 계획)
 
 - Before generating any code, analyze the user's request.
 - Briefly outline the **steps** you intend to take.
 - List the **files** you plan to create or modify.
 
-## 2\. Ask for Confirmation (승인 요청)
+## 2. Ask for Confirmation (승인 요청)
 
 - Explicitly ask the user for permission to proceed.
 - Example: "Here is the plan. Shall I proceed?" or "Do you want me to implement this?"
 
-## 3\. Execution (실행)
+## 3. Execution (실행)
 
 - **Do NOT** output any code blocks or apply edits until the user confirms (e.g., "Yes", "Go ahead").
 - Only after receiving confirmation, proceed with generating the code.
@@ -484,3 +471,40 @@ To ensure the code changes align with the user's intent, follow this workflow fo
 ## Exception (예외)
 
 - If the user explicitly says "Just do it", "Immediately apply", or "No need to ask", you may skip the confirmation step.
+
+# Post-Task Quality Verification
+
+After generating or modifying code, you **must** perform the following quality verification steps before marking the task as complete.
+
+## 1. Identify Verification Scripts
+
+- Read the `package.json` file to identify the validation commands used in the project.
+- Look for the following keywords:
+  - **Type Check**: `typecheck`, `tsc`, `build` (e.g., `npm run typecheck`)
+  - **Lint**: `lint` (e.g., `npm run lint`)
+  - **Test**: `test` (e.g., `npm test`)
+
+## 2. Run & Fix Loop
+
+Execute the identified commands in order. If an error occurs, attempt to fix it immediately.
+
+### Step A: Type Check (Priority 1)
+
+- Run `tsc` or the relevant type-check command.
+- **On Error**: Fix types (e.g., augment interfaces, add type guards), or correct imports. Avoid using `any`; resolve issues with the safest possible types.
+
+### Step B: Lint (Priority 2)
+
+- Run the lint command.
+- **On Error**: Fix code style issues, remove unused variables, or address other linter warnings.
+
+### Step C: Test (Priority 3)
+
+- Run unit tests related to the modified files. (If the full test suite takes too long, run only relevant tests).
+- **On Error**: Modify the implementation to pass the tests. If the test code itself is outdated and broken, update the test code.
+
+## 3. Final Report
+
+- Mark the task as complete only when all checks pass (Exit Code 0).
+- Explicitly inform the user: **"Passed all type checks, linting, and tests."**
+- If an error is beyond your ability to fix, report the error log and state: "This part requires manual intervention."
