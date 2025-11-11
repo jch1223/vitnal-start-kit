@@ -3,18 +3,22 @@
 import { Command } from 'commander';
 
 import packageJson from '../package.json';
+import { normalizeProjectName } from './lib/normalize-project-name';
 import { promptForOptions } from './lib/prompts';
+import { createProject } from './lib/scaffold';
 
-const executeCreateCommand = (projectName: string): void => {
-  const normalizedName = projectName.trim();
+import type { ResolvedConfig } from './types/config';
 
-  if (!normalizedName) {
-    console.error('Project name must not be empty.');
-    process.exit(1);
-  }
+const executeCreateCommand = async (projectName: string): Promise<void> => {
+  const normalizedName = normalizeProjectName(projectName);
+  const options = await promptForOptions();
 
-  // TODO: Replace with scaffold logic (copy template, install deps, etc.)
-  console.log(`Project directory '${normalizedName}' will be created.`);
+  const config: ResolvedConfig = {
+    projectName: normalizedName,
+    options,
+  };
+
+  await createProject(config);
 };
 
 const configureCreateCommand = (program: Command): void => {
@@ -22,16 +26,13 @@ const configureCreateCommand = (program: Command): void => {
     .command('create')
     .description('Generate a new Vitnal project in the target directory.')
     .argument('<project-name>', 'The name of the project directory to create')
-    .action((projectName: string) => {
-      executeCreateCommand(projectName);
-      promptForOptions()
-        .then((options) => {
-          console.log('Selected options:', options);
-        })
-        .catch((error) => {
-          console.error('Failed to collect options:', error);
-          process.exit(1);
-        });
+    .action(async (projectName: string) => {
+      try {
+        await executeCreateCommand(projectName);
+      } catch (error) {
+        console.error('Failed to create project:', error);
+        process.exit(1);
+      }
     });
 };
 
