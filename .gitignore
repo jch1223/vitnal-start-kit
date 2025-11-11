@@ -23,6 +23,3 @@ dist/
 
 # OS specific
 .DS_Store
-
-# Build output
-/dist

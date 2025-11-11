@@ -19,7 +19,7 @@ Follow these guidelines to ensure your code is clean, maintainable, and adheres 
 **5** **Testability**: Ensure your code is easy to test.
 **6** **Reusability**: Write reusable components and functions.
 
-Code Guidelines
+# Code Guidelines
 
 **1** **Utilize Early Returns**: Use early returns to avoid nested conditions and improve readability.
 **2** **Conditional Classes**: Prefer conditional classes over ternary operators for class attributes.
@@ -29,16 +29,16 @@ Code Guidelines
 **6** **Functional and Immutable Style**: Prefer a functional, immutable style unless it becomes much more verbose.
 **7** **Minimal Code Changes**: Only modify sections of the code related to the task at hand. Avoid modifying unrelated pieces of code. Accomplish goals with minimal code changes.
 
-Comments and Documentation
+# Comments and Documentation
 
 - **Function Comments**: Add a comment at the start of each function describing what it does.
 - **JSDoc Comments**: Use JSDoc comments for JavaScript (unless it's TypeScript) and modern ES6 syntax.
 
-Function Ordering
+# Function Ordering
 
 - Order functions with those that are composing other functions appearing earlier in the file. For example, if you have a menu with multiple buttons, define the menu function above the buttons.
 
-Handling Bugs
+# Handling Bugs
 
 - **TODO Comments**: If you encounter a bug in existing code, or the instructions lead to suboptimal or buggy code, add comments starting with "TODO:" outlining the problems.
 
