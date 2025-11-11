@@ -1,0 +1,35 @@
+{
+  "name": "vitnal-start-kit",
+  "version": "1.0.0",
+  "description": "CLI to bootstrap a React + TypeScript project with opinionated defaults.",
+  "type": "commonjs",
+  "main": "dist/cli.js",
+  "bin": {
+    "create-vitnal": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jch1223/vitnal-start-kit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "bugs": {
+    "url": "https://github.com/jch1223/vitnal-start-kit/issues"
+  },
+  "homepage": "https://github.com/jch1223/vitnal-start-kit#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.2"
+  }
+}
