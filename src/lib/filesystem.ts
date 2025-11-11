@@ -22,7 +22,9 @@ export const ensureTargetDirectoryAvailable = async (targetPath: string): Promis
 /**
  * 템플릿 디렉터리 전체를 대상 경로로 복사합니다.
  */
-export const copyTemplateDirectory = async (sourceDir: string, targetDir: string): Promise<void> => {
+export const copyTemplateDirectory = async (
+  sourceDir: string,
+  targetDir: string,
+): Promise<void> => {
   await cp(sourceDir, targetDir, { recursive: true });
 };
-

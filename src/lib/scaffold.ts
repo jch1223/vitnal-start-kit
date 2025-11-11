@@ -1,4 +1,5 @@
 import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from './filesystem';
+import { updatePackageJsonMetadata } from './package-metadata';
 import { resolveScaffoldPaths } from './paths';
 
 import type { ResolvedConfig } from '../types/config';
@@ -17,7 +18,10 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   await copyTemplateDirectory(paths.templateDir, paths.targetDir);
   console.log('기본 템플릿 복사가 완료되었습니다.');
 
+  await updatePackageJsonMetadata(config, paths.targetDir);
+  console.log('패키지 메타데이터가 업데이트되었습니다.');
+
   // TODO: 선택한 옵션(Tailwind, Taskmaster 등)을 템플릿 파일에 반영합니다.
   // TODO: 새 프로젝트 디렉터리에서 npm으로 의존성을 설치합니다.
-  // TODO: 설정 요약과 안내를 담은 README.md를 생성합니다.
+  // TODO: 옵션별 스크립트를 실행한 뒤 README 요약을 생성합니다.
 };

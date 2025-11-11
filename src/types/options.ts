@@ -5,4 +5,3 @@ export interface ProjectOptions {
   stateManagement: StateManagementOption;
   taskmaster: boolean;
 }
-
