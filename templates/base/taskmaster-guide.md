@@ -33,7 +33,7 @@ npx task-master init
 task-master parse-prd .taskmaster/docs/prd.txt
 ```
 
-## 복작한 작업 분해(선택사항)
+## 복잡한 작업 분해(선택사항)
 
 ```bash
 task-master expand --all
