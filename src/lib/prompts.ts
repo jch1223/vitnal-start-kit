@@ -5,7 +5,6 @@ import type { ProjectOptions, StateManagementOption } from '../types/options';
 type PromptAnswers = {
   reactQuery: boolean;
   stateManagement: string;
-  taskmaster: boolean;
 };
 
 const normalizeStateManagement = (choice: string): StateManagementOption => {
@@ -31,17 +30,10 @@ export const promptForOptions = async (): Promise<ProjectOptions> => {
       choices: ['None', 'Jotai', 'Zustand'],
       default: 'None',
     },
-    {
-      type: 'confirm',
-      name: 'taskmaster',
-      message: 'Taskmaster (AI-powered task manager)를 설치하시겠습니까?',
-      default: true,
-    },
   ]);
 
   return {
     reactQuery: answers.reactQuery,
     stateManagement: normalizeStateManagement(answers.stateManagement),
-    taskmaster: answers.taskmaster,
   };
 };

@@ -21,7 +21,7 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   await updatePackageJsonMetadata(config, paths.targetDir);
   console.log('패키지 메타데이터가 업데이트되었습니다.');
 
-  // TODO: 선택한 옵션(Tailwind, Taskmaster 등)을 템플릿 파일에 반영합니다.
+  // TODO: 선택한 옵션(Tailwind 등)을 템플릿 파일에 반영합니다.
   // TODO: 새 프로젝트 디렉터리에서 npm으로 의존성을 설치합니다.
   // TODO: 옵션별 스크립트를 실행한 뒤 README 요약을 생성합니다.
 };

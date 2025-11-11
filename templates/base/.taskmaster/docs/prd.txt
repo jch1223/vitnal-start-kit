@@ -1,0 +1,10 @@
+## Taskmaster 기본 PRD
+
+### 목적
+- Vitnal 스타터 프로젝트에서 우선 수행해야 할 작업을 Taskmaster 태스크로 관리합니다.
+
+### 범위
+1. 의존성 설치 및 개발 서버 확인
+2. 품질 도구(lint/format/test) 실행
+3. Taskmaster 계획 검토 및 필요 시 커스터마이즈
+

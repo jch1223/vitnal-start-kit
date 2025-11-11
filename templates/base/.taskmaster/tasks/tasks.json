@@ -1,0 +1,46 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "의존성 설치 및 개발 서버 확인",
+        "description": "`npm install` 후 `npm run dev`를 실행하여 템플릿이 정상적으로 구동되는지 확인합니다.",
+        "details": "템플릿이 복사된 후 프로젝트 루트에서 명령을 실행해 초기 화면이 표시되는지 확인하세요.",
+        "testStrategy": "`npm run dev` 실행 시 오류가 없는지 브라우저에서 확인합니다.",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": []
+      },
+      {
+        "id": 2,
+        "title": "품질 도구 점검",
+        "description": "Lint, Format, Test 스크립트가 모두 통과하는지 확인합니다.",
+        "details": "`npm run lint`, `npm run format`, `npm run test` 명령을 실행하여 기본 품질 도구가 정상 동작하는지 확인하세요.",
+        "testStrategy": "각 명령이 종료 코드 0으로 완료되는지 확인합니다.",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Taskmaster 태스크 검토",
+        "description": "`task-master list --with-subtasks` 명령으로 초기 태스크를 확인하고 필요 시 수정합니다.",
+        "details": "프로젝트 요구사항에 맞게 태스크를 조정하거나 확장하세요.",
+        "testStrategy": "Taskmaster CLI가 정상 실행되고 태스크 목록을 출력하는지 확인합니다.",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-11-11T15:00:00.000Z",
+      "updated": "2025-11-11T15:00:00.000Z",
+      "description": "Vitnal 템플릿 기본 태스크"
+    }
+  }
+}
+
