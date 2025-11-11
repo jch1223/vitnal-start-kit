@@ -74,7 +74,7 @@
         "testStrategy": "구성된 'templates/base' 디렉터리 내에서 직접 `npm install`과 `npm run build`를 실행하여 템플릿 자체가 오류 없이 빌드되는지 확인합니다. 또한 `npm run test`와 `npm run storybook`이 정상적으로 실행되는지 검증합니다.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -82,7 +82,7 @@
             "description": "Vite CLI를 사용하여 `templates/base` 경로에 기본적인 React + TypeScript 프로젝트를 생성합니다. 이는 모든 추가 기능의 기반이 됩니다.",
             "dependencies": [],
             "details": "프로젝트 루트에 `templates/base` 디렉터리를 생성합니다. 그 후 해당 디렉터리 내에서 `npm create vite@latest . -- --template react-ts` 명령을 실행하여 Vite 프로젝트를 초기화합니다. 이 때, 프로젝트 이름 프롬프트는 현재 디렉터리를 의미하는 `.`으로 지정합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`templates/base` 디렉터리 내에 `vite.config.ts`, `package.json`, `src/main.tsx` 등의 기본 Vite 프로젝트 파일들이 정상적으로 생성되었는지 확인합니다."
           },
           {
@@ -93,7 +93,7 @@
               1
             ],
             "details": "`templates/base` 디렉터리에서 `npm install -D tailwindcss postcss autoprefixer`를 실행하고, `npx tailwindcss init -p` 명령어로 설정 파일을 생성합니다. `tailwind.config.js`의 `content` 속성에 `\"./src/**/*.{js,ts,jsx,tsx}\"` 경로를 추가하고, `src/index.css` 파일에 Tailwind의 `@tailwind` 지시문을 추가합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "간단한 TailwindCSS 클래스(예: `text-red-500`)를 `src/App.tsx`에 적용한 후 `npm run dev`를 실행하여 스타일이 올바르게 적용되는지 브라우저에서 확인합니다."
           },
           {
@@ -104,7 +104,7 @@
               1
             ],
             "details": "`templates/base` 디렉터리에서 `npm install -D vitest @vitest/ui jsdom @testing-library/react`를 실행합니다. `vite.config.ts` 파일을 수정하여 테스트 관련 설정을 추가합니다. `package.json`의 `scripts` 객체에 `\"test\": \"vitest\"`와 `\"test:ui\": \"vitest --ui\"`를 추가합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "기본 `App` 컴포넌트를 렌더링하고 특정 텍스트가 존재하는지 확인하는 간단한 테스트 파일(`src/App.test.tsx`)을 작성한 뒤, `npm run test`를 실행하여 테스트가 성공적으로 통과하는지 확인합니다."
           },
           {
@@ -115,7 +115,7 @@
               1
             ],
             "details": "`templates/base` 디렉터리에서 `npx storybook@latest init` 명령을 실행하여 Storybook을 자동으로 설치 및 구성합니다. 이 과정에서 `.storybook` 디렉터리와 관련 설정 파일(`main.ts`, `preview.ts`)이 생성됩니다. `tailwind.config.js`를 인식하도록 `.storybook/preview.ts`에 `import '../src/index.css';`를 추가합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`npm run storybook` 명령어를 실행하여 Storybook 개발 서버가 정상적으로 구동되는지 확인합니다. 브라우저에서 Storybook UI가 나타나고, TailwindCSS 스타일이 적용된 기본 버튼 스토리가 올바르게 렌더링되는지 검증합니다."
           },
           {
@@ -128,7 +128,7 @@
               4
             ],
             "details": "Vite와 Storybook이 생성한 예제 파일들(예: `src/assets`, `src/App.css`, `src/components/`, `src/stories/`)을 삭제합니다. `App.tsx`의 내용을 최소한의 기본 구조로 정리합니다. 최종적으로 `templates/base` 디렉터리에서 `npm install`을 실행한 후 `npm run build`, `npm run test`가 모두 오류 없이 완료되는지 확인합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "정리된 `templates/base` 디렉터리에서 `npm install` 후 `npm run build`, `npm run test`, `npm run storybook` 스크립트가 모두 정상적으로 실행되는지 확인하여 템플릿의 무결성을 검증합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-11T15:55:53.229Z",
+      "updated": "2025-11-11T19:44:40.924Z",
       "description": "Tasks for master context"
     }
   }
