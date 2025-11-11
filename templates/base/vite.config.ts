@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import tailwindcss from '@tailwindcss/vite';
-import { playwright } from '@vitest/browser-playwright';
 import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 
 const dirname =
@@ -22,7 +22,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
-      reports: ['text', 'lcov'],
+      reporter: ['text', 'lcov'],
     },
     projects: shouldIncludeStorybookTests
       ? [
