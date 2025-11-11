@@ -9,7 +9,7 @@
         "testStrategy": "유닛 테스트를 통해 `process.argv`를 모의(mock)하여 다양한 명령어와 인자(예: 'create my-app', 'create')가 정확하게 파싱되는지 검증합니다. 프로젝트 이름이 누락되었을 때 적절한 오류 메시지를 표시하는지도 확인합니다.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,7 +17,7 @@
             "description": "CLI 명령어 파싱을 위해 commander.js 라이브러리를 프로젝트의 의존성으로 추가합니다. 이는 명령어 기반 인터페이스를 구축하는 첫 단계입니다.",
             "dependencies": [],
             "details": "`npm install commander` 또는 `yarn add commander` 명령어를 실행하여 `package.json`의 `dependencies`에 `commander`를 추가합니다. 최신 안정 버전을 사용하는 것을 권장합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`package.json` 파일을 열어 `dependencies` 항목에 `commander`가 정상적으로 추가되었는지 확인하고, `node_modules` 디렉터리에 해당 패키지가 설치되었는지 검사합니다."
           },
           {
@@ -28,7 +28,7 @@
               1
             ],
             "details": "`package.json`에 `\"bin\": { \"create-vitnal\": \"./cli.js\" }` 와 같이 `bin` 필드를 추가합니다. 프로젝트 루트에 `cli.js` 파일을 생성하고, 파일 최상단에 `#!/usr/bin/env node` shebang을 반드시 추가해야 합니다.\n<info added on 2025-11-11T14:59:20.708Z>\n```json\n\"TypeScript 기반 CLI를 위해 `package.json`의 `bin` 필드를 빌드 산출물 경로인 `\\\"bin\\\": { \\\"create-vitnal\\\": \\\"dist/cli.js\\\" }`로 설정합니다. 소스 진입점은 `src/cli.ts`로 생성하며, 파일 최상단에 `#!/usr/bin/env node` shebang을 추가합니다. TypeScript 컴파일 시 shebang이 유지되도록 `tsconfig.json`의 `outDir` 설정을 확인해야 합니다. `src/cli.ts`에는 향후 Commander 로직을 담을 기본 골격(예: TODO 주석)을 작성합니다. `npm run build` 실행 시 `dist/cli.js`가 생성되어 `bin` 경로와 연결됩니다.\\n\\n테스트 방법: `npm run build`를 실행하여 빌드한 후 `npm link`를 실행하고, 터미널에서 `create-vitnal` 명령이 동작하는지 확인합니다.\"\n```\n</info added on 2025-11-11T14:59:20.708Z>",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프로젝트 루트에서 `npm link` 명령어를 실행하여 로컬 개발 환경에 명령어를 등록합니다. 그 후 터미널에서 `create-vitnal`을 입력했을 때, 오류 없이 (혹은 파일이 비어있어 아무 동작 없이) 명령어가 인식되는지 확인합니다."
           },
           {
@@ -39,7 +39,7 @@
               2
             ],
             "details": "`cli.js` 파일에 `const { program } = require('commander');` 코드를 추가합니다. `program.version('0.1.0').description('A CLI for creating Vitnal projects');` 와 같이 프로그램의 초기 버전과 설명을 설정합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "터미널에서 `create-vitnal --version` 명령어를 실행했을 때 설정한 버전(예: '0.1.0')이 출력되는지 확인합니다. 또한 `create-vitnal --help`를 실행했을 때 설정한 설명이 출력되는지 검증합니다."
           },
           {
@@ -50,7 +50,7 @@
               3
             ],
             "details": "`cli.js` 파일에서 `program.command('create')` 메서드를 사용하여 새 명령어를 등록합니다. 이어서 `.argument('<project-name>', 'The name of the project to create')`를 체이닝하여 필수 인자를 정의합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "터미널에서 `create-vitnal create` 와 같이 프로젝트 이름을 빼고 명령어를 실행했을 때, `commander`가 자동으로 생성하는 'error: missing required argument 'project-name'' 메시지가 표시되는지 확인합니다."
           },
           {
@@ -61,7 +61,7 @@
               4
             ],
             "details": "`.argument()` 뒤에 `.action((projectName) => { console.log(`Project directory '${projectName}' will be created.`); })`를 추가하여 액션 핸들러를 구현합니다. 스크립트의 마지막 줄에 `program.parse(process.argv);`를 추가하여 전체 프로세스를 실행합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "터미널에서 `create-vitnal create my-new-app` 명령어를 실행했을 때, 콘솔에 \"Project directory 'my-new-app' will be created.\" 메시지가 정확하게 출력되는지 확인하여 명령어와 액션이 올바르게 연결되었는지 검증합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-11T14:50:16.072Z",
+      "updated": "2025-11-11T15:55:53.229Z",
       "description": "Tasks for master context"
     }
   }
