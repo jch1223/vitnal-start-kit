@@ -1,4 +1,5 @@
 ---
+globs: *.test.ts
 alwaysApply: false
 ---
 
@@ -32,46 +33,44 @@ Write maintainable tests with descriptive names grouped in describe blocks
 # Example Unit Test
 
 ```js
-import { describe, it, expect, beforeEach } from "vitest";
-import { vi } from "vitest";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { vi } from 'vitest';
 
 // Mock dependencies before imports
-vi.mock("../api/locale", () => ({
-  getLocale: vi.fn(() => "en-US"), // Mock locale API
+vi.mock('../api/locale', () => ({
+  getLocale: vi.fn(() => 'en-US'), // Mock locale API
 }));
 
 // Import module under test
-const { formatDate } = await import("../utils/formatDate");
+const { formatDate } = await import('../utils/formatDate');
 
-describe("formatDate", () => {
+describe('formatDate', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should format date correctly", () => {
+  it('should format date correctly', () => {
     // Arrange
-    const date = new Date("2023-10-15");
+    const date = new Date('2023-10-15');
 
     // Act
     const result = formatDate(date);
 
     // Assert
-    expect(result).toBe("2023-10-15");
+    expect(result).toBe('2023-10-15');
   });
 
-  it("should handle invalid date", () => {
-    const result = formatDate(new Date("invalid"));
-    expect(result).toBe("Invalid Date");
+  it('should handle invalid date', () => {
+    const result = formatDate(new Date('invalid'));
+    expect(result).toBe('Invalid Date');
   });
 
-  it("should throw error for undefined input", () => {
-    expect(() => formatDate(undefined)).toThrow("Input must be a Date object");
+  it('should throw error for undefined input', () => {
+    expect(() => formatDate(undefined)).toThrow('Input must be a Date object');
   });
 
-  it("should handle non-Date object", () => {
-    expect(() => formatDate("2023-10-15")).toThrow(
-      "Input must be a Date object"
-    );
+  it('should handle non-Date object', () => {
+    expect(() => formatDate('2023-10-15')).toThrow('Input must be a Date object');
   });
 });
 ```
@@ -79,17 +78,17 @@ describe("formatDate", () => {
 # TypeScript Example
 
 ```ts
-import { describe, it, expect, beforeEach } from "vitest";
-import { vi } from "vitest";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { vi } from 'vitest';
 
 // Mock dependencies before imports
-vi.mock("../api/weatherService", () => ({
+vi.mock('../api/weatherService', () => ({
   getWeatherData: vi.fn(),
 }));
 
 // Import the mocked module and the function to test
-import { getWeatherData } from "../api/weatherService";
-import { getForecast } from "../utils/forecastUtils";
+import { getWeatherData } from '../api/weatherService';
+import { getForecast } from '../utils/forecastUtils';
 
 // Define TypeScript interfaces
 interface WeatherData {
@@ -100,52 +99,50 @@ interface WeatherData {
 
 interface Forecast {
   prediction: string;
-  severity: "low" | "medium" | "high";
+  severity: 'low' | 'medium' | 'high';
 }
 
-describe("getForecast", () => {
+describe('getForecast', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return forecast when weather data is available", async () => {
+  it('should return forecast when weather data is available', async () => {
     // Arrange
     const mockWeather: WeatherData = {
       temperature: 25,
       humidity: 65,
-      conditions: "sunny",
+      conditions: 'sunny',
     };
     (getWeatherData as any).mockResolvedValue(mockWeather);
 
     // Act
-    const result = await getForecast("New York");
+    const result = await getForecast('New York');
 
     // Assert
-    expect(getWeatherData).toHaveBeenCalledWith("New York");
+    expect(getWeatherData).toHaveBeenCalledWith('New York');
     expect(result).toEqual({
-      prediction: "Clear skies",
-      severity: "low",
+      prediction: 'Clear skies',
+      severity: 'low',
     });
   });
 
-  it("should handle missing data fields", async () => {
+  it('should handle missing data fields', async () => {
     // Arrange: Weather data with missing fields
     const incompleteData = { temperature: 25 };
     (getWeatherData as any).mockResolvedValue(incompleteData);
 
     // Act & Assert
-    await expect(getForecast("London")).rejects.toThrow(
-      "Incomplete weather data"
-    );
+    await expect(getForecast('London')).rejects.toThrow('Incomplete weather data');
   });
 
-  it("should handle API errors gracefully", async () => {
+  it('should handle API errors gracefully', async () => {
     // Arrange: API failure
-    (getWeatherData as any).mockRejectedValue(new Error("Service unavailable"));
+    (getWeatherData as any).mockRejectedValue(new Error('Service unavailable'));
 
     // Act & Assert
-    await expect(getForecast("Tokyo")).rejects.toThrow(
-      "Failed to get forecast: Service unavailable"
+    await expect(getForecast('Tokyo')).rejects.toThrow(
+      'Failed to get forecast: Service unavailable',
     );
   });
 });
