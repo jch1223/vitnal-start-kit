@@ -1,3 +1,5 @@
+import ora from 'ora';
+
 import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from './filesystem';
 import { installOptionalDependencies } from './installer';
 import { updatePackageJsonMetadata } from './package-metadata';
@@ -18,15 +20,34 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   console.log('선택된 옵션:', config.options);
 
   await ensureTargetDirectoryAvailable(paths.targetDir);
-  await copyTemplateDirectory(paths.templateDir, paths.targetDir);
-  console.log('기본 템플릿 복사가 완료되었습니다.');
 
-  await updatePackageJsonMetadata(config, paths.targetDir);
-  console.log('패키지 메타데이터가 업데이트되었습니다.');
+  const copySpinner = ora('템플릿 파일을 복사하는 중...').start();
+  try {
+    await copyTemplateDirectory(paths.templateDir, paths.targetDir);
+    copySpinner.succeed('템플릿 복사가 완료되었습니다.');
+  } catch (error) {
+    copySpinner.fail('템플릿 복사에 실패했습니다.');
+    throw error;
+  }
+
+  const metadataSpinner = ora('패키지 메타데이터를 업데이트하는 중...').start();
+  try {
+    await updatePackageJsonMetadata(config, paths.targetDir);
+    metadataSpinner.succeed('패키지 메타데이터 업데이트 완료');
+  } catch (error) {
+    metadataSpinner.fail('패키지 메타데이터 업데이트 실패');
+    throw error;
+  }
 
   // README.md 동적 생성 (템플릿의 README.md를 덮어씀)
-  await generateReadme(paths.targetDir, config.projectName, config.options);
-  console.log('README.md 파일이 생성되었습니다.');
+  const readmeSpinner = ora('README.md 파일을 생성하는 중...').start();
+  try {
+    await generateReadme(paths.targetDir, config.projectName, config.options);
+    readmeSpinner.succeed('README.md 파일 생성 완료');
+  } catch (error) {
+    readmeSpinner.fail('README.md 파일 생성 실패');
+    throw error;
+  }
 
   await installOptionalDependencies(paths.targetDir, config.options);
 
