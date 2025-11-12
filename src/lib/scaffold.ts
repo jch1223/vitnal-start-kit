@@ -26,7 +26,6 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
 
   if (config.options.taskmaster) {
     await installAndInitializeTaskmaster(paths.targetDir);
-    console.log('Taskmaster 초기화가 완료되었습니다.');
   }
 
   // TODO: 선택한 옵션(Tailwind 외 추가 패키지 등)을 템플릿 파일에 반영합니다.
