@@ -487,7 +487,7 @@
           11,
           13
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -495,7 +495,7 @@
             "description": "파일 시스템에 의존하는 유틸리티 함수들을 격리된 환경에서 테스트하기 위해 Vitest 테스트 프레임워크를 설정하고, `memfs`를 이용한 인메모리 파일 시스템을 연동합니다. 이는 실제 디스크 I/O를 방지하여 빠르고 안정적인 테스트를 보장합니다.",
             "dependencies": [],
             "details": "`vitest`와 `memfs` 라이브러리를 devDependencies에 추가합니다. `vitest.config.ts` 파일에서 테스트 환경 설정을 완료하고, `fs` 모듈을 `memfs`로 모킹(mocking)하는 테스트 설정 또는 헬퍼 파일을 작성하여 파일 시스템 테스트를 위한 기반을 마련합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "테스트 실행 시 실제 파일 시스템이 아닌 `memfs`의 가상 파일 시스템을 사용하는지 확인하기 위해 간단한 파일 생성/읽기 테스트를 작성하여 검증합니다."
           },
           {
@@ -504,7 +504,7 @@
             "description": "사용자에게 상태를 알려주는 로깅 유틸리티(info, success, error 등)가 정확한 메시지와 스타일로 출력되는지 검증하는 테스트 스위트를 작성합니다.",
             "dependencies": [],
             "details": "`vitest`의 `vi.spyOn` 기능을 사용하여 `console.log`, `console.error` 등의 전역 객체를 감시합니다. 각 로깅 함수(예: `logger.info()`, `logger.error()`)를 호출했을 때, 스파이가 올바른 인자(색상 코드가 포함된 문자열 등)로 호출되었는지 `toHaveBeenCalledWith`를 사용하여 검증합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "각 로그 레벨(info, success, error, warn)에 대한 테스트 케이스를 작성하고, 포맷팅된 출력 메시지가 예상과 정확히 일치하는지 스파이 객체를 통해 확인합니다."
           },
           {
@@ -515,7 +515,7 @@
               1
             ],
             "details": "`memfs`로 초기화된 가상 파일 시스템 상에서 디렉터리 생성 함수를 실행합니다. 테스트 실행 후, `memfs`의 `fs.existsSync`나 `fs.readdirSync`를 사용해 지정된 경로에 디렉터리가 올바르게 생성되었는지 확인합니다. 디렉터리가 이미 존재할 때 에러를 발생시키는 로직도 테스트합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1) 새 디렉터리 생성 성공, 2) 이미 존재하는 디렉터리 시도 시 예외 처리, 3) 중첩된 경로에 디렉터리 생성 등 다양한 시나리오를 테스트 케이스로 작성하여 검증합니다."
           },
           {
@@ -525,8 +525,8 @@
             "dependencies": [
               1
             ],
-            "details": "`memfs`를 사용하여 가상의 'templates' 디렉터리와 그 안에 여러 파일 및 하위 디렉터리를 구성합니다. 템플릿 복사 함수를 실행한 후, 생성된 프로젝트 디렉터리의 구조와 각 파일의 내용이 원본 템플릿과 일치하는지 `memfs`의 API를 통해 비교하고 검증합니다.",
-            "status": "pending",
+            "details": "`memfs`를 사용하여 가상의 'templates' 디렉터리와 그 안에 여러 파일 및 하위 디렉터리를 구성합니다. 템플릿 복사 함수를 실행한 후, 생성된 프로젝트 디렉터리의 구조와 각 파일의 내용이 원본 템플릿과 일치하는지 `memfs`의 API를 통해 비교하고 검증합니다.\n<info added on 2025-11-12T19:11:45.697Z>\n```json\n\"copyTemplateDirectory 함수에 대한 테스트 작성을 완료했습니다. memfs를 활용한 가상 파일 시스템에서 재귀적 디렉터리 복사(파일 및 하위 디렉터리 포함), 빈 디렉터리 복사, 파일 내용 일치 여부 검증을 포함한 테스트를 구현했으며, 모든 케이스가 통과되었음을 확인했습니다.\"\n```\n</info added on 2025-11-12T19:11:45.697Z>",
+            "status": "done",
             "testStrategy": "가상 파일 시스템에서 소스 템플릿과 복사된 결과물의 디렉터리 구조 및 파일 내용을 비교하여 일치 여부를 확인합니다. `.gitignore`와 같이 이름이 변경되어야 하는 파일의 처리 로직도 함께 테스트합니다."
           },
           {
@@ -535,7 +535,7 @@
             "description": "CLI에 전달된 인자(예: 프로젝트 이름)를 파싱하고 유효성을 검사하는 로직에 대한 유닛 테스트를 작성합니다. 유효하지 않은 프로젝트 이름이 입력되었을 때 적절한 오류를 반환하는지 확인합니다.",
             "dependencies": [],
             "details": "`commander.js`에 의존하는 액션 핸들러 함수를 테스트합니다. `process.argv`를 모킹하여 다양한 CLI 입력(예: `['node', 'index.js', 'my-app']`, `['node', 'index.js', '']`)을 시뮬레이션하고, 파싱된 인자가 액션 핸들러에 정확히 전달되는지 확인합니다. 유효성 검사 함수를 직접 호출하여 테스트할 수도 있습니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "유효한 프로젝트 이름, 유효하지 않은 이름(특수문자 포함 등), 이름이 없는 경우 등 다양한 입력 값에 대한 테스트 케이스를 작성하여 각 경우에 예상된 동작(성공 또는 에러)이 발생하는지 검증합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-12T19:04:14.491Z",
+      "updated": "2025-11-12T19:11:27.389Z",
       "description": "Tasks for master context"
     }
   }
