@@ -15,6 +15,11 @@ const shouldIncludeStorybookTests = process.env.STORYBOOK_VITEST === 'true';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(dirname, './src'),
+    },
+  },
   test: {
     environment: 'jsdom',
     css: true,

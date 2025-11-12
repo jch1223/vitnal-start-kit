@@ -616,7 +616,7 @@
           17,
           18
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -624,7 +624,7 @@
             "description": "E2E 테스트 실행을 위한 기본 환경을 구축합니다. `execa`와 파일 시스템 관리를 위한 `fs-extra` 같은 개발 의존성을 설치하고, 테스트 결과를 임시 디렉터리에 생성하도록 기본 스크립트 구조를 잡습니다.",
             "dependencies": [],
             "details": "`package.json`의 `devDependencies`에 `execa`, `fs-extra`를 추가합니다. `scripts/e2e` 디렉터리를 생성하고, 테스트 실행 시 생성될 프로젝트를 저장할 임시 디렉터리(예: `temp-e2e-project`)를 만들고 비우는 로직을 포함하는 기본 테스트 스크립트 파일(예: `run-e2e.mjs`)을 작성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`npm install`을 실행하여 새 의존성이 정상적으로 설치되는지 확인하고, 스크립트 실행 시 임시 디렉터리가 생성되는지 수동으로 확인합니다."
           },
           {
@@ -635,7 +635,7 @@
               1
             ],
             "details": "`execa`를 사용하여 `node dist/index.js create-vitnal-e2e-test`와 같은 명령을 실행합니다. 자식 프로세스의 `stdin.write('\\n')`을 사용하여 각 프롬프트에 엔터 키를 전송합니다. 프로세스가 성공적으로 종료(exit code 0)되는지 확인합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "스크립트를 실행하여 `temp-e2e-project` 디렉터리에 기본 옵션으로 프로젝트가 실제로 생성되는지 확인합니다. CLI의 출력 로그를 검사하여 오류가 없는지 확인합니다."
           },
           {
@@ -646,7 +646,7 @@
               2
             ],
             "details": "`fs.existsSync`와 같은 Node.js 파일 시스템 모듈을 사용하여 필수 파일 및 디렉터리 목록(예: `['package.json', 'vite.config.ts', 'src', 'src/App.tsx']`)이 모두 존재하는지 확인하는 함수를 구현합니다. 파일이 누락된 경우 테스트를 실패 처리합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "의도적으로 템플릿에서 파일을 삭제한 후 테스트를 실행하여, 파일 누락 시 테스트가 올바르게 실패하는지 확인합니다. 정상적인 경우에는 테스트가 통과해야 합니다."
           },
           {
@@ -657,7 +657,7 @@
               3
             ],
             "details": "`execa`를 다시 사용하되, `cwd` 옵션을 생성된 프로젝트 경로로 설정하여 명령어를 실행합니다. `npm install` 후 `npm run build`를 실행하고, 마지막으로 `npm run test`를 실행합니다. 각 단계에서 Promise가 reject되거나 exit code가 0이 아니면 테스트를 즉시 실패시킵니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "각 명령어가 실행될 때 출력되는 로그를 확인하여 정상적으로 진행되는지 모니터링합니다. 최종적으로 모든 명령어가 성공적으로 완료되면 테스트가 통과하는지 확인합니다."
           },
           {
@@ -668,7 +668,7 @@
               4
             ],
             "details": "`try...finally` 블록을 사용하여 테스트 로직을 `try` 안에 배치하고, `finally` 블록에서 `fs.removeSync`를 사용하여 임시 디렉터리를 삭제합니다. `package.json`의 `scripts`에 `\"test:e2e\": \"node scripts/e2e/run-e2e.mjs\"`를 추가합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`npm run test:e2e` 명령을 실행하여 전체 파이프라인이 동작하는지 확인합니다. 테스트가 끝난 후 임시 프로젝트 폴더가 깨끗하게 삭제되었는지 파일 시스템에서 확인합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-12T19:11:27.389Z",
+      "updated": "2025-11-12T19:23:44.037Z",
       "description": "Tasks for master context"
     }
   }
