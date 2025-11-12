@@ -419,7 +419,7 @@
           14,
           15
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -427,7 +427,7 @@
             "description": "README.md 파일의 동적 생성을 위해 필요한 EJS 템플릿 엔진을 프로젝트의 의존성으로 추가합니다.",
             "dependencies": [],
             "details": "npm install ejs 또는 yarn add ejs 명령어를 사용하여 `package.json`의 `dependencies`에 ejs를 추가합니다. 타입스크립트 지원을 위해 `@types/ejs`를 `devDependencies`에 추가하는 것도 포함합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "의존성 설치 후 `npm install` 또는 `yarn`을 실행했을 때 오류가 발생하지 않는지 확인하고, `node_modules`에 `ejs` 폴더가 생성되었는지 확인합니다."
           },
           {
@@ -436,7 +436,7 @@
             "description": "동적으로 내용이 채워질 README의 기반이 되는 템플릿 파일을 생성합니다. 이 파일에는 프로젝트 제목, 설명, 실행 명령어 등 공통적인 섹션이 포함됩니다.",
             "dependencies": [],
             "details": "`templates` 디렉토리 또는 적절한 위치에 `README.template.md` 파일을 생성합니다. 프로젝트 이름(<%= projectName %>), 기본 스크립트(npm install, npm run dev) 등의 정적 내용과 플레이스홀더를 포함하여 마크다운 구조를 작성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "파일이 올바른 경로에 생성되었는지, 기본적인 마크다운 문법이 유효한지 수동으로 확인합니다."
           },
           {
@@ -448,7 +448,7 @@
               2
             ],
             "details": "`src/main.ts` 또는 별도의 유틸리티 파일에 `generateReadme(targetDir, options)`와 같은 함수를 작성합니다. 이 함수는 EJS의 `renderFile` 또는 `render` 메소드를 사용하여 `options` 객체를 템플릿에 주입하고, 결과를 `targetDir` 내의 `README.md` 파일로 저장합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "단위 테스트를 통해 `options` 객체가 주어졌을 때 예상되는 `README.md` 문자열이 정상적으로 생성되는지 검증합니다."
           },
           {
@@ -459,7 +459,7 @@
               3
             ],
             "details": "`src/main.ts`의 `createProject` 함수 내에서 파일 복사가 완료된 후, `npm install`이 실행되기 전에 `generateReadme` 함수를 호출하도록 코드를 추가합니다. 사용자 옵션과 생성될 프로젝트 경로를 인자로 전달합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI를 직접 실행하여 프로젝트를 생성했을 때, `README.md` 파일이 정상적으로 생성되고 그 내용에 기본 옵션들이 반영되었는지 확인합니다."
           },
           {
@@ -470,8 +470,8 @@
               2,
               3
             ],
-            "details": "`README.template.md` 파일 내에 EJS의 조건문(<% if (options.taskmaster) { %> ... <% } %>)을 사용합니다. `options.taskmaster` 값이 true일 때만 'Taskmaster 사용법' 섹션이 렌더링되도록 구현합니다.",
-            "status": "pending",
+            "details": "`README.template.md` 파일 내에 EJS의 조건문(<% if (options.taskmaster) { %> ... <% } %>)을 사용합니다. `options.taskmaster` 값이 true일 때만 'Taskmaster 사용법' 섹션이 렌더링되도록 구현합니다.\n<info added on 2025-11-12T19:05:08.486Z>\n[\n  \"README 템플릿에 이미 Taskmaster 조건부 렌더링이 포함되어 있습니다. `<% if (options.taskmaster) { %>` 구문을 사용하여 Taskmaster 옵션이 활성화된 경우에만 사용법 섹션이 렌더링되도록 구현되어 있습니다.\"\n]\n</info added on 2025-11-12T19:05:08.486Z>",
+            "status": "done",
             "testStrategy": "Taskmaster 옵션을 활성화했을 때와 비활성화했을 때 각각 프로젝트를 생성하여, 생성된 `README.md` 파일에 해당 섹션이 올바르게 포함되거나 제외되는지 스냅샷 테스트 또는 수동으로 비교 검증합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-12T18:52:53.708Z",
+      "updated": "2025-11-12T19:04:14.491Z",
       "description": "Tasks for master context"
     }
   }

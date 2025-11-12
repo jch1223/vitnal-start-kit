@@ -2,6 +2,7 @@ import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from './filesys
 import { installOptionalDependencies } from './installer';
 import { updatePackageJsonMetadata } from './package-metadata';
 import { resolveScaffoldPaths } from './paths';
+import { generateReadme } from './readme';
 import { installAndInitializeTaskmaster } from './taskmaster';
 
 import type { ResolvedConfig } from '../types/config';
@@ -22,6 +23,10 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
 
   await updatePackageJsonMetadata(config, paths.targetDir);
   console.log('패키지 메타데이터가 업데이트되었습니다.');
+
+  // README.md 동적 생성 (템플릿의 README.md를 덮어씀)
+  await generateReadme(paths.targetDir, config.projectName, config.options);
+  console.log('README.md 파일이 생성되었습니다.');
 
   await installOptionalDependencies(paths.targetDir, config.options);
 
