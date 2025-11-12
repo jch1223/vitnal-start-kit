@@ -1,19 +1,21 @@
 # Taskmaster 사용 가이드
 
-이 템플릿에는 `.taskmaster/` 디렉터리가 기본 포함되어 있어, 프로젝트 생성 직후 바로 Taskmaster 워크플로우를 사용할 수 있습니다. 필요에 따라 설정 파일을 수정하고 태스크를 확장하세요.
+프로젝트 생성 시 Taskmaster 옵션을 `예`로 선택하면 CLI가 `task-master` 패키지를 자동으로 설치하고 `task-master init --yes`를 실행해 `.taskmaster/` 디렉터리를 초기화합니다. 이후 필요에 따라 설정 파일을 수정하고 태스크를 확장하세요. 옵션을 `아니오`로 선택했다면 이 문서의 “수동 설치” 절차를 참고해 언제든지 도입할 수 있습니다.
 
 공식 문서 튜토리얼: https://github.com/eyaltoledano/claude-task-master/blob/main/docs/tutorial.md
 
 ## 설치 및 기본 점검
 
+자동 설치가 완료되면 추가 작업이 필요 없습니다. 수동으로 다시 설치하거나 다른 환경에 적용해야 할 때는 아래 명령을 사용하세요.
+
 ```bash
 # Taskmaster CLI 설치 (전역 또는 로컬 중 택1)
 npm install -g task-master-ai
-# 또는
+# 또는 프로젝트 루트에서
 npm install task-master-ai
 ```
 
-설치 시 복사되는 설정 파일 위치:
+자동 초기화로 생성된 설정 파일 위치:
 
 - `.taskmaster/config.json`: 모델 프로바이더와 응답 언어 등을 프로젝트에 맞게 수정
 - `.taskmaster/docs/prd.txt`: Vitnal 기본 PRD

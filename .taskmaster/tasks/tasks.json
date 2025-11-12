@@ -144,7 +144,7 @@
           11,
           12
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -152,7 +152,7 @@
             "description": "템플릿 파일 및 디렉터리를 안정적으로 복사하기 위해 'fs-extra' 라이브러리를 프로젝트 의존성에 추가하고, TypeScript 지원을 위한 '@types/fs-extra' 개발 의존성을 설치합니다.",
             "dependencies": [],
             "details": "터미널에서 `npm install fs-extra`와 `npm install @types/fs-extra --save-dev` 명령어를 실행하여 의존성을 `package.json` 파일에 추가하고 `package-lock.json`을 업데이트합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`node_modules` 디렉터리에서 `fs-extra` 폴더의 존재 여부와 `package.json` 파일 내의 `dependencies` 및 `devDependencies` 목록에 해당 항목이 추가되었는지 확인합니다."
           },
           {
@@ -163,7 +163,7 @@
               1
             ],
             "details": "`src/utils/fileSystem.ts` 파일을 생성하고 `copyTemplate(source: string, destination: string): Promise<void>` 시그니처를 가진 비동기 함수를 구현합니다. 내부적으로 `fse.copy(source, destination)`을 호출하여 파일 시스템 복사를 수행합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Jest와 같은 테스트 프레임워크를 사용하여 임시 소스 디렉터리와 빈 대상 디렉터리를 설정합니다. `copyTemplate` 함수를 실행한 후, 대상 디렉터리의 내용이 소스 디렉터리와 일치하는지 확인합니다."
           },
           {
@@ -174,7 +174,7 @@
               2
             ],
             "details": "`copyTemplate` 함수 시작 부분에 `fse.pathExists(destination)`과 `fse.readdir(destination)`을 사용하여 대상 디렉터리의 상태를 확인합니다. 디렉터리가 존재하고 파일이 하나 이상 있을 경우, 'Destination directory is not empty.'와 같은 명확한 오류 메시지와 함께 Promise를 reject하도록 수정합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "미리 파일을 포함하는 디렉터리를 생성하고, 해당 디렉터리를 복사 대상으로 지정하여 `copyTemplate` 함수를 실행했을 때 예상된 오류가 발생하는지 테스트 케이스를 작성하여 검증합니다."
           },
           {
@@ -185,7 +185,7 @@
               3
             ],
             "details": "`copyTemplate` 함수 실행 전후와 catch 블록에 로깅 함수를 추가합니다. `logger.info('Copying template files...')`와 같은 메시지를 시작 시점에 출력하고, `try-catch` 구문을 사용하여 작업 완료 시 `logger.success('Template copied successfully!')`, 실패 시 `logger.error(error.message)`를 출력하도록 구현합니다. 스피너 로거가 있다면 이를 활용하여 진행 중 상태를 표시합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "콘솔 출력을 가로채거나 모의(mock) 로거를 주입하여, `copyTemplate` 함수의 각 시나리오(성공, 실패)에 따라 정확한 메시지가 올바른 로그 레벨(info, success, error)로 출력되는지 확인합니다."
           },
           {
@@ -196,7 +196,7 @@
               4
             ],
             "details": "프로젝트 생성 과정을 담당하는 `src/core/creator.ts` 또는 유사 파일에서 사용자가 입력한 프로젝트 이름을 기반으로 대상 경로를 설정합니다. 그런 다음, `templates/base`를 소스 경로로, 계산된 대상 경로를 목적지로 하여 `copyTemplate(templatePath, targetPath)` 함수를 호출합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "전체 CLI 애플리케이션을 실행하는 엔드투엔드(E2E) 테스트를 작성합니다. 특정 프로젝트 이름을 입력하고 명령을 실행한 후, 파일 시스템에 해당 이름의 디렉터리가 생성되고 그 안에 `templates/base`의 내용이 정확히 복제되었는지 확인합니다."
           }
         ]
@@ -211,7 +211,7 @@
         "dependencies": [
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -219,7 +219,7 @@
             "description": "프로젝트에 `inquirer` 라이브러리를 설치하고, 대화형 프롬프트로부터 수집할 사용자 설정 옵션에 대한 TypeScript 인터페이스를 정의합니다.",
             "dependencies": [],
             "details": "`pnpm add -D inquirer @types/inquirer` 명령을 실행하여 의존성을 추가합니다. `src/types` 디렉터리 내에 `options.ts` 파일을 생성하고 `ProjectOptions` 인터페이스를 정의합니다. 이 인터페이스에는 `reactQuery: boolean`, `stateManagement: 'jotai' | 'zustand' | 'none'`, `taskmaster: boolean`과 같은 필드가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`package.json`에 `inquirer`와 `@types/inquirer`가 `devDependencies`로 추가되었는지 확인합니다. `ProjectOptions` 인터페이스가 지정된 필드와 타입으로 올바르게 정의되었는지 코드 검토를 통해 확인합니다."
           },
           {
@@ -230,7 +230,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `inquirer.prompt`를 사용하는 함수를 작성합니다. 질문 객체는 `{ type: 'confirm', name: 'reactQuery', message: 'React Query를 사용하여 서버 상태를 관리하시겠습니까?', default: true }`와 같이 구성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "해당 프롬프트 함수를 직접 실행하여 CLI에 질문이 올바르게 표시되고 기본값이 'Yes'로 설정되어 있는지 수동으로 확인합니다. Enter 키를 눌렀을 때 `true`가 반환되는지 확인합니다."
           },
           {
@@ -241,7 +241,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `inquirer.prompt`를 사용하는 질문을 추가합니다. 질문 객체는 `{ type: 'list', name: 'stateManagement', message: '어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까?', choices: ['Jotai', 'Zustand', 'None'], default: 'None' }` 형식으로 구성합니다. 답변은 후처리를 위해 소문자 또는 'none'으로 변환합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프롬프트를 실행하여 선택지(Jotai, Zustand, None)가 모두 표시되는지 확인합니다. 각 항목을 선택했을 때 해당하는 값('jotai', 'zustand', 'none')이 올바르게 반환되는지 단위 테스트 또는 수동 테스트로 검증합니다."
           },
           {
@@ -252,7 +252,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `{ type: 'confirm', name: 'taskmaster', message: 'Taskmaster (AI-powered task manager)를 설치하시겠습니까?', default: true }` 구성의 질문을 추가합니다. 이는 다른 'confirm' 타입 질문과 동일한 패턴을 따릅니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI에서 프롬프트를 실행하여 질문 메시지와 기본값이 'Yes'로 올바르게 표시되는지 확인합니다. 'No'를 선택했을 때 `false`가 반환되는지 검증합니다."
           },
           {
@@ -265,7 +265,7 @@
               4
             ],
             "details": "`src/lib/prompts.ts`에 `export async function promptForOptions(): Promise<ProjectOptions>` 함수를 정의합니다. 이 함수 내에서 이전에 만든 모든 질문 객체를 배열에 담아 `inquirer.prompt`에 전달합니다. 반환된 답변 객체를 `ProjectOptions` 타입에 맞게 가공하여 반환하고, `src/cli.ts`에서 이 함수를 호출하여 결과를 사용하도록 연결합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`inquirer`를 모킹(mocking)하여 사전 정의된 답변 시나리오(예: React Query: yes, Zustand, Taskmaster: no)를 입력값으로 제공했을 때, 예상되는 `ProjectOptions` 객체가 정확히 반환되는지 확인하는 단위 테스트를 작성합니다."
           }
         ]
@@ -281,15 +281,15 @@
           13,
           14
         ],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
             "title": "사용자 선택 옵션과 패키지 이름 매핑 유틸리티 구현",
             "description": "사용자가 선택한 옵션(예: react-query, zustand)을 실제 npm 패키지 이름과 설치 유형(일반/개발)으로 변환하는 매핑 객체 또는 함수를 생성합니다.",
             "dependencies": [],
-            "details": "`src/utils/dependencies.ts`와 같은 새 파일을 만들고, 사용자 옵션 객체를 입력받아 `{ dependencies: string[], devDependencies: string[] }` 형태의 객체를 반환하는 함수를 정의합니다. 예를 들어, `options.stateManagement === 'zustand'`이면 `dependencies` 배열에 'zustand'를 추가합니다.",
-            "status": "pending",
+            "details": "`src/utils/dependencies.ts`와 같은 새 파일을 만들고, 사용자 옵션 객체를 입력받아 `{ dependencies: string[], devDependencies: string[] }` 형태의 객체를 반환하는 함수를 정의합니다. 예를 들어, `options.stateManagement === 'zustand'`이면 `dependencies` 배열에 'zustand'를 추가합니다.\n<info added on 2025-11-11T22:43:44.351Z>\n{\n  \"update\": \"Taskmaster는 기본 포함으로 확정됨에 따라, 선택적 패키지 매핑은 React Query와 상태 관리(Jotai, Zustand) 옵션만 처리합니다. `src/lib/dependencies.ts` 파일 내에 `resolveOptionalPackages(options)` 함수를 구현합니다. 이 함수는 React Query 선택 시 `@tanstack/react-query`를, 상태 관리 라이브러리 선택 시 `jotai` 또는 `zustand`를 `dependencies` 배열에 추가합니다. 의존성 목록은 중복 방지를 위해 Set으로 관리 후 정렬된 배열로 변환하여 `{ dependencies: string[], devDependencies: string[] }` 형식의 객체로 반환합니다.\"\n}\n</info added on 2025-11-11T22:43:44.351Z>\n<info added on 2025-11-11T22:50:04.226Z>\n{\n  \"update\": \"`src/lib/dependencies.ts`를 추가하여 `resolveOptionalPackages` 함수를 구현했습니다. React Query 선택 시 `@tanstack/react-query`, 상태 관리 선택에 따라 `jotai` 또는 `zustand`가 dependencies 배열에 포함되도록 했고, 중복 제거 후 정렬해 반환합니다. 현재는 devDependencies가 비어 있지만 쉽게 확장할 수 있는 구조입니다.\"\n}\n</info added on 2025-11-11T22:50:04.226Z>",
+            "status": "done",
             "testStrategy": "다양한 옵션 조합을 입력했을 때, 정확한 의존성 및 개발 의존성 패키지 목록이 반환되는지 확인하는 유닛 테스트를 작성합니다."
           },
           {
@@ -299,8 +299,8 @@
             "dependencies": [
               1
             ],
-            "details": "프로젝트 루트에서 `npm install execa`를 실행하여 의존성을 추가합니다. `src/core/installer.ts` 파일에 `installDependencies(projectPath: string, options: UserOptions)` 시그니처를 갖는 비동기 함수를 정의합니다. 이 함수는 내부적으로 1번 서브태스크에서 만든 매핑 유틸리티를 호출합니다.",
-            "status": "pending",
+            "details": "프로젝트 루트에서 `npm install execa`를 실행하여 의존성을 추가합니다. `src/core/installer.ts` 파일에 `installDependencies(projectPath: string, options: UserOptions)` 시그니처를 갖는 비동기 함수를 정의합니다. 이 함수는 내부적으로 1번 서브태스크에서 만든 매핑 유틸리티를 호출합니다.\n<info added on 2025-11-11T22:50:49.196Z>\n\"외부 의존성을 추가하지 않기 위해 `execa` 라이브러리 대신 Node.js의 내장 `child_process.spawn`을 사용하는 것으로 변경되었습니다. `src/lib/process.ts` 파일에 Promise 기반의 `runCommand` 유틸리티 함수를 구현했습니다. 이 함수는 Windows 호환성을 위해 `shell` 옵션을 포함하며, 다른 설치 로직에서 재사용될 공용 함수입니다.\"\n</info added on 2025-11-11T22:50:49.196Z>",
+            "status": "done",
             "testStrategy": "`execa`가 `package.json`에 추가되었는지 확인하고, `installer.ts` 파일과 `installDependencies` 함수가 정상적으로 생성되었는지 검토합니다."
           },
           {
@@ -310,8 +310,8 @@
             "dependencies": [
               2
             ],
-            "details": "매핑 유틸리티에서 반환된 `dependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', ...dependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 설치 과정에서 발생하는 예외를 처리하는 로직을 포함합니다.",
-            "status": "pending",
+            "details": "매핑 유틸리티에서 반환된 `dependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', ...dependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 설치 과정에서 발생하는 예외를 처리하는 로직을 포함합니다.\n<info added on 2025-11-11T22:51:19.025Z>\n```json\n\"src/lib/installer.ts에서 installOptionalDependencies 함수를 구현하여 선택된 옵션에 따라 npm install ... 명령을 실행하도록 했습니다. 일반 의존성 배열이 비어 있지 않으면 npm install을 실행하고, 현재는 React Query/Jotai/Zustand 케이스를 처리합니다. 명령 실행은 runCommand 유틸리티를 재사용합니다.\"\n```\n</info added on 2025-11-11T22:51:19.025Z>",
+            "status": "done",
             "testStrategy": "특정 옵션(예: zustand)을 활성화하여 프로젝트 생성 시, 생성된 프로젝트의 `package.json` 파일에 'zustand'가 `dependencies` 항목에 추가되었는지 확인합니다."
           },
           {
@@ -321,8 +321,8 @@
             "dependencies": [
               2
             ],
-            "details": "매핑 유틸리티에서 반환된 `devDependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', '-D', ...devDependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 일반 의존성 설치와 마찬가지로 오류 처리 로직을 포함합니다.",
-            "status": "pending",
+            "details": "매핑 유틸리티에서 반환된 `devDependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', '-D', ...devDependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 일반 의존성 설치와 마찬가지로 오류 처리 로직을 포함합니다.\n<info added on 2025-11-11T22:51:47.587Z>\n\"installOptionalDependencies 함수 내에서 devDependencies 배열이 존재할 경우 `npm install --save-dev` 명령을 실행하도록 구현했습니다. 현재 기본 옵션에서는 해당 배열이 비어있지만, 향후 테스트 도구 등의 옵션 추가에 대비해 확장 가능한 구조로 분기 처리를 완료했습니다.\"\n</info added on 2025-11-11T22:51:47.587Z>",
+            "status": "done",
             "testStrategy": "개발 의존성 관련 옵션(예: msw)을 활성화하여 프로젝트 생성 시, 생성된 프로젝트의 `package.json` 파일에 'msw'가 `devDependencies` 항목에 추가되었는지 확인합니다."
           },
           {
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-11T19:44:40.924Z",
+      "updated": "2025-11-11T22:51:53.787Z",
       "description": "Tasks for master context"
     }
   }
