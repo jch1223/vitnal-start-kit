@@ -1,0 +1,76 @@
+---
+description: Rule to suggest a Conventional Commit message along with a work summary when completing a task in Task Master.
+globs: **/*
+---
+
+# Task Master Completion & Commit Strategy
+
+When completing a task using `task-master-ai` (`complete_task`) or wrapping up a unit of work, you must follow this procedure and format.
+
+## 1. Trigger Condition
+
+This rule activates when:
+
+- The `complete_task` function of the `task_master` tool is called.
+- The user requests a midpoint check or finalization of a task currently managed by Task Master.
+
+## 2. Analysis Process
+
+1.  **Task Context**: Check the title and description of the completed task.
+2.  **Code Changes**: Analyze the actual files and logic modified while performing the task.
+3.  **Commit Type**: Determine the commit type based on the nature of the changes (`feat`, `fix`, `refactor`, `chore`, etc.).
+
+## 3. Response Format
+
+Use the following template when reporting task completion:
+
+### ✅ Task Completed: [Task ID/Name]
+
+> _A brief statement confirming the successful completion of the task._
+
+### 📝 Work Summary
+
+- **[Key Change 1]**: (e.g., Implemented `UserProfile` component UI)
+- **[Key Change 2]**: (e.g., Added API integration and error handling)
+  _(Summarize by mapping Task Master's detailed requirements to the actual code changes)_
+
+### 🚀 Recommended Commit
+
+```bash
+git add .
+git commit -m "type(scope): description"
+```
+
+## 4\. Commit Message Guidelines
+
+- **Type**:
+  - `feat`: New features (when adding functionality in Task Master)
+  - `fix`: Bug fixes
+  - `refactor`: Code structure improvements without functional changes
+  - `chore`: Configuration changes, package installation, etc.
+- **Scope**: The Task Master task name or affected module name (e.g., `auth`, `ui`, `api`)
+- **Description**: Concisely describe "what" and "why" (in English or the project's language convention).
+
+## 5\. Example
+
+**User**: "Finished the login UI work. Mark it as complete."
+
+**AI Response**:
+(After calling `complete_task`)
+
+### ✅ Task Completed: Implement Login UI
+
+Login screen publishing and form validation logic implementation are complete.
+
+### 📝 Work Summary
+
+- **LoginPage.tsx**: Implemented email/password input form UI (Applied Tailwind).
+- **useLoginForm.ts**: Added React Hook Form + Zod validation logic.
+- **routes.ts**: Configured routing for the login page.
+
+### 🚀 Recommended Commit
+
+```bash
+git add .
+git commit -m "feat(auth): implement login ui and validation"
+```

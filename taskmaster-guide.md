@@ -52,3 +52,17 @@ task-master list --with-subtasks
 # 계획 실행
 task-master next
 ```
+
+## 모델 설정 방법
+
+모델 설정:
+
+```bash
+task-master models --setup
+```
+
+현재 모델 확인:
+
+```bash
+task-master models
+```

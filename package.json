@@ -13,7 +13,11 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --check \"src/**/*.ts\"",
     "format:fix": "prettier --write \"src/**/*.ts\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "node scripts/e2e/run-e2e.mjs"
   },
   "repository": {
     "type": "git",
@@ -30,17 +34,27 @@
   },
   "homepage": "https://github.com/jch1223/vitnal-start-kit#readme",
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/inquirer": "^9.0.9",
     "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
+    "@vitest/ui": "^4.0.8",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
+    "execa": "^9.6.0",
+    "fs-extra": "^11.3.2",
+    "memfs": "^4.51.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
   },
   "dependencies": {
-    "commander": "^14.0.2"
+    "commander": "^14.0.2",
+    "ejs": "^3.1.10",
+    "inquirer": "^9.3.7",
+    "ora": "^9.0.0"
   }
 }

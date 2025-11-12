@@ -144,7 +144,7 @@
           11,
           12
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -152,7 +152,7 @@
             "description": "템플릿 파일 및 디렉터리를 안정적으로 복사하기 위해 'fs-extra' 라이브러리를 프로젝트 의존성에 추가하고, TypeScript 지원을 위한 '@types/fs-extra' 개발 의존성을 설치합니다.",
             "dependencies": [],
             "details": "터미널에서 `npm install fs-extra`와 `npm install @types/fs-extra --save-dev` 명령어를 실행하여 의존성을 `package.json` 파일에 추가하고 `package-lock.json`을 업데이트합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`node_modules` 디렉터리에서 `fs-extra` 폴더의 존재 여부와 `package.json` 파일 내의 `dependencies` 및 `devDependencies` 목록에 해당 항목이 추가되었는지 확인합니다."
           },
           {
@@ -163,7 +163,7 @@
               1
             ],
             "details": "`src/utils/fileSystem.ts` 파일을 생성하고 `copyTemplate(source: string, destination: string): Promise<void>` 시그니처를 가진 비동기 함수를 구현합니다. 내부적으로 `fse.copy(source, destination)`을 호출하여 파일 시스템 복사를 수행합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Jest와 같은 테스트 프레임워크를 사용하여 임시 소스 디렉터리와 빈 대상 디렉터리를 설정합니다. `copyTemplate` 함수를 실행한 후, 대상 디렉터리의 내용이 소스 디렉터리와 일치하는지 확인합니다."
           },
           {
@@ -174,7 +174,7 @@
               2
             ],
             "details": "`copyTemplate` 함수 시작 부분에 `fse.pathExists(destination)`과 `fse.readdir(destination)`을 사용하여 대상 디렉터리의 상태를 확인합니다. 디렉터리가 존재하고 파일이 하나 이상 있을 경우, 'Destination directory is not empty.'와 같은 명확한 오류 메시지와 함께 Promise를 reject하도록 수정합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "미리 파일을 포함하는 디렉터리를 생성하고, 해당 디렉터리를 복사 대상으로 지정하여 `copyTemplate` 함수를 실행했을 때 예상된 오류가 발생하는지 테스트 케이스를 작성하여 검증합니다."
           },
           {
@@ -185,7 +185,7 @@
               3
             ],
             "details": "`copyTemplate` 함수 실행 전후와 catch 블록에 로깅 함수를 추가합니다. `logger.info('Copying template files...')`와 같은 메시지를 시작 시점에 출력하고, `try-catch` 구문을 사용하여 작업 완료 시 `logger.success('Template copied successfully!')`, 실패 시 `logger.error(error.message)`를 출력하도록 구현합니다. 스피너 로거가 있다면 이를 활용하여 진행 중 상태를 표시합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "콘솔 출력을 가로채거나 모의(mock) 로거를 주입하여, `copyTemplate` 함수의 각 시나리오(성공, 실패)에 따라 정확한 메시지가 올바른 로그 레벨(info, success, error)로 출력되는지 확인합니다."
           },
           {
@@ -196,7 +196,7 @@
               4
             ],
             "details": "프로젝트 생성 과정을 담당하는 `src/core/creator.ts` 또는 유사 파일에서 사용자가 입력한 프로젝트 이름을 기반으로 대상 경로를 설정합니다. 그런 다음, `templates/base`를 소스 경로로, 계산된 대상 경로를 목적지로 하여 `copyTemplate(templatePath, targetPath)` 함수를 호출합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "전체 CLI 애플리케이션을 실행하는 엔드투엔드(E2E) 테스트를 작성합니다. 특정 프로젝트 이름을 입력하고 명령을 실행한 후, 파일 시스템에 해당 이름의 디렉터리가 생성되고 그 안에 `templates/base`의 내용이 정확히 복제되었는지 확인합니다."
           }
         ]
@@ -211,7 +211,7 @@
         "dependencies": [
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -219,7 +219,7 @@
             "description": "프로젝트에 `inquirer` 라이브러리를 설치하고, 대화형 프롬프트로부터 수집할 사용자 설정 옵션에 대한 TypeScript 인터페이스를 정의합니다.",
             "dependencies": [],
             "details": "`pnpm add -D inquirer @types/inquirer` 명령을 실행하여 의존성을 추가합니다. `src/types` 디렉터리 내에 `options.ts` 파일을 생성하고 `ProjectOptions` 인터페이스를 정의합니다. 이 인터페이스에는 `reactQuery: boolean`, `stateManagement: 'jotai' | 'zustand' | 'none'`, `taskmaster: boolean`과 같은 필드가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`package.json`에 `inquirer`와 `@types/inquirer`가 `devDependencies`로 추가되었는지 확인합니다. `ProjectOptions` 인터페이스가 지정된 필드와 타입으로 올바르게 정의되었는지 코드 검토를 통해 확인합니다."
           },
           {
@@ -230,7 +230,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `inquirer.prompt`를 사용하는 함수를 작성합니다. 질문 객체는 `{ type: 'confirm', name: 'reactQuery', message: 'React Query를 사용하여 서버 상태를 관리하시겠습니까?', default: true }`와 같이 구성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "해당 프롬프트 함수를 직접 실행하여 CLI에 질문이 올바르게 표시되고 기본값이 'Yes'로 설정되어 있는지 수동으로 확인합니다. Enter 키를 눌렀을 때 `true`가 반환되는지 확인합니다."
           },
           {
@@ -241,7 +241,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `inquirer.prompt`를 사용하는 질문을 추가합니다. 질문 객체는 `{ type: 'list', name: 'stateManagement', message: '어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까?', choices: ['Jotai', 'Zustand', 'None'], default: 'None' }` 형식으로 구성합니다. 답변은 후처리를 위해 소문자 또는 'none'으로 변환합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프롬프트를 실행하여 선택지(Jotai, Zustand, None)가 모두 표시되는지 확인합니다. 각 항목을 선택했을 때 해당하는 값('jotai', 'zustand', 'none')이 올바르게 반환되는지 단위 테스트 또는 수동 테스트로 검증합니다."
           },
           {
@@ -252,7 +252,7 @@
               1
             ],
             "details": "`src/lib/prompts.ts` 파일에 `{ type: 'confirm', name: 'taskmaster', message: 'Taskmaster (AI-powered task manager)를 설치하시겠습니까?', default: true }` 구성의 질문을 추가합니다. 이는 다른 'confirm' 타입 질문과 동일한 패턴을 따릅니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI에서 프롬프트를 실행하여 질문 메시지와 기본값이 'Yes'로 올바르게 표시되는지 확인합니다. 'No'를 선택했을 때 `false`가 반환되는지 검증합니다."
           },
           {
@@ -265,7 +265,7 @@
               4
             ],
             "details": "`src/lib/prompts.ts`에 `export async function promptForOptions(): Promise<ProjectOptions>` 함수를 정의합니다. 이 함수 내에서 이전에 만든 모든 질문 객체를 배열에 담아 `inquirer.prompt`에 전달합니다. 반환된 답변 객체를 `ProjectOptions` 타입에 맞게 가공하여 반환하고, `src/cli.ts`에서 이 함수를 호출하여 결과를 사용하도록 연결합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`inquirer`를 모킹(mocking)하여 사전 정의된 답변 시나리오(예: React Query: yes, Zustand, Taskmaster: no)를 입력값으로 제공했을 때, 예상되는 `ProjectOptions` 객체가 정확히 반환되는지 확인하는 단위 테스트를 작성합니다."
           }
         ]
@@ -281,15 +281,15 @@
           13,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "사용자 선택 옵션과 패키지 이름 매핑 유틸리티 구현",
             "description": "사용자가 선택한 옵션(예: react-query, zustand)을 실제 npm 패키지 이름과 설치 유형(일반/개발)으로 변환하는 매핑 객체 또는 함수를 생성합니다.",
             "dependencies": [],
-            "details": "`src/utils/dependencies.ts`와 같은 새 파일을 만들고, 사용자 옵션 객체를 입력받아 `{ dependencies: string[], devDependencies: string[] }` 형태의 객체를 반환하는 함수를 정의합니다. 예를 들어, `options.stateManagement === 'zustand'`이면 `dependencies` 배열에 'zustand'를 추가합니다.",
-            "status": "pending",
+            "details": "`src/utils/dependencies.ts`와 같은 새 파일을 만들고, 사용자 옵션 객체를 입력받아 `{ dependencies: string[], devDependencies: string[] }` 형태의 객체를 반환하는 함수를 정의합니다. 예를 들어, `options.stateManagement === 'zustand'`이면 `dependencies` 배열에 'zustand'를 추가합니다.\n<info added on 2025-11-11T22:43:44.351Z>\n{\n  \"update\": \"Taskmaster는 기본 포함으로 확정됨에 따라, 선택적 패키지 매핑은 React Query와 상태 관리(Jotai, Zustand) 옵션만 처리합니다. `src/lib/dependencies.ts` 파일 내에 `resolveOptionalPackages(options)` 함수를 구현합니다. 이 함수는 React Query 선택 시 `@tanstack/react-query`를, 상태 관리 라이브러리 선택 시 `jotai` 또는 `zustand`를 `dependencies` 배열에 추가합니다. 의존성 목록은 중복 방지를 위해 Set으로 관리 후 정렬된 배열로 변환하여 `{ dependencies: string[], devDependencies: string[] }` 형식의 객체로 반환합니다.\"\n}\n</info added on 2025-11-11T22:43:44.351Z>\n<info added on 2025-11-11T22:50:04.226Z>\n{\n  \"update\": \"`src/lib/dependencies.ts`를 추가하여 `resolveOptionalPackages` 함수를 구현했습니다. React Query 선택 시 `@tanstack/react-query`, 상태 관리 선택에 따라 `jotai` 또는 `zustand`가 dependencies 배열에 포함되도록 했고, 중복 제거 후 정렬해 반환합니다. 현재는 devDependencies가 비어 있지만 쉽게 확장할 수 있는 구조입니다.\"\n}\n</info added on 2025-11-11T22:50:04.226Z>",
+            "status": "done",
             "testStrategy": "다양한 옵션 조합을 입력했을 때, 정확한 의존성 및 개발 의존성 패키지 목록이 반환되는지 확인하는 유닛 테스트를 작성합니다."
           },
           {
@@ -299,8 +299,8 @@
             "dependencies": [
               1
             ],
-            "details": "프로젝트 루트에서 `npm install execa`를 실행하여 의존성을 추가합니다. `src/core/installer.ts` 파일에 `installDependencies(projectPath: string, options: UserOptions)` 시그니처를 갖는 비동기 함수를 정의합니다. 이 함수는 내부적으로 1번 서브태스크에서 만든 매핑 유틸리티를 호출합니다.",
-            "status": "pending",
+            "details": "프로젝트 루트에서 `npm install execa`를 실행하여 의존성을 추가합니다. `src/core/installer.ts` 파일에 `installDependencies(projectPath: string, options: UserOptions)` 시그니처를 갖는 비동기 함수를 정의합니다. 이 함수는 내부적으로 1번 서브태스크에서 만든 매핑 유틸리티를 호출합니다.\n<info added on 2025-11-11T22:50:49.196Z>\n\"외부 의존성을 추가하지 않기 위해 `execa` 라이브러리 대신 Node.js의 내장 `child_process.spawn`을 사용하는 것으로 변경되었습니다. `src/lib/process.ts` 파일에 Promise 기반의 `runCommand` 유틸리티 함수를 구현했습니다. 이 함수는 Windows 호환성을 위해 `shell` 옵션을 포함하며, 다른 설치 로직에서 재사용될 공용 함수입니다.\"\n</info added on 2025-11-11T22:50:49.196Z>",
+            "status": "done",
             "testStrategy": "`execa`가 `package.json`에 추가되었는지 확인하고, `installer.ts` 파일과 `installDependencies` 함수가 정상적으로 생성되었는지 검토합니다."
           },
           {
@@ -310,8 +310,8 @@
             "dependencies": [
               2
             ],
-            "details": "매핑 유틸리티에서 반환된 `dependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', ...dependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 설치 과정에서 발생하는 예외를 처리하는 로직을 포함합니다.",
-            "status": "pending",
+            "details": "매핑 유틸리티에서 반환된 `dependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', ...dependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 설치 과정에서 발생하는 예외를 처리하는 로직을 포함합니다.\n<info added on 2025-11-11T22:51:19.025Z>\n```json\n\"src/lib/installer.ts에서 installOptionalDependencies 함수를 구현하여 선택된 옵션에 따라 npm install ... 명령을 실행하도록 했습니다. 일반 의존성 배열이 비어 있지 않으면 npm install을 실행하고, 현재는 React Query/Jotai/Zustand 케이스를 처리합니다. 명령 실행은 runCommand 유틸리티를 재사용합니다.\"\n```\n</info added on 2025-11-11T22:51:19.025Z>",
+            "status": "done",
             "testStrategy": "특정 옵션(예: zustand)을 활성화하여 프로젝트 생성 시, 생성된 프로젝트의 `package.json` 파일에 'zustand'가 `dependencies` 항목에 추가되었는지 확인합니다."
           },
           {
@@ -321,8 +321,8 @@
             "dependencies": [
               2
             ],
-            "details": "매핑 유틸리티에서 반환된 `devDependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', '-D', ...devDependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 일반 의존성 설치와 마찬가지로 오류 처리 로직을 포함합니다.",
-            "status": "pending",
+            "details": "매핑 유틸리티에서 반환된 `devDependencies` 배열을 가져옵니다. 배열에 항목이 있을 경우, `execa('npm', ['install', '-D', ...devDependencies], { cwd: projectPath })`를 호출하여 패키지를 설치합니다. 일반 의존성 설치와 마찬가지로 오류 처리 로직을 포함합니다.\n<info added on 2025-11-11T22:51:47.587Z>\n\"installOptionalDependencies 함수 내에서 devDependencies 배열이 존재할 경우 `npm install --save-dev` 명령을 실행하도록 구현했습니다. 현재 기본 옵션에서는 해당 배열이 비어있지만, 향후 테스트 도구 등의 옵션 추가에 대비해 확장 가능한 구조로 분기 처리를 완료했습니다.\"\n</info added on 2025-11-11T22:51:47.587Z>",
+            "status": "done",
             "testStrategy": "개발 의존성 관련 옵션(예: msw)을 활성화하여 프로젝트 생성 시, 생성된 프로젝트의 `package.json` 파일에 'msw'가 `devDependencies` 항목에 추가되었는지 확인합니다."
           },
           {
@@ -333,8 +333,8 @@
               3,
               4
             ],
-            "details": "CLI 도구에 `ora` 라이브러리를 설치합니다. `installDependencies` 함수 내에서 `execa` 호출 전후로 `ora` 스피너를 시작하고(`spinner.start('Installing additional dependencies...')`), 성공 시 `spinner.succeed()`, 실패 시 `spinner.fail()`을 호출하도록 코드를 수정합니다.",
-            "status": "pending",
+            "details": "CLI 도구에 `ora` 라이브러리를 설치합니다. `installDependencies` 함수 내에서 `execa` 호출 전후로 `ora` 스피너를 시작하고(`spinner.start('Installing additional dependencies...')`), 성공 시 `spinner.succeed()`, 실패 시 `spinner.fail()`을 호출하도록 코드를 수정합니다.\n<info added on 2025-11-12T18:47:29.366Z>\n```json\n\"`ora` 라이브러리를 `dependencies`에 추가하고, `installOptionalDependencies` 및 `installAndInitializeTaskmaster` 함수에 스피너를 적용했습니다. 일반 의존성, 개발 의존성, Taskmaster 초기화 각 단계에서 스피너가 진행 상태를 표시하며, `try-catch`로 에러 발생 시 실패 메시지를 출력합니다. 스피너 도입으로 `scaffold.ts`의 불필요한 `console.log`는 제거되었습니다.\"\n```\n</info added on 2025-11-12T18:47:29.366Z>",
+            "status": "done",
             "testStrategy": "수동 테스트를 통해 의존성 설치 중에 스피너가 정상적으로 표시되고, 설치 완료 후 성공 메시지가 나타나는지 확인합니다. 의도적으로 설치를 실패시켜 실패 메시지가 올바르게 표시되는지도 검증합니다."
           }
         ]
@@ -349,7 +349,7 @@
         "dependencies": [
           13
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -357,7 +357,7 @@
             "description": "새 프로젝트에 복사될 ESLint, Prettier, VSCode 설정 파일을 저장할 `templates/common` 디렉터리 구조를 CLI 프로젝트 내에 생성합니다.",
             "dependencies": [],
             "details": "CLI 프로젝트의 루트 레벨에 `templates` 디렉터리를 생성하고, 그 안에 `common` 이라는 하위 디렉터리를 만듭니다. 또한, VSCode 설정 파일을 위해 `templates/common/.vscode` 디렉터리도 함께 생성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프로젝트 루트에서 `test -d templates/common && test -d templates/common/.vscode` 쉘 명령어를 실행하여 디렉터리들이 정상적으로 생성되었는지 확인합니다."
           },
           {
@@ -368,7 +368,7 @@
               1
             ],
             "details": "`@typescript-eslint/parser`, `eslint-plugin-react`, `eslint-config-prettier` 등을 포함하는 표준 규칙셋으로 `.eslintrc.cjs` 파일을 작성합니다. 이 파일은 `templates/common` 디렉터리에 위치해야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "임시 테스트 프로젝트에 해당 설정 파일을 복사한 후 `npx eslint . --max-warnings 0` 명령을 실행하여 오류 없이 통과하는지 검증합니다."
           },
           {
@@ -379,7 +379,7 @@
               1
             ],
             "details": "`templates/common` 디렉터리 내에 `.prettierrc` 파일을 생성하고, `singleQuote: true`, `semi: true`, `tabWidth: 2`, `trailingComma: 'all'` 과 같은 팀 표준 포맷팅 옵션을 JSON 형식으로 정의합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "임의의 코드 파일에 대해 `npx prettier --check .` 명령어를 실행하여 포맷팅 규칙 위반이 없는지 확인하고, `--write` 옵션으로 파일이 올바르게 수정되는지 검증합니다."
           },
           {
@@ -390,7 +390,7 @@
               1
             ],
             "details": "`templates/common/.vscode` 디렉터리 내에 `settings.json` 파일을 생성합니다. 파일 내용에는 `\"editor.formatOnSave\": true`, `\"editor.defaultFormatter\": \"esbenp.prettier-vscode\"` 등의 규칙을 반드시 포함합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "생성된 프로젝트를 VSCode로 열고, 파일을 수정한 뒤 저장(Ctrl+S)했을 때 Prettier에 의해 코드가 자동으로 포맷팅되는지 수동으로 확인합니다."
           },
           {
@@ -402,8 +402,8 @@
               3,
               4
             ],
-            "details": "CLI의 프로젝트 생성 로직(commander.js의 action 콜백)에 `fs-extra` 라이브러리의 `copy` 함수를 사용하여 `templates/common`의 내용물을 사용자가 지정한 새 프로젝트 폴더로 재귀적으로 복사하는 코드를 추가합니다.",
-            "status": "pending",
+            "details": "CLI의 프로젝트 생성 로직(commander.js의 action 콜백)에 `fs-extra` 라이브러리의 `copy` 함수를 사용하여 `templates/common`의 내용물을 사용자가 지정한 새 프로젝트 폴더로 재귀적으로 복사하는 코드를 추가합니다.\n<info added on 2025-11-12T18:51:25.637Z>\n```json\n\"paths.ts에 TEMPLATE_COMMON_DIR 상수와 ScaffoldPaths 인터페이스에 commonTemplateDir 필드를 추가했습니다. scaffold.ts의 createProject 함수에서 copyTemplateDirectory를 재사용하여 기본 템플릿 복사 후 공통 설정 파일을 복사하는 로직을 구현했습니다. 복사 순서는 기본 템플릿 → 공통 설정 파일(병합) → 패키지 메타데이터 업데이트 순입니다. 빌드 및 린트 검증 완료했습니다.\"\n```\n</info added on 2025-11-12T18:51:25.637Z>",
+            "status": "done",
             "testStrategy": "CLI를 실행하여 새 프로젝트를 생성한 후, 생성된 프로젝트 디렉터리 내에 `.eslintrc.cjs`, `.prettierrc`, `.vscode/settings.json` 파일이 모두 존재하는지 파일 시스템을 통해 확인합니다."
           }
         ]
@@ -419,7 +419,7 @@
           14,
           15
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -427,7 +427,7 @@
             "description": "README.md 파일의 동적 생성을 위해 필요한 EJS 템플릿 엔진을 프로젝트의 의존성으로 추가합니다.",
             "dependencies": [],
             "details": "npm install ejs 또는 yarn add ejs 명령어를 사용하여 `package.json`의 `dependencies`에 ejs를 추가합니다. 타입스크립트 지원을 위해 `@types/ejs`를 `devDependencies`에 추가하는 것도 포함합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "의존성 설치 후 `npm install` 또는 `yarn`을 실행했을 때 오류가 발생하지 않는지 확인하고, `node_modules`에 `ejs` 폴더가 생성되었는지 확인합니다."
           },
           {
@@ -436,7 +436,7 @@
             "description": "동적으로 내용이 채워질 README의 기반이 되는 템플릿 파일을 생성합니다. 이 파일에는 프로젝트 제목, 설명, 실행 명령어 등 공통적인 섹션이 포함됩니다.",
             "dependencies": [],
             "details": "`templates` 디렉토리 또는 적절한 위치에 `README.template.md` 파일을 생성합니다. 프로젝트 이름(<%= projectName %>), 기본 스크립트(npm install, npm run dev) 등의 정적 내용과 플레이스홀더를 포함하여 마크다운 구조를 작성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "파일이 올바른 경로에 생성되었는지, 기본적인 마크다운 문법이 유효한지 수동으로 확인합니다."
           },
           {
@@ -448,7 +448,7 @@
               2
             ],
             "details": "`src/main.ts` 또는 별도의 유틸리티 파일에 `generateReadme(targetDir, options)`와 같은 함수를 작성합니다. 이 함수는 EJS의 `renderFile` 또는 `render` 메소드를 사용하여 `options` 객체를 템플릿에 주입하고, 결과를 `targetDir` 내의 `README.md` 파일로 저장합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "단위 테스트를 통해 `options` 객체가 주어졌을 때 예상되는 `README.md` 문자열이 정상적으로 생성되는지 검증합니다."
           },
           {
@@ -459,7 +459,7 @@
               3
             ],
             "details": "`src/main.ts`의 `createProject` 함수 내에서 파일 복사가 완료된 후, `npm install`이 실행되기 전에 `generateReadme` 함수를 호출하도록 코드를 추가합니다. 사용자 옵션과 생성될 프로젝트 경로를 인자로 전달합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI를 직접 실행하여 프로젝트를 생성했을 때, `README.md` 파일이 정상적으로 생성되고 그 내용에 기본 옵션들이 반영되었는지 확인합니다."
           },
           {
@@ -470,8 +470,8 @@
               2,
               3
             ],
-            "details": "`README.template.md` 파일 내에 EJS의 조건문(<% if (options.taskmaster) { %> ... <% } %>)을 사용합니다. `options.taskmaster` 값이 true일 때만 'Taskmaster 사용법' 섹션이 렌더링되도록 구현합니다.",
-            "status": "pending",
+            "details": "`README.template.md` 파일 내에 EJS의 조건문(<% if (options.taskmaster) { %> ... <% } %>)을 사용합니다. `options.taskmaster` 값이 true일 때만 'Taskmaster 사용법' 섹션이 렌더링되도록 구현합니다.\n<info added on 2025-11-12T19:05:08.486Z>\n[\n  \"README 템플릿에 이미 Taskmaster 조건부 렌더링이 포함되어 있습니다. `<% if (options.taskmaster) { %>` 구문을 사용하여 Taskmaster 옵션이 활성화된 경우에만 사용법 섹션이 렌더링되도록 구현되어 있습니다.\"\n]\n</info added on 2025-11-12T19:05:08.486Z>",
+            "status": "done",
             "testStrategy": "Taskmaster 옵션을 활성화했을 때와 비활성화했을 때 각각 프로젝트를 생성하여, 생성된 `README.md` 파일에 해당 섹션이 올바르게 포함되거나 제외되는지 스냅샷 테스트 또는 수동으로 비교 검증합니다."
           }
         ]
@@ -487,7 +487,7 @@
           11,
           13
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -495,7 +495,7 @@
             "description": "파일 시스템에 의존하는 유틸리티 함수들을 격리된 환경에서 테스트하기 위해 Vitest 테스트 프레임워크를 설정하고, `memfs`를 이용한 인메모리 파일 시스템을 연동합니다. 이는 실제 디스크 I/O를 방지하여 빠르고 안정적인 테스트를 보장합니다.",
             "dependencies": [],
             "details": "`vitest`와 `memfs` 라이브러리를 devDependencies에 추가합니다. `vitest.config.ts` 파일에서 테스트 환경 설정을 완료하고, `fs` 모듈을 `memfs`로 모킹(mocking)하는 테스트 설정 또는 헬퍼 파일을 작성하여 파일 시스템 테스트를 위한 기반을 마련합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "테스트 실행 시 실제 파일 시스템이 아닌 `memfs`의 가상 파일 시스템을 사용하는지 확인하기 위해 간단한 파일 생성/읽기 테스트를 작성하여 검증합니다."
           },
           {
@@ -504,7 +504,7 @@
             "description": "사용자에게 상태를 알려주는 로깅 유틸리티(info, success, error 등)가 정확한 메시지와 스타일로 출력되는지 검증하는 테스트 스위트를 작성합니다.",
             "dependencies": [],
             "details": "`vitest`의 `vi.spyOn` 기능을 사용하여 `console.log`, `console.error` 등의 전역 객체를 감시합니다. 각 로깅 함수(예: `logger.info()`, `logger.error()`)를 호출했을 때, 스파이가 올바른 인자(색상 코드가 포함된 문자열 등)로 호출되었는지 `toHaveBeenCalledWith`를 사용하여 검증합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "각 로그 레벨(info, success, error, warn)에 대한 테스트 케이스를 작성하고, 포맷팅된 출력 메시지가 예상과 정확히 일치하는지 스파이 객체를 통해 확인합니다."
           },
           {
@@ -515,7 +515,7 @@
               1
             ],
             "details": "`memfs`로 초기화된 가상 파일 시스템 상에서 디렉터리 생성 함수를 실행합니다. 테스트 실행 후, `memfs`의 `fs.existsSync`나 `fs.readdirSync`를 사용해 지정된 경로에 디렉터리가 올바르게 생성되었는지 확인합니다. 디렉터리가 이미 존재할 때 에러를 발생시키는 로직도 테스트합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1) 새 디렉터리 생성 성공, 2) 이미 존재하는 디렉터리 시도 시 예외 처리, 3) 중첩된 경로에 디렉터리 생성 등 다양한 시나리오를 테스트 케이스로 작성하여 검증합니다."
           },
           {
@@ -525,8 +525,8 @@
             "dependencies": [
               1
             ],
-            "details": "`memfs`를 사용하여 가상의 'templates' 디렉터리와 그 안에 여러 파일 및 하위 디렉터리를 구성합니다. 템플릿 복사 함수를 실행한 후, 생성된 프로젝트 디렉터리의 구조와 각 파일의 내용이 원본 템플릿과 일치하는지 `memfs`의 API를 통해 비교하고 검증합니다.",
-            "status": "pending",
+            "details": "`memfs`를 사용하여 가상의 'templates' 디렉터리와 그 안에 여러 파일 및 하위 디렉터리를 구성합니다. 템플릿 복사 함수를 실행한 후, 생성된 프로젝트 디렉터리의 구조와 각 파일의 내용이 원본 템플릿과 일치하는지 `memfs`의 API를 통해 비교하고 검증합니다.\n<info added on 2025-11-12T19:11:45.697Z>\n```json\n\"copyTemplateDirectory 함수에 대한 테스트 작성을 완료했습니다. memfs를 활용한 가상 파일 시스템에서 재귀적 디렉터리 복사(파일 및 하위 디렉터리 포함), 빈 디렉터리 복사, 파일 내용 일치 여부 검증을 포함한 테스트를 구현했으며, 모든 케이스가 통과되었음을 확인했습니다.\"\n```\n</info added on 2025-11-12T19:11:45.697Z>",
+            "status": "done",
             "testStrategy": "가상 파일 시스템에서 소스 템플릿과 복사된 결과물의 디렉터리 구조 및 파일 내용을 비교하여 일치 여부를 확인합니다. `.gitignore`와 같이 이름이 변경되어야 하는 파일의 처리 로직도 함께 테스트합니다."
           },
           {
@@ -535,7 +535,7 @@
             "description": "CLI에 전달된 인자(예: 프로젝트 이름)를 파싱하고 유효성을 검사하는 로직에 대한 유닛 테스트를 작성합니다. 유효하지 않은 프로젝트 이름이 입력되었을 때 적절한 오류를 반환하는지 확인합니다.",
             "dependencies": [],
             "details": "`commander.js`에 의존하는 액션 핸들러 함수를 테스트합니다. `process.argv`를 모킹하여 다양한 CLI 입력(예: `['node', 'index.js', 'my-app']`, `['node', 'index.js', '']`)을 시뮬레이션하고, 파싱된 인자가 액션 핸들러에 정확히 전달되는지 확인합니다. 유효성 검사 함수를 직접 호출하여 테스트할 수도 있습니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "유효한 프로젝트 이름, 유효하지 않은 이름(특수문자 포함 등), 이름이 없는 경우 등 다양한 입력 값에 대한 테스트 케이스를 작성하여 각 경우에 예상된 동작(성공 또는 에러)이 발생하는지 검증합니다."
           }
         ]
@@ -550,7 +550,7 @@
         "dependencies": [
           15
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -558,7 +558,7 @@
             "description": "사용자가 어떤 상태 관리 라이브러리를 사용할지 (Jotai, Zustand, 없음) 선택할 수 있도록 CLI에 프롬프트를 추가합니다.",
             "dependencies": [],
             "details": "`inquirer` 또는 유사한 프롬프트 라이브러리를 사용하여, 'stateManagement' 옵션을 받는 질문을 추가합니다. 선택지는 'none', 'jotai', 'zustand' 세 가지를 제공해야 합니다. 사용자의 선택은 후속 처리 단계에서 사용할 수 있도록 변수에 저장됩니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI를 실행했을 때 상태 관리 라이브러리 선택 프롬프트가 정상적으로 표시되는지, 그리고 각 옵션을 선택했을 때 다음 단계로 올바른 값이 전달되는지 확인합니다."
           },
           {
@@ -567,7 +567,7 @@
             "description": "Jotai를 선택했을 때 프로젝트에 추가될 기본 예제 코드와 파일 구조를 생성합니다.",
             "dependencies": [],
             "details": "`templates/addons/jotai/src/store` 디렉터리를 생성하고, 내부에 간단한 카운터 상태를 관리하는 `counter.ts` 파일을 추가합니다. 파일에는 `atom`을 사용한 기본 상태 정의와 export가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`templates/addons/jotai/src/store/counter.ts` 파일이 생성되었는지, 그리고 파일 내용이 유효한 Jotai 코드인지 수동으로 검토합니다."
           },
           {
@@ -576,7 +576,7 @@
             "description": "Zustand를 선택했을 때 프로젝트에 추가될 기본 예제 코드와 파일 구조를 생성합니다.",
             "dependencies": [],
             "details": "`templates/addons/zustand/src/store` 디렉터리를 생성하고, 내부에 간단한 카운터 상태를 관리하는 `counter.ts` 파일을 추가합니다. 파일에는 `create` 함수를 사용한 기본 스토어 생성 코드가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`templates/addons/zustand/src/store/counter.ts` 파일이 생성되었는지, 그리고 파일 내용이 유효한 Zustand 코드인지 수동으로 검토합니다."
           },
           {
@@ -587,7 +587,7 @@
               1
             ],
             "details": "프로젝트 생성 과정 중, 프롬프트에서 저장된 'stateManagement' 값을 확인합니다. 값이 'jotai' 또는 'zustand'일 경우, 생성될 프로젝트의 `package.json` 파일을 읽어 `dependencies` 객체에 해당 라이브러리를 추가한 후 다시 저장하는 함수를 구현합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Jotai와 Zustand를 각각 선택하여 프로젝트를 생성한 후, 최종 `package.json` 파일의 'dependencies'에 해당 라이브러리가 올바른 버전으로 추가되었는지 확인합니다. 'none'을 선택했을 때는 추가되지 않는지도 확인합니다."
           },
           {
@@ -599,8 +599,8 @@
               2,
               3
             ],
-            "details": "기본 템플릿 복사가 완료된 후, 'stateManagement' 옵션 값을 확인하는 조건문을 추가합니다. 'jotai'가 선택된 경우 `templates/addons/jotai/`의 내용을, 'zustand'가 선택된 경우 `templates/addons/zustand/`의 내용을 생성된 프로젝트 경로에 재귀적으로 복사/병합합니다.",
-            "status": "pending",
+            "details": "기본 템플릿 복사가 완료된 후, 'stateManagement' 옵션 값을 확인하는 조건문을 추가합니다. 'jotai'가 선택된 경우 `templates/addons/jotai/`의 내용을, 'zustand'가 선택된 경우 `templates/addons/zustand/`의 내용을 생성된 프로젝트 경로에 재귀적으로 복사/병합합니다.\n<info added on 2025-11-12T18:53:19.485Z>\n{\n  \"update\": \"paths.ts에 TEMPLATE_ADDONS_DIR 상수 추가 및 ScaffoldPaths 인터페이스에 addonsTemplateDir 필드를 추가했습니다. scaffold.ts의 createProject 함수에서는 상태 관리 옵션이 'none'이 아닐 경우, path.join을 사용하여 선택된 라이브러리(jotai/zustand)의 템플릿 경로를 동적으로 구성하여 애드온 파일을 복사하는 로직을 구현했습니다. 파일 복사는 기본 템플릿 및 공통 설정 파일 복사 이후, 패키지 메타데이터 업데이트 이전에 실행되도록 순서를 조정했으며, 빌드 및 린트 검증을 완료했습니다.\"\n}\n</info added on 2025-11-12T18:53:19.485Z>",
+            "status": "done",
             "testStrategy": "Jotai와 Zustand를 각각 선택하여 프로젝트를 생성한 후, `src/store/counter.ts` 파일이 올바른 내용으로 생성되었는지 확인합니다. 'none'을 선택했을 때는 해당 디렉터리 및 파일이 생성되지 않아야 합니다."
           }
         ]
@@ -616,7 +616,7 @@
           17,
           18
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -624,7 +624,7 @@
             "description": "E2E 테스트 실행을 위한 기본 환경을 구축합니다. `execa`와 파일 시스템 관리를 위한 `fs-extra` 같은 개발 의존성을 설치하고, 테스트 결과를 임시 디렉터리에 생성하도록 기본 스크립트 구조를 잡습니다.",
             "dependencies": [],
             "details": "`package.json`의 `devDependencies`에 `execa`, `fs-extra`를 추가합니다. `scripts/e2e` 디렉터리를 생성하고, 테스트 실행 시 생성될 프로젝트를 저장할 임시 디렉터리(예: `temp-e2e-project`)를 만들고 비우는 로직을 포함하는 기본 테스트 스크립트 파일(예: `run-e2e.mjs`)을 작성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`npm install`을 실행하여 새 의존성이 정상적으로 설치되는지 확인하고, 스크립트 실행 시 임시 디렉터리가 생성되는지 수동으로 확인합니다."
           },
           {
@@ -635,7 +635,7 @@
               1
             ],
             "details": "`execa`를 사용하여 `node dist/index.js create-vitnal-e2e-test`와 같은 명령을 실행합니다. 자식 프로세스의 `stdin.write('\\n')`을 사용하여 각 프롬프트에 엔터 키를 전송합니다. 프로세스가 성공적으로 종료(exit code 0)되는지 확인합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "스크립트를 실행하여 `temp-e2e-project` 디렉터리에 기본 옵션으로 프로젝트가 실제로 생성되는지 확인합니다. CLI의 출력 로그를 검사하여 오류가 없는지 확인합니다."
           },
           {
@@ -646,7 +646,7 @@
               2
             ],
             "details": "`fs.existsSync`와 같은 Node.js 파일 시스템 모듈을 사용하여 필수 파일 및 디렉터리 목록(예: `['package.json', 'vite.config.ts', 'src', 'src/App.tsx']`)이 모두 존재하는지 확인하는 함수를 구현합니다. 파일이 누락된 경우 테스트를 실패 처리합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "의도적으로 템플릿에서 파일을 삭제한 후 테스트를 실행하여, 파일 누락 시 테스트가 올바르게 실패하는지 확인합니다. 정상적인 경우에는 테스트가 통과해야 합니다."
           },
           {
@@ -657,7 +657,7 @@
               3
             ],
             "details": "`execa`를 다시 사용하되, `cwd` 옵션을 생성된 프로젝트 경로로 설정하여 명령어를 실행합니다. `npm install` 후 `npm run build`를 실행하고, 마지막으로 `npm run test`를 실행합니다. 각 단계에서 Promise가 reject되거나 exit code가 0이 아니면 테스트를 즉시 실패시킵니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "각 명령어가 실행될 때 출력되는 로그를 확인하여 정상적으로 진행되는지 모니터링합니다. 최종적으로 모든 명령어가 성공적으로 완료되면 테스트가 통과하는지 확인합니다."
           },
           {
@@ -668,7 +668,7 @@
               4
             ],
             "details": "`try...finally` 블록을 사용하여 테스트 로직을 `try` 안에 배치하고, `finally` 블록에서 `fs.removeSync`를 사용하여 임시 디렉터리를 삭제합니다. `package.json`의 `scripts`에 `\"test:e2e\": \"node scripts/e2e/run-e2e.mjs\"`를 추가합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`npm run test:e2e` 명령을 실행하여 전체 파이프라인이 동작하는지 확인합니다. 테스트가 끝난 후 임시 프로젝트 폴더가 깨끗하게 삭제되었는지 파일 시스템에서 확인합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-11T19:44:40.924Z",
+      "updated": "2025-11-12T19:23:44.037Z",
       "description": "Tasks for master context"
     }
   }
