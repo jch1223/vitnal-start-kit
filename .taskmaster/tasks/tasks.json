@@ -281,7 +281,7 @@
           13,
           14
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -349,7 +349,7 @@
         "dependencies": [
           13
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -357,7 +357,7 @@
             "description": "새 프로젝트에 복사될 ESLint, Prettier, VSCode 설정 파일을 저장할 `templates/common` 디렉터리 구조를 CLI 프로젝트 내에 생성합니다.",
             "dependencies": [],
             "details": "CLI 프로젝트의 루트 레벨에 `templates` 디렉터리를 생성하고, 그 안에 `common` 이라는 하위 디렉터리를 만듭니다. 또한, VSCode 설정 파일을 위해 `templates/common/.vscode` 디렉터리도 함께 생성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프로젝트 루트에서 `test -d templates/common && test -d templates/common/.vscode` 쉘 명령어를 실행하여 디렉터리들이 정상적으로 생성되었는지 확인합니다."
           },
           {
@@ -368,7 +368,7 @@
               1
             ],
             "details": "`@typescript-eslint/parser`, `eslint-plugin-react`, `eslint-config-prettier` 등을 포함하는 표준 규칙셋으로 `.eslintrc.cjs` 파일을 작성합니다. 이 파일은 `templates/common` 디렉터리에 위치해야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "임시 테스트 프로젝트에 해당 설정 파일을 복사한 후 `npx eslint . --max-warnings 0` 명령을 실행하여 오류 없이 통과하는지 검증합니다."
           },
           {
@@ -379,7 +379,7 @@
               1
             ],
             "details": "`templates/common` 디렉터리 내에 `.prettierrc` 파일을 생성하고, `singleQuote: true`, `semi: true`, `tabWidth: 2`, `trailingComma: 'all'` 과 같은 팀 표준 포맷팅 옵션을 JSON 형식으로 정의합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "임의의 코드 파일에 대해 `npx prettier --check .` 명령어를 실행하여 포맷팅 규칙 위반이 없는지 확인하고, `--write` 옵션으로 파일이 올바르게 수정되는지 검증합니다."
           },
           {
@@ -390,7 +390,7 @@
               1
             ],
             "details": "`templates/common/.vscode` 디렉터리 내에 `settings.json` 파일을 생성합니다. 파일 내용에는 `\"editor.formatOnSave\": true`, `\"editor.defaultFormatter\": \"esbenp.prettier-vscode\"` 등의 규칙을 반드시 포함합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "생성된 프로젝트를 VSCode로 열고, 파일을 수정한 뒤 저장(Ctrl+S)했을 때 Prettier에 의해 코드가 자동으로 포맷팅되는지 수동으로 확인합니다."
           },
           {
@@ -402,8 +402,8 @@
               3,
               4
             ],
-            "details": "CLI의 프로젝트 생성 로직(commander.js의 action 콜백)에 `fs-extra` 라이브러리의 `copy` 함수를 사용하여 `templates/common`의 내용물을 사용자가 지정한 새 프로젝트 폴더로 재귀적으로 복사하는 코드를 추가합니다.",
-            "status": "pending",
+            "details": "CLI의 프로젝트 생성 로직(commander.js의 action 콜백)에 `fs-extra` 라이브러리의 `copy` 함수를 사용하여 `templates/common`의 내용물을 사용자가 지정한 새 프로젝트 폴더로 재귀적으로 복사하는 코드를 추가합니다.\n<info added on 2025-11-12T18:51:25.637Z>\n```json\n\"paths.ts에 TEMPLATE_COMMON_DIR 상수와 ScaffoldPaths 인터페이스에 commonTemplateDir 필드를 추가했습니다. scaffold.ts의 createProject 함수에서 copyTemplateDirectory를 재사용하여 기본 템플릿 복사 후 공통 설정 파일을 복사하는 로직을 구현했습니다. 복사 순서는 기본 템플릿 → 공통 설정 파일(병합) → 패키지 메타데이터 업데이트 순입니다. 빌드 및 린트 검증 완료했습니다.\"\n```\n</info added on 2025-11-12T18:51:25.637Z>",
+            "status": "done",
             "testStrategy": "CLI를 실행하여 새 프로젝트를 생성한 후, 생성된 프로젝트 디렉터리 내에 `.eslintrc.cjs`, `.prettierrc`, `.vscode/settings.json` 파일이 모두 존재하는지 파일 시스템을 통해 확인합니다."
           }
         ]
@@ -550,7 +550,7 @@
         "dependencies": [
           15
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -558,7 +558,7 @@
             "description": "사용자가 어떤 상태 관리 라이브러리를 사용할지 (Jotai, Zustand, 없음) 선택할 수 있도록 CLI에 프롬프트를 추가합니다.",
             "dependencies": [],
             "details": "`inquirer` 또는 유사한 프롬프트 라이브러리를 사용하여, 'stateManagement' 옵션을 받는 질문을 추가합니다. 선택지는 'none', 'jotai', 'zustand' 세 가지를 제공해야 합니다. 사용자의 선택은 후속 처리 단계에서 사용할 수 있도록 변수에 저장됩니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "CLI를 실행했을 때 상태 관리 라이브러리 선택 프롬프트가 정상적으로 표시되는지, 그리고 각 옵션을 선택했을 때 다음 단계로 올바른 값이 전달되는지 확인합니다."
           },
           {
@@ -567,7 +567,7 @@
             "description": "Jotai를 선택했을 때 프로젝트에 추가될 기본 예제 코드와 파일 구조를 생성합니다.",
             "dependencies": [],
             "details": "`templates/addons/jotai/src/store` 디렉터리를 생성하고, 내부에 간단한 카운터 상태를 관리하는 `counter.ts` 파일을 추가합니다. 파일에는 `atom`을 사용한 기본 상태 정의와 export가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`templates/addons/jotai/src/store/counter.ts` 파일이 생성되었는지, 그리고 파일 내용이 유효한 Jotai 코드인지 수동으로 검토합니다."
           },
           {
@@ -576,7 +576,7 @@
             "description": "Zustand를 선택했을 때 프로젝트에 추가될 기본 예제 코드와 파일 구조를 생성합니다.",
             "dependencies": [],
             "details": "`templates/addons/zustand/src/store` 디렉터리를 생성하고, 내부에 간단한 카운터 상태를 관리하는 `counter.ts` 파일을 추가합니다. 파일에는 `create` 함수를 사용한 기본 스토어 생성 코드가 포함되어야 합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "`templates/addons/zustand/src/store/counter.ts` 파일이 생성되었는지, 그리고 파일 내용이 유효한 Zustand 코드인지 수동으로 검토합니다."
           },
           {
@@ -587,7 +587,7 @@
               1
             ],
             "details": "프로젝트 생성 과정 중, 프롬프트에서 저장된 'stateManagement' 값을 확인합니다. 값이 'jotai' 또는 'zustand'일 경우, 생성될 프로젝트의 `package.json` 파일을 읽어 `dependencies` 객체에 해당 라이브러리를 추가한 후 다시 저장하는 함수를 구현합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Jotai와 Zustand를 각각 선택하여 프로젝트를 생성한 후, 최종 `package.json` 파일의 'dependencies'에 해당 라이브러리가 올바른 버전으로 추가되었는지 확인합니다. 'none'을 선택했을 때는 추가되지 않는지도 확인합니다."
           },
           {
@@ -599,8 +599,8 @@
               2,
               3
             ],
-            "details": "기본 템플릿 복사가 완료된 후, 'stateManagement' 옵션 값을 확인하는 조건문을 추가합니다. 'jotai'가 선택된 경우 `templates/addons/jotai/`의 내용을, 'zustand'가 선택된 경우 `templates/addons/zustand/`의 내용을 생성된 프로젝트 경로에 재귀적으로 복사/병합합니다.",
-            "status": "pending",
+            "details": "기본 템플릿 복사가 완료된 후, 'stateManagement' 옵션 값을 확인하는 조건문을 추가합니다. 'jotai'가 선택된 경우 `templates/addons/jotai/`의 내용을, 'zustand'가 선택된 경우 `templates/addons/zustand/`의 내용을 생성된 프로젝트 경로에 재귀적으로 복사/병합합니다.\n<info added on 2025-11-12T18:53:19.485Z>\n{\n  \"update\": \"paths.ts에 TEMPLATE_ADDONS_DIR 상수 추가 및 ScaffoldPaths 인터페이스에 addonsTemplateDir 필드를 추가했습니다. scaffold.ts의 createProject 함수에서는 상태 관리 옵션이 'none'이 아닐 경우, path.join을 사용하여 선택된 라이브러리(jotai/zustand)의 템플릿 경로를 동적으로 구성하여 애드온 파일을 복사하는 로직을 구현했습니다. 파일 복사는 기본 템플릿 및 공통 설정 파일 복사 이후, 패키지 메타데이터 업데이트 이전에 실행되도록 순서를 조정했으며, 빌드 및 린트 검증을 완료했습니다.\"\n}\n</info added on 2025-11-12T18:53:19.485Z>",
+            "status": "done",
             "testStrategy": "Jotai와 Zustand를 각각 선택하여 프로젝트를 생성한 후, `src/store/counter.ts` 파일이 올바른 내용으로 생성되었는지 확인합니다. 'none'을 선택했을 때는 해당 디렉터리 및 파일이 생성되지 않아야 합니다."
           }
         ]
@@ -676,7 +676,7 @@
     ],
     "metadata": {
       "created": "2025-11-11T14:24:02.818Z",
-      "updated": "2025-11-12T18:47:29.685Z",
+      "updated": "2025-11-12T18:52:53.708Z",
       "description": "Tasks for master context"
     }
   }

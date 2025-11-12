@@ -19,6 +19,7 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   await ensureTargetDirectoryAvailable(paths.targetDir);
   await copyTemplateDirectory(paths.templateDir, paths.targetDir);
   console.log('기본 템플릿 복사가 완료되었습니다.');
+
   await updatePackageJsonMetadata(config, paths.targetDir);
   console.log('패키지 메타데이터가 업데이트되었습니다.');
 
