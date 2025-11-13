@@ -28,6 +28,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # TypeScript 타입 체크 (빌드 없이 타입만 검증)
+      - name: Run type check
+        run: npm run typecheck
+
       # ESLint를 통한 코드 품질 검사
       - name: Run linter
         run: npm run lint
