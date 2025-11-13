@@ -49,13 +49,49 @@ export const runCreateCommand = async (): Promise<void> => {
 
   // 프롬프트 응답을 위한 Promise
   const promptResponsePromise = new Promise<void>((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      reject(new Error(`프롬프트 응답 타임아웃: ${responsesSent}/${maxPrompts} 프롬프트에 응답`));
-    }, PROMPT_TIMEOUT);
-
     // stdout 데이터 수집, 파싱 및 실시간 출력
     const reader = cliProcess.stdout.getReader();
     const decoder = new TextDecoder();
+
+    // stderr reader도 미리 선언하여 타임아웃 핸들러에서 접근 가능하도록 함
+    let stderrReader: ReadableStreamDefaultReader<Uint8Array> | null = null;
+
+    // 리소스 정리 함수
+    const cleanupResources = async () => {
+      try {
+        // stdout reader 정리
+        if (reader) {
+          try {
+            await reader.cancel();
+          } catch {
+            // 이미 취소되었거나 에러가 발생한 경우 무시
+          }
+        }
+
+        // stderr reader 정리
+        if (stderrReader) {
+          try {
+            await stderrReader.cancel();
+          } catch {
+            // 이미 취소되었거나 에러가 발생한 경우 무시
+          }
+        }
+
+        // stdin 종료
+        await safeEndStdin(cliProcess.stdin);
+
+        // 프로세스 종료
+        cliProcess.kill();
+      } catch (error) {
+        // 정리 중 에러는 무시 (이미 정리된 리소스일 수 있음)
+        console.error('리소스 정리 중 에러 발생:', error);
+      }
+    };
+
+    const timeout = setTimeout(async () => {
+      await cleanupResources();
+      reject(new Error(`프롬프트 응답 타임아웃: ${responsesSent}/${maxPrompts} 프롬프트에 응답`));
+    }, PROMPT_TIMEOUT);
 
     const sendResponse = async (promptConfig: (typeof PROMPT_RESPONSES)[number]) => {
       // 응답 전송
@@ -117,6 +153,8 @@ export const runCreateCommand = async (): Promise<void> => {
           }
         }
       } catch (error) {
+        // 에러 발생 시 리소스 정리
+        await cleanupResources();
         reject(error);
       }
     };
@@ -127,9 +165,14 @@ export const runCreateCommand = async (): Promise<void> => {
     const stdoutPromise = readStdout();
 
     // stderr는 실시간으로 출력 (에러 메시지 등)
-    const stderrReader = cliProcess.stderr.getReader();
+    // 타임아웃 핸들러에서 접근할 수 있도록 미리 선언된 변수에 할당
+    stderrReader = cliProcess.stderr.getReader();
 
     const readStderr = async () => {
+      if (!stderrReader) {
+        return;
+      }
+
       try {
         while (true) {
           const { done, value } = await stderrReader.read();
