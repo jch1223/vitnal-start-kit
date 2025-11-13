@@ -1,14 +1,12 @@
 #!/usr/bin/env bun
 
-import { execa } from 'execa';
-import fs from 'fs-extra';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Writable } from 'node:stream';
 
+// Bun 1.0.23+에서는 import.meta.dir을 지원하지만, 안정성을 위해 fileURLToPath도 함께 사용
+// import.meta.dir이 undefined일 경우를 대비한 fallback
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __dirname = (import.meta.dir as string | undefined) || path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const TEST_PROJECT_NAME = 'vitnal-e2e-test';
 const TEST_PROJECT_DIR = path.join(PROJECT_ROOT, TEST_PROJECT_NAME);
@@ -30,9 +28,15 @@ const REQUIRED_FILES: string[] = [
  * 임시 프로젝트 디렉터리를 정리합니다.
  */
 const cleanup = async () => {
-  if (await fs.pathExists(TEST_PROJECT_DIR)) {
-    await fs.remove(TEST_PROJECT_DIR);
-    console.log(`✓ 임시 프로젝트 디렉터리 삭제 완료: ${TEST_PROJECT_DIR}`);
+  try {
+    // Bun의 Promise 기반 fs API 사용 (node:fs/promises)
+    const { rm, exists } = await import('node:fs/promises');
+    if (await exists(TEST_PROJECT_DIR)) {
+      await rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+      console.log(`✓ 임시 프로젝트 디렉터리 삭제 완료: ${TEST_PROJECT_DIR}`);
+    }
+  } catch (error) {
+    // 디렉터리가 없거나 삭제 실패 시 무시
   }
 };
 
@@ -41,12 +45,33 @@ const cleanup = async () => {
  */
 const validateProjectStructure = async () => {
   console.log('📋 생성된 프로젝트 파일 구조 검증 중...');
+  console.log(`검증 대상 디렉터리: ${TEST_PROJECT_DIR}`);
 
   const missingFiles: string[] = [];
 
   for (const file of REQUIRED_FILES) {
     const filePath = path.join(TEST_PROJECT_DIR, file);
-    if (!(await fs.pathExists(filePath))) {
+
+    try {
+      // Bun의 Promise 기반 fs API 사용 (node:fs/promises)
+      const { stat } = await import('node:fs/promises');
+      const stats = await stat(filePath);
+
+      // src는 디렉터리여야 하고, 나머지는 파일이어야 함
+      if (file === 'src' && !stats.isDirectory()) {
+        console.log(`  ❌ 타입 오류: ${file}는 디렉터리여야 함`);
+        missingFiles.push(file);
+      } else if (file !== 'src' && stats.isDirectory()) {
+        console.log(`  ❌ 타입 오류: ${file}는 파일이어야 함`);
+        missingFiles.push(file);
+      } else {
+        console.log(`  ✓ 존재: ${file}`);
+      }
+    } catch (error) {
+      // 파일/디렉터리가 존재하지 않으면 에러 발생
+      console.log(
+        `  ❌ 누락: ${file} (${filePath}) - ${error instanceof Error ? error.message : String(error)}`,
+      );
       missingFiles.push(file);
     }
   }
@@ -59,53 +84,55 @@ const validateProjectStructure = async () => {
 };
 
 /**
- * 프롬프트 메시지 패턴 정의
- * inquirer가 출력하는 프롬프트 메시지를 감지하기 위한 패턴
+ * 프롬프트 메시지 패턴 및 응답 정의
+ * inquirer가 출력하는 프롬프트 메시지를 감지하고 적절한 응답을 전송
  */
-const PROMPT_PATTERNS = [
-  /React Query를 사용하여 서버 상태를 관리하시겠습니까/,
-  /어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까/,
-  /Task Master AI를 사용하여 작업 관리를 하시겠습니까/,
+const PROMPT_RESPONSES = [
+  {
+    pattern: /React Query를 사용하여 서버 상태를 관리하시겠습니까/,
+    response: '\n', // 기본값 true (엔터)
+    delay: 100, // 응답 지연 시간 (ms)
+  },
+  {
+    pattern: /어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까/,
+    response: '\n', // list 타입은 기본값이 있으면 엔터 한 번으로 선택
+    delay: 500, // list 타입은 렌더링 시간이 더 필요하므로 더 긴 지연
+    waitForRender: true, // 프롬프트가 완전히 렌더링될 때까지 대기
+    renderPattern: /Use arrow keys|없음/, // 프롬프트가 완전히 렌더링되었는지 확인하는 패턴
+  },
+  {
+    pattern: /Task Master AI를 사용하여 작업 관리를 하시겠습니까/,
+    response: 'y\n', // 기본값 false이므로 'y' 입력하여 선택
+    delay: 100, // 응답 지연 시간 (ms)
+  },
 ] as const;
 
 /**
  * 안전하게 stdin에 데이터를 전송합니다.
  */
-const safeWriteStdin = (stdin: Writable | null, data: string): boolean => {
+const safeWriteStdin = async (stdin: any, data: string): Promise<void> => {
   if (!stdin) {
-    return false;
-  }
-
-  // stream.Writable의 상태 확인
-  if (stdin.destroyed) {
-    return false;
-  }
-  if (stdin.writableEnded || stdin.writable === false) {
-    return false;
+    return;
   }
 
   try {
-    return stdin.write(data) !== false;
+    // Bun.spawn의 stdin은 FileSink 타입으로 write() 메서드를 가짐
+    await stdin.write(data);
   } catch (error) {
-    // 스트림이 이미 닫혔거나 에러가 발생한 경우
-    return false;
+    // 스트림이 이미 닫혔거나 에러가 발생한 경우 무시
   }
 };
 
 /**
  * 안전하게 stdin을 종료합니다.
  */
-const safeEndStdin = (stdin: Writable | null): void => {
+const safeEndStdin = async (stdin: any): Promise<void> => {
   if (!stdin) {
     return;
   }
 
-  // stream.Writable의 상태 확인
-  if (stdin.destroyed || stdin.writableEnded) {
-    return;
-  }
-
   try {
+    // Bun.spawn의 stdin은 FileSink 타입으로 end() 메서드를 가짐
     stdin.end();
   } catch (error) {
     // 스트림이 이미 닫혔거나 에러가 발생한 경우 무시
@@ -119,19 +146,20 @@ const safeEndStdin = (stdin: Writable | null): void => {
 const runCreateCommand = async () => {
   console.log('🔨 프로젝트 생성 중...\n');
 
-  // Bun 사용으로 더 빠른 실행 (Node.js 대비 2-3배 빠름)
-  // --bun 플래그로 Bun 런타임 강제 사용 (Node.js 호환 모드 비활성화)
-  const cliProcess = execa('bun', ['--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
+  // Bun.spawn을 사용하여 프로세스 실행
+  const cliProcess = Bun.spawn(['bun', '--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
-    stdio: ['pipe', 'pipe', 'pipe'], // stdout/stderr를 캡처하여 파싱 및 출력
+    stdin: 'pipe',
+    stdout: 'pipe',
+    stderr: 'pipe',
   });
 
   let stdoutBuffer = '';
   let promptIndex = 0;
   let responsesSent = 0;
-  const maxPrompts = PROMPT_PATTERNS.length;
+  let responseScheduled = false; // 응답이 이미 스케줄되었는지 추적
+  const maxPrompts = PROMPT_RESPONSES.length;
   const PROMPT_TIMEOUT = 30000; // 30초 타임아웃
-  const RESPONSE_DELAY = 100; // 프롬프트 감지 후 응답 지연 (ms)
 
   // 프롬프트 응답을 위한 Promise
   const promptResponsePromise = new Promise<void>((resolve, reject) => {
@@ -140,41 +168,91 @@ const runCreateCommand = async () => {
     }, PROMPT_TIMEOUT);
 
     // stdout 데이터 수집, 파싱 및 실시간 출력
-    cliProcess.stdout?.on('data', (chunk: Buffer) => {
-      const data = chunk.toString();
-      stdoutBuffer += data;
+    const reader = cliProcess.stdout.getReader();
+    const decoder = new TextDecoder();
 
-      // 실시간으로 stdout 출력 (ora 스피너 등 표시)
-      process.stdout.write(chunk);
+    const sendResponse = async (promptConfig: (typeof PROMPT_RESPONSES)[number]) => {
+      // 응답 전송
+      await safeWriteStdin(cliProcess.stdin, promptConfig.response);
 
-      // 현재 기대하는 프롬프트 패턴 확인
-      if (promptIndex < maxPrompts) {
-        const pattern = PROMPT_PATTERNS[promptIndex];
-        if (pattern.test(stdoutBuffer)) {
-          // 프롬프트가 감지되었으므로 응답 전송
-          setTimeout(() => {
-            if (safeWriteStdin(cliProcess.stdin, '\n')) {
-              responsesSent++;
-              promptIndex++;
+      responsesSent++;
+      promptIndex++;
+      responseScheduled = false; // 다음 프롬프트를 위해 리셋
 
-              // 모든 프롬프트에 응답했으면 stdin 종료
-              if (promptIndex >= maxPrompts) {
-                clearTimeout(timeout);
-                setTimeout(() => {
-                  safeEndStdin(cliProcess.stdin);
-                  resolve();
-                }, RESPONSE_DELAY);
+      // 모든 프롬프트에 응답했으면 stdin 종료
+      if (promptIndex >= maxPrompts) {
+        clearTimeout(timeout);
+        setTimeout(async () => {
+          await safeEndStdin(cliProcess.stdin);
+          resolve();
+        }, 100);
+      }
+    };
+
+    const readStdout = async () => {
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const data = decoder.decode(value, { stream: true });
+          stdoutBuffer += data;
+
+          // 실시간으로 stdout 출력 (ora 스피너 등 표시)
+          process.stdout.write(value);
+
+          // 현재 기대하는 프롬프트 패턴 확인
+          if (promptIndex < maxPrompts && !responseScheduled) {
+            const promptConfig = PROMPT_RESPONSES[promptIndex];
+
+            // 프롬프트 패턴이 감지되었는지 확인
+            if (promptConfig.pattern.test(stdoutBuffer)) {
+              // renderPattern이 있는 경우 (list 타입 등)
+              if ('renderPattern' in promptConfig && promptConfig.renderPattern) {
+                // renderPattern이 감지되면 즉시 응답 전송
+                if (promptConfig.renderPattern.test(stdoutBuffer)) {
+                  responseScheduled = true;
+                  // 렌더링이 완료되었으므로 응답 전송
+                  setTimeout(async () => {
+                    await sendResponse(promptConfig);
+                    responseScheduled = false;
+                  }, 100); // 짧은 지연 후 응답
+                }
+                // renderPattern이 아직 감지되지 않았으면 계속 대기
+              } else {
+                // renderPattern이 없는 경우 (confirm 타입 등)
+                responseScheduled = true;
+                setTimeout(async () => {
+                  await sendResponse(promptConfig);
+                  responseScheduled = false;
+                }, promptConfig.delay);
               }
             }
-          }, RESPONSE_DELAY);
+          }
         }
+      } catch (error) {
+        reject(error);
       }
-    });
+    };
+
+    readStdout();
 
     // stderr는 실시간으로 출력 (에러 메시지 등)
-    cliProcess.stderr?.on('data', (chunk: Buffer) => {
-      process.stderr.write(chunk);
-    });
+    const stderrReader = cliProcess.stderr.getReader();
+
+    const readStderr = async () => {
+      try {
+        while (true) {
+          const { done, value } = await stderrReader.read();
+          if (done) break;
+          process.stderr.write(value);
+        }
+      } catch (error) {
+        // stderr 읽기 에러는 무시
+      }
+    };
+
+    readStderr();
   });
 
   try {
@@ -182,10 +260,10 @@ const runCreateCommand = async () => {
     await promptResponsePromise;
 
     // 프로세스 완료 대기
-    const cliResult = await cliProcess;
+    const exitCode = await cliProcess.exited;
 
-    if (cliResult.exitCode !== 0) {
-      throw new Error(`프로젝트 생성 실패 (exit code: ${cliResult.exitCode})`);
+    if (exitCode !== 0) {
+      throw new Error(`프로젝트 생성 실패 (exit code: ${exitCode})`);
     }
 
     if (responsesSent < maxPrompts) {
@@ -195,12 +273,10 @@ const runCreateCommand = async () => {
     console.log('\n✓ 프로젝트 생성 완료\n');
   } catch (error) {
     // 에러 발생 시 stdin 정리
-    safeEndStdin(cliProcess.stdin);
+    await safeEndStdin(cliProcess.stdin);
 
     // 프로세스가 아직 실행 중이면 종료
-    if (!cliProcess.killed) {
-      cliProcess.kill();
-    }
+    cliProcess.kill();
 
     throw error;
   }
@@ -211,47 +287,55 @@ const runCreateCommand = async () => {
  */
 const runNpmCommands = async () => {
   console.log('📦 npm install 실행 중...');
-  const installResult = await execa('npm', ['install'], {
+  const installProcess = Bun.spawn(['npm', 'install'], {
     cwd: TEST_PROJECT_DIR,
-    stdio: 'inherit',
+    stdout: 'inherit',
+    stderr: 'inherit',
   });
 
-  if (installResult.exitCode !== 0) {
+  const installExitCode = await installProcess.exited;
+  if (installExitCode !== 0) {
     throw new Error('npm install 실패');
   }
   console.log('✓ npm install 완료\n');
 
   // Playwright 브라우저 설치 (Storybook 테스트에 필요)
   console.log('🌐 Playwright 브라우저 설치 중...');
-  const playwrightInstallResult = await execa('npx', ['playwright', 'install', 'chromium'], {
+  const playwrightProcess = Bun.spawn(['npx', 'playwright', 'install', 'chromium'], {
     cwd: TEST_PROJECT_DIR,
-    stdio: 'inherit',
+    stdout: 'inherit',
+    stderr: 'inherit',
   });
 
-  if (playwrightInstallResult.exitCode !== 0) {
+  const playwrightExitCode = await playwrightProcess.exited;
+  if (playwrightExitCode !== 0) {
     throw new Error('Playwright 브라우저 설치 실패');
   }
   console.log('✓ Playwright 브라우저 설치 완료\n');
 
   console.log('🔨 npm run build 실행 중...');
-  const buildResult = await execa('npm', ['run', 'build'], {
+  const buildProcess = Bun.spawn(['npm', 'run', 'build'], {
     cwd: TEST_PROJECT_DIR,
-    stdio: 'inherit',
+    stdout: 'inherit',
+    stderr: 'inherit',
   });
 
-  if (buildResult.exitCode !== 0) {
+  const buildExitCode = await buildProcess.exited;
+  if (buildExitCode !== 0) {
     throw new Error('npm run build 실패');
   }
   console.log('✓ npm run build 완료\n');
 
   // 기본 프로젝트만 실행 (Storybook 프로젝트는 CI에서 별도로 실행)
   console.log('🧪 npm run test 실행 중... (기본 프로젝트만)');
-  const testResult = await execa('npm', ['run', 'test', '--', '--project=default'], {
+  const testProcess = Bun.spawn(['npm', 'run', 'test', '--', '--project=default'], {
     cwd: TEST_PROJECT_DIR,
-    stdio: 'inherit',
+    stdout: 'inherit',
+    stderr: 'inherit',
   });
 
-  if (testResult.exitCode !== 0) {
+  const testExitCode = await testProcess.exited;
+  if (testExitCode !== 0) {
     throw new Error('npm run test 실패');
   }
   console.log('✓ npm run test 완료\n');
@@ -272,12 +356,14 @@ const runE2ETest = async () => {
 
     // 2. CLI 빌드 확인
     console.log('📦 CLI 빌드 확인 중...');
-    const buildResult = await execa('npm', ['run', 'build'], {
+    const buildProcess = Bun.spawn(['npm', 'run', 'build'], {
       cwd: PROJECT_ROOT,
-      stdio: 'inherit',
+      stdout: 'inherit',
+      stderr: 'inherit',
     });
 
-    if (buildResult.exitCode !== 0) {
+    const buildExitCode = await buildProcess.exited;
+    if (buildExitCode !== 0) {
       throw new Error('CLI 빌드 실패');
     }
 
