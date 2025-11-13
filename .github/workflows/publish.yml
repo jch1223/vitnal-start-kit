@@ -1,11 +1,14 @@
 name: Publish
 
-# Publish 워크플로우: 버전 태그(v*.*.*)가 push될 때만 실행
-# 예: git tag v1.0.0 && git push origin v1.0.0
+# Publish 워크플로우: 버전 태그 push 또는 GitHub Releases 생성 시 실행
+# 방법 1: git tag v1.0.0 && git push origin v1.0.0
+# 방법 2: GitHub에서 Releases 생성 (권장 - 릴리스 노트와 함께 관리 가능)
 on:
   push:
     tags:
       - 'v*.*.*'
+  release:
+    types: [published] # GitHub Releases가 생성될 때 실행
 
 jobs:
   test:
