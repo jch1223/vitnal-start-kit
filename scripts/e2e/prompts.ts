@@ -137,7 +137,6 @@ export const runCreateCommand = async (): Promise<void> => {
                   // 렌더링이 완료되었으므로 응답 전송
                   setTimeout(async () => {
                     await sendResponse(promptConfig);
-                    responseScheduled = false;
                   }, 100); // 짧은 지연 후 응답
                 }
                 // renderPattern이 아직 감지되지 않았으면 계속 대기
@@ -146,7 +145,6 @@ export const runCreateCommand = async (): Promise<void> => {
                 responseScheduled = true;
                 setTimeout(async () => {
                   await sendResponse(promptConfig);
-                  responseScheduled = false;
                 }, promptConfig.delay);
               }
             }
