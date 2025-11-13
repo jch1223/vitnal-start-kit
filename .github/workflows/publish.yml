@@ -1,14 +1,11 @@
 name: Publish
 
-# Publish 워크플로우: 버전 태그 push 또는 GitHub Releases 생성 시 실행
-# 방법 1: git tag v1.0.0 && git push origin v1.0.0
-# 방법 2: GitHub에서 Releases 생성 (권장 - 릴리스 노트와 함께 관리 가능)
+# Publish 워크플로우: GitHub Releases 생성 시에만 실행
+# GitHub에서 Releases를 생성하면 자동으로 npm에 배포됩니다
+# 방법: GitHub 저장소 → Releases → "Draft a new release" → 태그 선택 및 릴리스 노트 작성 → "Publish release"
 on:
-  push:
-    tags:
-      - 'v*.*.*'
   release:
-    types: [published] # GitHub Releases가 생성될 때 실행
+    types: [published] # GitHub Releases가 생성될 때만 실행
 
 jobs:
   test:
@@ -105,17 +102,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 태그 또는 Release에서 버전 추출 및 package.json 업데이트
-      - name: Extract version from tag/release
+      # GitHub Release에서 버전 추출 및 package.json 업데이트
+      - name: Extract version from release
         id: extract_version
         run: |
-          if [ "${{ github.event_name }}" == "release" ]; then
-            # GitHub Releases 이벤트인 경우
-            VERSION="${{ github.event.release.tag_name }}"
-          else
-            # 태그 push 이벤트인 경우
-            VERSION="${GITHUB_REF#refs/tags/}"
-          fi
+          # GitHub Releases에서 태그 이름 가져오기
+          VERSION="${{ github.event.release.tag_name }}"
           # 'v' 접두사 제거 (v1.0.1 -> 1.0.1)
           VERSION="${VERSION#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
