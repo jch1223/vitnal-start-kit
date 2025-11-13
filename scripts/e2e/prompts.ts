@@ -1,3 +1,5 @@
+import { spawn } from 'child_process';
+import path from 'node:path';
 import { PROJECT_ROOT, TEST_PROJECT_NAME } from '@e2e/config';
 import { safeEndStdin, safeWriteStdin } from '@e2e/utils/stream';
 
@@ -32,12 +34,11 @@ export const PROMPT_RESPONSES = [
 export const runCreateCommand = async (): Promise<void> => {
   console.log('🔨 프로젝트 생성 중...\n');
 
-  // Bun.spawn을 사용하여 프로세스 실행
-  const cliProcess = Bun.spawn(['bun', '--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
+  // child_process.spawn을 사용하여 프로세스 실행
+  const cliPath = path.join(PROJECT_ROOT, 'dist', 'cli.js');
+  const cliProcess = spawn('node', [cliPath, TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
-    stdin: 'pipe',
-    stdout: 'pipe',
-    stderr: 'pipe',
+    stdio: ['pipe', 'pipe', 'pipe'],
   });
 
   let stdoutBuffer = '';
@@ -52,10 +53,6 @@ export const runCreateCommand = async (): Promise<void> => {
     const timeout = setTimeout(() => {
       reject(new Error(`프롬프트 응답 타임아웃: ${responsesSent}/${maxPrompts} 프롬프트에 응답`));
     }, PROMPT_TIMEOUT);
-
-    // stdout 데이터 수집, 파싱 및 실시간 출력
-    const reader = cliProcess.stdout.getReader();
-    const decoder = new TextDecoder();
 
     const sendResponse = async (promptConfig: (typeof PROMPT_RESPONSES)[number]) => {
       // 응답 전송
@@ -75,70 +72,53 @@ export const runCreateCommand = async (): Promise<void> => {
       }
     };
 
-    const readStdout = async () => {
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+    // stdout 데이터 수집, 파싱 및 실시간 출력
+    cliProcess.stdout.on('data', (chunk: Buffer) => {
+      const data = chunk.toString();
+      stdoutBuffer += data;
 
-          const data = decoder.decode(value, { stream: true });
-          stdoutBuffer += data;
+      // 실시간으로 stdout 출력 (ora 스피너 등 표시)
+      process.stdout.write(chunk);
 
-          // 실시간으로 stdout 출력 (ora 스피너 등 표시)
-          process.stdout.write(value);
+      // 현재 기대하는 프롬프트 패턴 확인
+      if (promptIndex < maxPrompts && !responseScheduled) {
+        const promptConfig = PROMPT_RESPONSES[promptIndex];
 
-          // 현재 기대하는 프롬프트 패턴 확인
-          if (promptIndex < maxPrompts && !responseScheduled) {
-            const promptConfig = PROMPT_RESPONSES[promptIndex];
-
-            // 프롬프트 패턴이 감지되었는지 확인
-            if (promptConfig.pattern.test(stdoutBuffer)) {
-              // renderPattern이 있는 경우 (list 타입 등)
-              if ('renderPattern' in promptConfig && promptConfig.renderPattern) {
-                // renderPattern이 감지되면 즉시 응답 전송
-                if (promptConfig.renderPattern.test(stdoutBuffer)) {
-                  responseScheduled = true;
-                  // 렌더링이 완료되었으므로 응답 전송
-                  setTimeout(async () => {
-                    await sendResponse(promptConfig);
-                    responseScheduled = false;
-                  }, 100); // 짧은 지연 후 응답
-                }
-                // renderPattern이 아직 감지되지 않았으면 계속 대기
-              } else {
-                // renderPattern이 없는 경우 (confirm 타입 등)
-                responseScheduled = true;
-                setTimeout(async () => {
-                  await sendResponse(promptConfig);
-                  responseScheduled = false;
-                }, promptConfig.delay);
-              }
+        // 프롬프트 패턴이 감지되었는지 확인
+        if (promptConfig.pattern.test(stdoutBuffer)) {
+          // renderPattern이 있는 경우 (list 타입 등)
+          if ('renderPattern' in promptConfig && promptConfig.renderPattern) {
+            // renderPattern이 감지되면 즉시 응답 전송
+            if (promptConfig.renderPattern.test(stdoutBuffer)) {
+              responseScheduled = true;
+              // 렌더링이 완료되었으므로 응답 전송
+              setTimeout(async () => {
+                await sendResponse(promptConfig);
+                responseScheduled = false;
+              }, 100); // 짧은 지연 후 응답
             }
+            // renderPattern이 아직 감지되지 않았으면 계속 대기
+          } else {
+            // renderPattern이 없는 경우 (confirm 타입 등)
+            responseScheduled = true;
+            setTimeout(async () => {
+              await sendResponse(promptConfig);
+              responseScheduled = false;
+            }, promptConfig.delay);
           }
         }
-      } catch (error) {
-        reject(error);
       }
-    };
+    });
 
-    readStdout();
+    cliProcess.stdout.on('end', () => {
+      clearTimeout(timeout);
+      resolve();
+    });
 
     // stderr는 실시간으로 출력 (에러 메시지 등)
-    const stderrReader = cliProcess.stderr.getReader();
-
-    const readStderr = async () => {
-      try {
-        while (true) {
-          const { done, value } = await stderrReader.read();
-          if (done) break;
-          process.stderr.write(value);
-        }
-      } catch (error) {
-        // stderr 읽기 에러는 무시
-      }
-    };
-
-    readStderr();
+    cliProcess.stderr.on('data', (chunk: Buffer) => {
+      process.stderr.write(chunk);
+    });
   });
 
   try {
@@ -146,7 +126,11 @@ export const runCreateCommand = async (): Promise<void> => {
     await promptResponsePromise;
 
     // 프로세스 완료 대기
-    const exitCode = await cliProcess.exited;
+    const exitCode = await new Promise<number>((resolve) => {
+      cliProcess.on('exit', (code) => {
+        resolve(code ?? 0);
+      });
+    });
 
     if (exitCode !== 0) {
       throw new Error(`프로젝트 생성 실패 (exit code: ${exitCode})`);

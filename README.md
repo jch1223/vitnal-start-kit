@@ -80,7 +80,7 @@ my-app/
 
 - `npm run build` - TypeScript 컴파일
 - `npm run test` - 유닛 테스트 실행 (Vitest)
-- `npm run test:e2e` - E2E 테스트 실행 (Bun)
+- `npm run test:e2e` - E2E 테스트 실행 (Node.js)
 - `npm run lint` - 코드 린팅
 - `npm run format` - 코드 포맷팅
 

@@ -6,8 +6,8 @@
 - **패키지 배포 편의성**: npm 배포 시 CommonJS 구조가 기본값이라 추가 번들링 없이 `dist/cli.js`를 그대로 배포할 수 있습니다.
 - **서드파티 도구 호환**: Taskmaster, ESLint, Vitest 등 다른 개발 도구들도 아직 CommonJS 기반 설정 예제가 풍부해서 참고하기 쉽습니다.
 
-### e2e 테스트 bunjs 사용
+### e2e 테스트 Node.js 사용
 
-- 문제: ci에서 e2e 테스트 실행시 [1분이상 소요](https://github.com/jch1223/vitnal-start-kit/actions/runs/19324138282)되는 문제가 있었음.
-- 해결: bunjs와 성능비교하여 개선 시도
-- 결과: 1분에서 ([약 40초](https://github.com/jch1223/vitnal-start-kit/actions/runs/19338690338))로 약 33% 속도 개선
+- E2E 테스트는 Node.js와 `execa`를 사용하여 작성됨
+- `tsx`를 통해 TypeScript 파일을 직접 실행
+- `child_process.spawn`을 사용하여 프로세스 실행 및 스트림 처리

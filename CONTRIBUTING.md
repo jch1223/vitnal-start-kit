@@ -19,18 +19,6 @@ cd vitnal-start-kit
 npm install
 ```
 
-Bun은 `devDependencies`에 포함되어 있어 `npm install` 시 자동으로 설치됩니다. E2E 테스트는 `npm run test:e2e` 명령어를 통해 실행되며, 로컬에 설치된 Bun을 자동으로 사용합니다.
-
-**참고**: 글로벌 Bun 설치가 필요한 경우 (선택 사항):
-
-```bash
-# macOS/Linux
-curl -fsSL https://bun.sh/install | bash
-
-# 또는 npm을 통해
-npm install -g bun
-```
-
 3. 프로젝트를 빌드하세요:
 
 ```bash
@@ -105,9 +93,7 @@ npm run test:coverage # 커버리지 리포트
 npm run test:e2e
 ```
 
-E2E 테스트는 실제로 프로젝트를 생성하고 빌드/테스트를 실행합니다.
-
-**참고**: E2E 테스트는 [Bun](https://bun.sh/) 런타임을 사용하여 작성되었습니다. Bun의 네이티브 API(`Bun.spawn`, `Bun.file` 등)를 활용하여 프로세스 실행과 파일 시스템 작업을 처리합니다. E2E 테스트를 실행하려면 Bun이 설치되어 있어야 합니다.
+E2E 테스트는 실제로 프로젝트를 생성하고 빌드/테스트를 실행합니다. Node.js와 `execa`를 사용하여 작성되었으며, TypeScript를 컴파일한 후 Node.js로 실행합니다.
 
 ## 🏗️ 프로젝트 구조
 

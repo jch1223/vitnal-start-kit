@@ -1,16 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "baseUrl": ".",
     "rootDir": ".",
+    "outDir": "./dist",
     "paths": {
       "@e2e/*": ["./*"]
     },
-    "types": ["node", "bun"],
-    "noEmit": true
+    "types": ["node"]
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

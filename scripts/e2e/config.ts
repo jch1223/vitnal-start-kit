@@ -1,12 +1,10 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-// Bun 1.0.23+에서는 import.meta.dir을 지원하지만, 안정성을 위해 fileURLToPath도 함께 사용
-// import.meta.dir이 undefined일 경우를 대비한 fallback
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = (import.meta.dir as string | undefined) || path.dirname(__filename);
-
-export const PROJECT_ROOT = path.resolve(__dirname, '../..');
+// CommonJS 모듈에서는 __dirname이 자동으로 제공됨
+// TypeScript 컴파일러가 CommonJS로 컴파일하면 __dirname이 자동으로 생성됨
+// 컴파일된 파일 위치: scripts/e2e/dist/config.js
+// 프로젝트 루트: scripts/e2e/dist -> scripts/e2e -> scripts -> 프로젝트 루트 (../../..)
+export const PROJECT_ROOT = path.resolve(__dirname, '../../..');
 export const TEST_PROJECT_NAME = 'vitnal-e2e-test';
 export const TEST_PROJECT_DIR = path.join(PROJECT_ROOT, TEST_PROJECT_NAME);
 

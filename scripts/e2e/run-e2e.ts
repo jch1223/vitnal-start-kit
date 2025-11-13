@@ -1,5 +1,6 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 
+import { execa } from 'execa';
 import { PROJECT_ROOT } from '@e2e/config';
 import { runNpmCommands } from '@e2e/commands';
 import { runCreateCommand } from '@e2e/prompts';
@@ -21,14 +22,13 @@ const runE2ETest = async () => {
 
     // 2. CLI 빌드 확인
     console.log('📦 CLI 빌드 확인 중...');
-    const buildProcess = Bun.spawn(['npm', 'run', 'build'], {
+    const buildResult = await execa('npm', ['run', 'build'], {
       cwd: PROJECT_ROOT,
       stdout: 'inherit',
       stderr: 'inherit',
     });
 
-    const buildExitCode = await buildProcess.exited;
-    if (buildExitCode !== 0) {
+    if (buildResult.exitCode !== 0) {
       throw new Error('CLI 빌드 실패');
     }
 
