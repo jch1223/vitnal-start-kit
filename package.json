@@ -1,11 +1,11 @@
 {
-  "name": "vitnal-start-kit",
+  "name": "create-vitnal-start-kit",
   "version": "1.0.1",
   "description": "CLI to bootstrap a React + TypeScript project with opinionated defaults.",
   "type": "commonjs",
   "main": "dist/cli.js",
   "bin": {
-    "create-vitnal": "dist/cli.js"
+    "create-vitnal-start-kit": "dist/cli.js"
   },
   "files": [
     "dist",
