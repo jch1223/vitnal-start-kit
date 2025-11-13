@@ -24,7 +24,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "node scripts/e2e/run-e2e.mjs",
-    "prepublishOnly": "npm run build && npm run test && npm run lint"
+    "prepublishOnly": "npm run test && npm run lint"
   },
   "repository": {
     "type": "git",
