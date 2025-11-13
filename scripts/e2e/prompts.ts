@@ -58,11 +58,13 @@ export const runCreateCommand = async (): Promise<void> => {
   let responsesSent = 0;
   let responseScheduled = false;
   const maxPrompts = PROMPT_RESPONSES.length;
+  let stderrBuffer = ''; // 외부에서 접근 가능하도록 선언
 
   // 프롬프트 응답을 위한 Promise
   const promptResponsePromise = new Promise<void>((resolve, reject) => {
     const reader = cliProcess.stdout.getReader();
     const decoder = new TextDecoder();
+    const stderrDecoder = new TextDecoder();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let stderrReader: any = null;
 
@@ -188,7 +190,7 @@ export const runCreateCommand = async (): Promise<void> => {
     };
 
     /**
-     * stderr 스트림을 읽고 실시간으로 출력합니다.
+     * stderr 스트림을 읽고 실시간으로 출력하며 버퍼에도 저장합니다.
      * stderr 읽기 실패는 전체 프로세스를 중단시키지 않습니다.
      */
     const readStderr = async (): Promise<void> => {
@@ -200,6 +202,8 @@ export const runCreateCommand = async (): Promise<void> => {
         while (true) {
           const { done, value } = await stderrReader.read();
           if (done) break;
+          const data = stderrDecoder.decode(value, { stream: true });
+          stderrBuffer += data;
           process.stderr.write(Buffer.from(value));
         }
       } catch (error) {
@@ -218,12 +222,30 @@ export const runCreateCommand = async (): Promise<void> => {
   });
 
   try {
-    await promptResponsePromise;
+    // 프로세스 종료를 먼저 감지하기 위해 Promise.race 사용
+    const processExitPromise = cliProcess.exited.then((exitCode) => {
+      // 프로세스가 예상보다 일찍 종료된 경우
+      if (exitCode !== 0) {
+        const errorMessage = stderrBuffer.trim()
+          ? `프로세스가 예상치 못하게 종료됨 (exit code: ${exitCode})\n\nstderr:\n${stderrBuffer}`
+          : `프로세스가 예상치 못하게 종료됨 (exit code: ${exitCode})`;
+        throw new Error(errorMessage);
+      }
+      return exitCode;
+    });
 
+    // 프롬프트 응답 완료와 프로세스 종료를 모두 기다림
+    await Promise.race([promptResponsePromise, processExitPromise]);
+
+    // 프롬프트 응답이 완료된 후 프로세스 종료를 기다림
     const exitCode = await cliProcess.exited;
 
     if (exitCode !== 0) {
-      throw new Error(`프로젝트 생성 실패 (exit code: ${exitCode})`);
+      // stderr 내용을 포함한 상세한 에러 메시지
+      const errorMessage = stderrBuffer.trim()
+        ? `프로젝트 생성 실패 (exit code: ${exitCode})\n\nstderr:\n${stderrBuffer}`
+        : `프로젝트 생성 실패 (exit code: ${exitCode})`;
+      throw new Error(errorMessage);
     }
 
     if (responsesSent < maxPrompts) {
