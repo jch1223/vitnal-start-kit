@@ -60,6 +60,10 @@ export const runCreateCommand = async (): Promise<void> => {
   const maxPrompts = PROMPT_RESPONSES.length;
   let stderrBuffer = ''; // 외부에서 접근 가능하도록 선언
 
+  // 외부 스코프에서 접근 가능한 정리 함수들
+  let clearPromptTimeout: (() => void) | null = null;
+  let cleanupFn: (() => Promise<void>) | null = null;
+
   // 프롬프트 응답을 위한 Promise
   const promptResponsePromise = new Promise<void>((resolve, reject) => {
     const reader = cliProcess.stdout.getReader();
@@ -97,6 +101,9 @@ export const runCreateCommand = async (): Promise<void> => {
       }
     };
 
+    // 외부에서 접근 가능하도록 cleanupFn 할당
+    cleanupFn = cleanupResources;
+
     /**
      * 타임아웃 핸들러
      * 타임아웃 발생 시 리소스를 정리하고 Promise를 reject합니다.
@@ -112,6 +119,9 @@ export const runCreateCommand = async (): Promise<void> => {
         reject(error);
       });
     }, TIMEOUTS.PROMPT_RESPONSE);
+
+    // 외부에서 접근 가능하도록 clearPromptTimeout 할당
+    clearPromptTimeout = () => clearTimeout(timeout);
 
     /**
      * 프롬프트에 응답을 전송하고 상태를 업데이트합니다.
@@ -254,8 +264,13 @@ export const runCreateCommand = async (): Promise<void> => {
 
     console.log('\n✓ 프로젝트 생성 완료\n');
   } catch (error) {
-    await safeEndStdin(cliProcess.stdin);
-    cliProcess.kill();
+    // 에러 발생 시 타임아웃과 리소스를 확실히 정리
+    clearPromptTimeout?.();
+    await cleanupFn?.();
     throw error;
+  } finally {
+    // 어떤 경로로 종료되더라도 타임아웃과 리소스를 확실히 정리
+    clearPromptTimeout?.();
+    await cleanupFn?.();
   }
 };
