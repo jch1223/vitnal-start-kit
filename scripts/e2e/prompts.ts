@@ -1,3 +1,4 @@
+import { spawn } from 'node:child_process';
 import { PROJECT_ROOT, TEST_PROJECT_NAME } from '@e2e/config';
 import { safeEndStdin, safeWriteStdin } from '@e2e/utils/stream';
 
@@ -42,15 +43,15 @@ export const PROMPT_RESPONSES = [
  * create-vsk 명령을 실행하고 프롬프트에 자동으로 응답합니다.
  * stdout을 파싱하여 프롬프트가 실제로 표시되었을 때만 응답합니다.
  */
+import path from 'node:path';
+
 export const runCreateCommand = async (): Promise<void> => {
   console.log('🔨 프로젝트 생성 중...\n');
 
-  // Bun.spawn을 사용하여 프로세스 실행
-  const cliProcess = Bun.spawn(['bun', '--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
+  const cliPath = path.join(PROJECT_ROOT, 'dist', 'cli.js');
+  const cliProcess = spawn('node', [cliPath, TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
-    stdin: 'pipe',
-    stdout: 'pipe',
-    stderr: 'pipe',
+    stdio: ['pipe', 'pipe', 'pipe'],
   });
 
   let stdoutBuffer = '';
@@ -58,67 +59,41 @@ export const runCreateCommand = async (): Promise<void> => {
   let responsesSent = 0;
   let responseScheduled = false;
   const maxPrompts = PROMPT_RESPONSES.length;
-  let stderrBuffer = ''; // 외부에서 접근 가능하도록 선언
+  let stderrBuffer = '';
 
-  // 프롬프트 응답을 위한 Promise
   const promptResponsePromise = new Promise<void>((resolve, reject) => {
-    const reader = cliProcess.stdout.getReader();
     const decoder = new TextDecoder();
     const stderrDecoder = new TextDecoder();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let stderrReader: any = null;
 
-    /**
-     * 리소스 정리 함수
-     * 스트림 reader와 프로세스를 안전하게 정리합니다.
-     */
-    const cleanupResources = async (): Promise<void> => {
+    const cleanupResources = (): void => {
       try {
-        if (reader) {
-          try {
-            await reader.cancel();
-          } catch {
-            // 이미 취소되었거나 에러가 발생한 경우 무시
-          }
+        if (cliProcess.stdin && !cliProcess.stdin.destroyed) {
+          cliProcess.stdin.destroy();
         }
-
-        if (stderrReader) {
-          try {
-            await stderrReader.cancel();
-          } catch {
-            // 이미 취소되었거나 에러가 발생한 경우 무시
-          }
+        if (!cliProcess.killed) {
+          cliProcess.kill();
         }
-
-        await safeEndStdin(cliProcess.stdin);
-        cliProcess.kill();
       } catch (error) {
         console.error('리소스 정리 중 에러 발생:', error);
       }
     };
 
-    /**
-     * 타임아웃 핸들러
-     * 타임아웃 발생 시 리소스를 정리하고 Promise를 reject합니다.
-     */
-    const handleTimeout = async (): Promise<void> => {
-      await cleanupResources();
+    const handleTimeout = (): void => {
+      cleanupResources();
       reject(new Error(`프롬프트 응답 타임아웃: ${responsesSent}/${maxPrompts} 프롬프트에 응답`));
     };
 
     const timeout = setTimeout(() => {
-      handleTimeout().catch((error) => {
+      try {
+        handleTimeout();
+      } catch (error) {
         console.error('타임아웃 핸들러 실행 중 에러:', error);
         reject(error);
-      });
+      }
     }, TIMEOUTS.PROMPT_RESPONSE);
 
-    /**
-     * 프롬프트에 응답을 전송하고 상태를 업데이트합니다.
-     */
     const sendResponse = async (promptConfig: (typeof PROMPT_RESPONSES)[number]): Promise<void> => {
       await safeWriteStdin(cliProcess.stdin, promptConfig.response);
-
       responsesSent++;
       promptIndex++;
       responseScheduled = false;
@@ -132,116 +107,59 @@ export const runCreateCommand = async (): Promise<void> => {
       }
     };
 
-    /**
-     * 프롬프트 패턴이 감지되었을 때 응답을 스케줄합니다.
-     */
-    const scheduleResponse = (promptConfig: (typeof PROMPT_RESPONSES)[number]): void => {
-      responseScheduled = true;
+    cliProcess.stdout.on('data', (chunk: Buffer) => {
+      const data = chunk.toString();
+      stdoutBuffer += data;
+      process.stdout.write(chunk);
 
-      // renderPattern이 있는 경우, renderPattern이 감지되면 짧은 지연 후 응답
-      // renderPattern이 없는 경우, 설정된 지연 시간 후 응답
+      if (promptIndex >= maxPrompts || responseScheduled) {
+        return;
+      }
+
+      const promptConfig = PROMPT_RESPONSES[promptIndex];
+      if (!promptConfig.pattern.test(stdoutBuffer)) {
+        return;
+      }
+
+      if (
+        'renderPattern' in promptConfig &&
+        promptConfig.renderPattern &&
+        !promptConfig.renderPattern.test(stdoutBuffer)
+      ) {
+        return;
+      }
+      responseScheduled = true;
       const delay =
         'renderPattern' in promptConfig && promptConfig.renderPattern
           ? DELAYS.DEFAULT_RESPONSE
           : promptConfig.delay;
-
       setTimeout(async () => {
         await sendResponse(promptConfig);
       }, delay);
-    };
-
-    /**
-     * stdout 스트림을 읽고 프롬프트를 감지하여 응답합니다.
-     */
-    const readStdout = async (): Promise<void> => {
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const data = decoder.decode(value, { stream: true });
-          stdoutBuffer += data;
-          process.stdout.write(value);
-
-          if (promptIndex >= maxPrompts || responseScheduled) {
-            continue;
-          }
-
-          const promptConfig = PROMPT_RESPONSES[promptIndex];
-          if (!promptConfig.pattern.test(stdoutBuffer)) {
-            continue;
-          }
-
-          // renderPattern이 있는 경우, renderPattern이 감지될 때까지 대기
-          if (
-            'renderPattern' in promptConfig &&
-            promptConfig.renderPattern &&
-            !promptConfig.renderPattern.test(stdoutBuffer)
-          ) {
-            continue;
-          }
-
-          scheduleResponse(promptConfig);
-        }
-      } catch (error) {
-        await cleanupResources();
-        reject(error);
-      }
-    };
-
-    /**
-     * stderr 스트림을 읽고 실시간으로 출력하며 버퍼에도 저장합니다.
-     * stderr 읽기 실패는 전체 프로세스를 중단시키지 않습니다.
-     */
-    const readStderr = async (): Promise<void> => {
-      if (!stderrReader) {
-        return;
-      }
-
-      try {
-        while (true) {
-          const { done, value } = await stderrReader.read();
-          if (done) break;
-          const data = stderrDecoder.decode(value, { stream: true });
-          stderrBuffer += data;
-          process.stderr.write(Buffer.from(value));
-        }
-      } catch (error) {
-        console.error('stderr 읽기 중 에러 발생:', error);
-      }
-    };
-
-    stderrReader = cliProcess.stderr.getReader();
-    const stdoutPromise = readStdout();
-    const stderrPromise = readStderr().catch((error) => {
-      console.error('stderr 읽기 작업 실패:', error);
     });
 
-    // 두 비동기 작업을 추적하여 unhandled rejection 방지
-    Promise.allSettled([stdoutPromise, stderrPromise]);
+    cliProcess.stdout.on('end', () => {
+      clearTimeout(timeout);
+      resolve();
+    });
+
+    cliProcess.stderr.on('data', (chunk: Buffer) => {
+      const data = chunk.toString();
+      stderrBuffer += data;
+      process.stderr.write(chunk);
+    });
   });
 
   try {
-    // 프로세스 종료를 먼저 감지하기 위해 Promise.race 사용
-    const processExitPromise = cliProcess.exited.then((exitCode) => {
-      // 프로세스가 예상보다 일찍 종료된 경우
-      if (exitCode !== 0) {
-        const errorMessage = stderrBuffer.trim()
-          ? `프로세스가 예상치 못하게 종료됨 (exit code: ${exitCode})\n\nstderr:\n${stderrBuffer}`
-          : `프로세스가 예상치 못하게 종료됨 (exit code: ${exitCode})`;
-        throw new Error(errorMessage);
-      }
-      return exitCode;
+    await promptResponsePromise;
+
+    const exitCode = await new Promise<number>((resolve) => {
+      cliProcess.on('exit', (code) => {
+        resolve(code ?? 0);
+      });
     });
 
-    // 프롬프트 응답 완료와 프로세스 종료를 모두 기다림
-    await Promise.race([promptResponsePromise, processExitPromise]);
-
-    // 프롬프트 응답이 완료된 후 프로세스 종료를 기다림
-    const exitCode = await cliProcess.exited;
-
     if (exitCode !== 0) {
-      // stderr 내용을 포함한 상세한 에러 메시지
       const errorMessage = stderrBuffer.trim()
         ? `프로젝트 생성 실패 (exit code: ${exitCode})\n\nstderr:\n${stderrBuffer}`
         : `프로젝트 생성 실패 (exit code: ${exitCode})`;
@@ -255,7 +173,9 @@ export const runCreateCommand = async (): Promise<void> => {
     console.log('\n✓ 프로젝트 생성 완료\n');
   } catch (error) {
     await safeEndStdin(cliProcess.stdin);
-    cliProcess.kill();
+    if (!cliProcess.killed) {
+      cliProcess.kill();
+    }
     throw error;
   }
 };

@@ -13,7 +13,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npx tsc-alias",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "npm run format:fix && npm run lint -- --fix",
@@ -23,7 +23,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "npx bun run --bun scripts/e2e/run-e2e.ts",
+    "test:e2e": "tsc --project scripts/e2e/tsconfig.json --skipLibCheck && npx tsc-alias -p scripts/e2e/tsconfig.json --resolve-full-paths --resolve-full-extension .js && node scripts/e2e/dist/run-e2e.js",
     "prepublishOnly": "npm run test && npm run lint"
   },
   "repository": {
@@ -58,8 +58,10 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
+    "execa": "^9.6.0",
     "memfs": "^4.51.0",
     "prettier": "^3.6.2",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "vitest": "^4.0.8"
   },

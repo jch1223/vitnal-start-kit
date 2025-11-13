@@ -1,12 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// Bun 1.0.23+에서는 import.meta.dir을 지원하지만, 안정성을 위해 fileURLToPath도 함께 사용
-// import.meta.dir이 undefined일 경우를 대비한 fallback
+// ESM 모듈에서 __dirname을 얻기 위한 방법
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = (import.meta.dir as string | undefined) || path.dirname(__filename);
+const __dirname = path.dirname(__filename);
 
-export const PROJECT_ROOT = path.resolve(__dirname, '../..');
+// 컴파일된 파일이 scripts/e2e/dist에 있으므로, 루트로 가려면 ../../..로 이동
+export const PROJECT_ROOT = path.resolve(__dirname, '../../..');
 export const TEST_PROJECT_NAME = 'vitnal-e2e-test';
 export const TEST_PROJECT_DIR = path.join(PROJECT_ROOT, TEST_PROJECT_NAME);
 
