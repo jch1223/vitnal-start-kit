@@ -7,17 +7,20 @@ Vitnal Start Kit에 기여해주셔서 감사합니다! 이 문서는 프로젝�
 ### 개발 환경 설정
 
 1. 저장소를 클론하세요:
+
 ```bash
 git clone https://github.com/jch1223/vitnal-start-kit.git
 cd vitnal-start-kit
 ```
 
 2. 의존성을 설치하세요:
+
 ```bash
 npm install
 ```
 
 3. 프로젝트를 빌드하세요:
+
 ```bash
 npm run build
 ```
@@ -25,6 +28,7 @@ npm run build
 ### 개발 워크플로우
 
 1. **브랜치 생성**: 새로운 기능이나 버그 수정을 위한 브랜치를 생성하세요
+
    ```bash
    git checkout -b feature/your-feature-name
    # 또는
@@ -34,6 +38,7 @@ npm run build
 2. **변경사항 작성**: 코드를 작성하고 테스트하세요
 
 3. **코드 품질 확인**:
+
    ```bash
    npm run lint        # 린팅 확인
    npm run format      # 포맷팅 확인
@@ -42,6 +47,7 @@ npm run build
    ```
 
 4. **커밋**: [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따르세요
+
    ```bash
    git commit -m "feat: Add new feature"
    git commit -m "fix: Fix bug in template copying"
@@ -63,6 +69,7 @@ npm run build
 - `chore`: 빌드 프로세스 또는 보조 도구 변경
 
 예시:
+
 ```
 feat(scaffold): Add support for custom template directory
 fix(filesystem): Handle edge case in directory copying
@@ -107,7 +114,7 @@ vitnal-start-kit/
 - **TypeScript**: 엄격한 타입 체크 사용
 - **ESLint**: 코드 품질 검사
 - **Prettier**: 코드 포맷팅
-- **명명 규칙**: 
+- **명명 규칙**:
   - 파일: kebab-case 또는 PascalCase (컴포넌트)
   - 함수/변수: camelCase
   - 상수: UPPER_SNAKE_CASE
@@ -147,4 +154,3 @@ vitnal-start-kit/
 질문이나 제안사항이 있으시면 [이슈를 생성](https://github.com/jch1223/vitnal-start-kit/issues)해주세요.
 
 감사합니다! 🎉
-
