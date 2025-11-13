@@ -112,6 +112,18 @@ const runNpmCommands = async () => {
   }
   console.log('✓ npm install 완료\n');
 
+  // Playwright 브라우저 설치 (Storybook 테스트에 필요)
+  console.log('🌐 Playwright 브라우저 설치 중...');
+  const playwrightInstallResult = await execa('npx', ['playwright', 'install', 'chromium'], {
+    cwd: TEST_PROJECT_DIR,
+    stdio: 'inherit',
+  });
+
+  if (playwrightInstallResult.exitCode !== 0) {
+    throw new Error('Playwright 브라우저 설치 실패');
+  }
+  console.log('✓ Playwright 브라우저 설치 완료\n');
+
   console.log('🔨 npm run build 실행 중...');
   const buildResult = await execa('npm', ['run', 'build'], {
     cwd: TEST_PROJECT_DIR,

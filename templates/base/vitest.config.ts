@@ -33,6 +33,10 @@ export default defineConfig({
       {
         test: {
           name: 'default',
+          globals: true,
+          environment: 'jsdom',
+          css: true,
+          setupFiles: ['./src/test/setup.ts'],
         },
       },
       // Storybook 프로젝트 (Storybook 테스트용)
