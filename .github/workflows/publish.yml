@@ -1,0 +1,51 @@
+name: Publish
+
+# Publish 워크플로우: 버전 태그(v*.*.*)가 push될 때만 실행
+# 예: git tag v1.0.0 && git push origin v1.0.0
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정 및 npm 레지스트리 설정
+      # registry-url 설정으로 npm publish 시 자동 인증 가능
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      # 의존성 설치 (package-lock.json 기반)
+      - name: Install dependencies
+        run: npm ci
+
+      # 단위 테스트 실행 (배포 전 검증)
+      - name: Run tests
+        run: npm run test
+
+      # E2E 테스트 실행 (실제 사용 시나리오 검증)
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      # 프로젝트 빌드 (dist 폴더 생성)
+      - name: Build project
+        run: npm run build
+
+      # npm 레지스트리에 패키지 배포
+      # NODE_AUTH_TOKEN은 GitHub Secrets에 저장된 NPM_TOKEN 사용
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+

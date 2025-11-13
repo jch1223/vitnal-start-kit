@@ -7,6 +7,11 @@
   "bin": {
     "create-vitnal": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
@@ -17,15 +22,21 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "node scripts/e2e/run-e2e.mjs"
+    "test:e2e": "node scripts/e2e/run-e2e.mjs",
+    "prepublishOnly": "npm run build && npm run test && npm run lint"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jch1223/vitnal-start-kit.git"
   },
-  "keywords": [],
+  "keywords": [
+    "scaffold"
+  ],
   "author": "",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18"
   },

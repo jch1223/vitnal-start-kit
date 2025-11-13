@@ -1,0 +1,84 @@
+name: CI
+
+# CI 워크플로우: main/develop 브랜치에 push하거나 PR 생성 시 실행
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    # 매트릭스 전략: 여러 Node.js 버전에서 테스트하여 호환성 확인
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정 및 npm 캐시 활성화 (빌드 속도 향상)
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # package-lock.json 기반으로 정확한 의존성 설치 (CI 환경에 적합)
+      - name: Install dependencies
+        run: npm ci
+
+      # ESLint를 통한 코드 품질 검사
+      - name: Run linter
+        run: npm run lint
+
+      # Prettier를 통한 코드 포맷팅 검사
+      - name: Run formatter check
+        run: npm run format
+
+      # TypeScript 타입 체크 및 빌드 검증
+      - name: Run type check
+        run: npm run build
+
+      # 단위 테스트 실행
+      - name: Run unit tests
+        run: npm run test
+
+      # E2E 테스트 실행 (실제 프로젝트 생성 시나리오 검증)
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+  # 빌드 작업: 테스트가 모두 통과한 후에만 실행
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test # test 작업 완료 후 실행
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 20.x 환경 설정 (프로덕션 빌드용)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # 프로젝트 빌드 (dist 폴더 생성)
+      - name: Build project
+        run: npm run build
+
+      # npm 패키지 내용 검증 (실제로 publish하지 않고 확인만)
+      - name: Verify package contents
+        run: npm pack --dry-run
