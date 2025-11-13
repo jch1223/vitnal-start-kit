@@ -139,6 +139,9 @@ const runNpmCommands = async () => {
 const runE2ETest = async () => {
   console.log('🚀 E2E 테스트 시작...\n');
 
+  // E2E 테스트 환경임을 표시 (taskmaster init이 비대화형 모드로 실행되도록)
+  process.env.E2E_TEST = 'true';
+
   try {
     // 1. 기존 테스트 프로젝트 디렉터리 정리
     await cleanup();

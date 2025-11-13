@@ -18,6 +18,8 @@ export const runCommand = (
       cwd: options.cwd,
       stdio: 'inherit',
       shell: process.platform === 'win32',
+      // 환경 변수 전달 (E2E 테스트 환경 감지용)
+      env: { ...process.env },
     });
 
     child.on('close', (code) => {
