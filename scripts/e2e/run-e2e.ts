@@ -21,7 +21,7 @@ const runE2ETest = async () => {
 
     // 2. CLI 빌드 확인
     console.log('📦 CLI 빌드 확인 중...');
-    const buildProcess = Bun.spawn(['npm', 'run', 'build'], {
+    const buildProcess = Bun.spawn(['bun', 'run', 'build'], {
       cwd: PROJECT_ROOT,
       stdout: 'inherit',
       stderr: 'inherit',
