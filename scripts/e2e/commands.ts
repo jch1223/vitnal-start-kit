@@ -18,20 +18,6 @@ export const runNpmCommands = async (): Promise<void> => {
   }
   console.log('✓ bun install 완료\n');
 
-  // Playwright 브라우저 설치 (Storybook 테스트에 필요)
-  console.log('🌐 Playwright 브라우저 설치 중...');
-  const playwrightProcess = Bun.spawn(['bunx', 'playwright', 'install', 'chromium'], {
-    cwd: TEST_PROJECT_DIR,
-    stdout: 'inherit',
-    stderr: 'inherit',
-  });
-
-  const playwrightExitCode = await playwrightProcess.exited;
-  if (playwrightExitCode !== 0) {
-    throw new Error('Playwright 브라우저 설치 실패');
-  }
-  console.log('✓ Playwright 브라우저 설치 완료\n');
-
   console.log('🔨 bun run build 실행 중...');
   const buildProcess = Bun.spawn(['bun', 'run', 'build'], {
     cwd: TEST_PROJECT_DIR,
