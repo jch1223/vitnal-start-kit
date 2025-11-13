@@ -121,7 +121,10 @@ export const runCreateCommand = async (): Promise<void> => {
       }
     };
 
-    readStdout();
+    // stdout 읽기 작업을 Promise로 추적
+    // readStdout 내부에서 에러 발생 시 reject를 호출하므로,
+    // 여기서는 Promise를 추적만 하여 unhandled rejection 방지
+    const stdoutPromise = readStdout();
 
     // stderr는 실시간으로 출력 (에러 메시지 등)
     const stderrReader = cliProcess.stderr.getReader();
@@ -134,11 +137,24 @@ export const runCreateCommand = async (): Promise<void> => {
           process.stderr.write(value);
         }
       } catch (error) {
-        // stderr 읽기 에러는 무시
+        // stderr 읽기 에러는 전체 프로세스를 중단시키지 않지만,
+        // unhandled rejection을 방지하기 위해 에러를 처리
+        console.error('stderr 읽기 중 에러 발생:', error);
       }
     };
 
-    readStderr();
+    // stderr 읽기 작업을 Promise로 추적하여 에러 처리
+    // stderr 읽기 실패는 전체 프로세스를 중단시키지 않지만,
+    // unhandled rejection을 방지하기 위해 명시적으로 에러 처리
+    const stderrPromise = readStderr().catch((error) => {
+      console.error('stderr 읽기 작업 실패:', error);
+    });
+
+    // 두 비동기 작업을 추적하여 unhandled rejection 방지
+    // stdout 실패는 readStdout 내부에서 promptResponsePromise를 reject하므로
+    // 전체 프로세스가 실패하게 됨
+    // stderr 실패는 로깅만 하고 프로세스를 중단시키지 않음
+    Promise.allSettled([stdoutPromise, stderrPromise]);
   });
 
   try {
