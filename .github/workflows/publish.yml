@@ -105,6 +105,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 태그 또는 Release에서 버전 추출 및 package.json 업데이트
+      - name: Extract version from tag/release
+        id: extract_version
+        run: |
+          if [ "${{ github.event_name }}" == "release" ]; then
+            # GitHub Releases 이벤트인 경우
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            # 태그 push 이벤트인 경우
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
+          # 'v' 접두사 제거 (v1.0.1 -> 1.0.1)
+          VERSION="${VERSION#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+      # package.json의 version 필드 자동 업데이트
+      - name: Update package.json version
+        run: |
+          VERSION="${{ steps.extract_version.outputs.version }}"
+          npm pkg set version="$VERSION"
+          echo "Updated package.json version to $VERSION"
+
       # Node.js 환경 설정 및 npm 레지스트리 설정
       # registry-url 설정으로 npm publish 시 자동 인증 가능
       - name: Setup Node.js
