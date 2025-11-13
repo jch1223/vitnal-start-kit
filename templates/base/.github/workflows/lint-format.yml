@@ -1,0 +1,37 @@
+name: Lint & Format
+
+# Lint와 Format 체크 워크플로우: main 브랜치에 push하거나 PR 생성 시 실행
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정 및 npm 캐시 활성화
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # ESLint를 통한 코드 품질 검사
+      - name: Run linter
+        run: npm run lint
+
+      # Prettier를 통한 코드 포맷팅 검사
+      - name: Run formatter check
+        run: npm run format

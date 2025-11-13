@@ -1,0 +1,58 @@
+name: Test
+
+# 테스트 워크플로우: main 브랜치에 push하거나 PR 생성 시 실행
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정 및 npm 캐시 활성화
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # 단위 테스트 실행
+      - name: Run tests
+        run: npm run test
+
+  # 스토리북 테스트: test job과 병렬로 실행하여 CI 시간 단축
+  test-storybook:
+    name: Storybook Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정 및 npm 캐시 활성화
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # 스토리북 테스트 실행
+      - name: Run Storybook tests
+        run: npm run test:storybook
