@@ -4,6 +4,7 @@ import { execa } from 'execa';
 import fs from 'fs-extra';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Writable } from 'node:stream';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,7 @@ const TEST_PROJECT_DIR = path.join(PROJECT_ROOT, TEST_PROJECT_NAME);
 /**
  * 필수 파일 및 디렉터리 목록
  */
-const REQUIRED_FILES = [
+const REQUIRED_FILES: string[] = [
   'package.json',
   'vite.config.ts',
   'tsconfig.json',
@@ -41,7 +42,7 @@ const cleanup = async () => {
 const validateProjectStructure = async () => {
   console.log('📋 생성된 프로젝트 파일 구조 검증 중...');
 
-  const missingFiles = [];
+  const missingFiles: string[] = [];
 
   for (const file of REQUIRED_FILES) {
     const filePath = path.join(TEST_PROJECT_DIR, file);
@@ -58,7 +59,62 @@ const validateProjectStructure = async () => {
 };
 
 /**
+ * 프롬프트 메시지 패턴 정의
+ * inquirer가 출력하는 프롬프트 메시지를 감지하기 위한 패턴
+ */
+const PROMPT_PATTERNS = [
+  /React Query를 사용하여 서버 상태를 관리하시겠습니까/,
+  /어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까/,
+  /Task Master AI를 사용하여 작업 관리를 하시겠습니까/,
+] as const;
+
+/**
+ * 안전하게 stdin에 데이터를 전송합니다.
+ */
+const safeWriteStdin = (stdin: Writable | null, data: string): boolean => {
+  if (!stdin) {
+    return false;
+  }
+
+  // stream.Writable의 상태 확인
+  if (stdin.destroyed) {
+    return false;
+  }
+  if (stdin.writableEnded || stdin.writable === false) {
+    return false;
+  }
+
+  try {
+    return stdin.write(data) !== false;
+  } catch (error) {
+    // 스트림이 이미 닫혔거나 에러가 발생한 경우
+    return false;
+  }
+};
+
+/**
+ * 안전하게 stdin을 종료합니다.
+ */
+const safeEndStdin = (stdin: Writable | null): void => {
+  if (!stdin) {
+    return;
+  }
+
+  // stream.Writable의 상태 확인
+  if (stdin.destroyed || stdin.writableEnded) {
+    return;
+  }
+
+  try {
+    stdin.end();
+  } catch (error) {
+    // 스트림이 이미 닫혔거나 에러가 발생한 경우 무시
+  }
+};
+
+/**
  * create-vsk 명령을 실행하고 프롬프트에 자동으로 응답합니다.
+ * stdout을 파싱하여 프롬프트가 실제로 표시되었을 때만 응답합니다.
  */
 const runCreateCommand = async () => {
   console.log('🔨 프로젝트 생성 중...\n');
@@ -67,34 +123,87 @@ const runCreateCommand = async () => {
   // --bun 플래그로 Bun 런타임 강제 사용 (Node.js 호환 모드 비활성화)
   const cliProcess = execa('bun', ['--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
-    stdio: ['pipe', 'inherit', 'inherit'], // stdout/stderr는 실시간 출력하여 ora 스피너 표시
+    stdio: ['pipe', 'pipe', 'pipe'], // stdout/stderr를 캡처하여 파싱 및 출력
   });
 
-  // 프롬프트에 엔터 키를 보내 기본값으로 응답
-  // 프롬프트 순서: React Query (기본: true), State Management (기본: None), Taskmaster (기본: true)
-  const sendEnter = () => {
-    if (!cliProcess.stdin.destroyed) {
-      cliProcess.stdin.write('\n');
+  let stdoutBuffer = '';
+  let promptIndex = 0;
+  let responsesSent = 0;
+  const maxPrompts = PROMPT_PATTERNS.length;
+  const PROMPT_TIMEOUT = 30000; // 30초 타임아웃
+  const RESPONSE_DELAY = 100; // 프롬프트 감지 후 응답 지연 (ms)
+
+  // 프롬프트 응답을 위한 Promise
+  const promptResponsePromise = new Promise<void>((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      reject(new Error(`프롬프트 응답 타임아웃: ${responsesSent}/${maxPrompts} 프롬프트에 응답`));
+    }, PROMPT_TIMEOUT);
+
+    // stdout 데이터 수집, 파싱 및 실시간 출력
+    cliProcess.stdout?.on('data', (chunk: Buffer) => {
+      const data = chunk.toString();
+      stdoutBuffer += data;
+
+      // 실시간으로 stdout 출력 (ora 스피너 등 표시)
+      process.stdout.write(chunk);
+
+      // 현재 기대하는 프롬프트 패턴 확인
+      if (promptIndex < maxPrompts) {
+        const pattern = PROMPT_PATTERNS[promptIndex];
+        if (pattern.test(stdoutBuffer)) {
+          // 프롬프트가 감지되었으므로 응답 전송
+          setTimeout(() => {
+            if (safeWriteStdin(cliProcess.stdin, '\n')) {
+              responsesSent++;
+              promptIndex++;
+
+              // 모든 프롬프트에 응답했으면 stdin 종료
+              if (promptIndex >= maxPrompts) {
+                clearTimeout(timeout);
+                setTimeout(() => {
+                  safeEndStdin(cliProcess.stdin);
+                  resolve();
+                }, RESPONSE_DELAY);
+              }
+            }
+          }, RESPONSE_DELAY);
+        }
+      }
+    });
+
+    // stderr는 실시간으로 출력 (에러 메시지 등)
+    cliProcess.stderr?.on('data', (chunk: Buffer) => {
+      process.stderr.write(chunk);
+    });
+  });
+
+  try {
+    // 프롬프트 응답 완료 대기
+    await promptResponsePromise;
+
+    // 프로세스 완료 대기
+    const cliResult = await cliProcess;
+
+    if (cliResult.exitCode !== 0) {
+      throw new Error(`프로젝트 생성 실패 (exit code: ${cliResult.exitCode})`);
     }
-  };
 
-  // 각 프롬프트에 대해 엔터 키 전송 (더 긴 간격으로)
-  setTimeout(sendEnter, 1000);
-  setTimeout(sendEnter, 2000);
-  setTimeout(sendEnter, 3000);
-  setTimeout(() => {
-    if (!cliProcess.stdin.destroyed) {
-      cliProcess.stdin.end();
+    if (responsesSent < maxPrompts) {
+      throw new Error(`일부 프롬프트에 응답하지 못함: ${responsesSent}/${maxPrompts}`);
     }
-  }, 4000);
 
-  const cliResult = await cliProcess;
+    console.log('\n✓ 프로젝트 생성 완료\n');
+  } catch (error) {
+    // 에러 발생 시 stdin 정리
+    safeEndStdin(cliProcess.stdin);
 
-  if (cliResult.exitCode !== 0) {
-    throw new Error(`프로젝트 생성 실패 (exit code: ${cliResult.exitCode})`);
+    // 프로세스가 아직 실행 중이면 종료
+    if (!cliProcess.killed) {
+      cliProcess.kill();
+    }
+
+    throw error;
   }
-
-  console.log('\n✓ 프로젝트 생성 완료\n');
 };
 
 /**
@@ -197,4 +306,3 @@ runE2ETest().catch((error) => {
   console.error('E2E 테스트 실행 중 오류 발생:', error);
   process.exit(1);
 });
-
