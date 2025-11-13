@@ -1,4 +1,4 @@
-import type { ProjectOptions } from '../types/options';
+import type { ProjectOptions } from '@/types/options';
 
 export interface DependencyBuckets {
   dependencies: string[];
@@ -31,3 +31,4 @@ export const resolveOptionalPackages = (options: ProjectOptions): DependencyBuck
     devDependencies: Array.from(devDependencySet).sort(),
   };
 };
+

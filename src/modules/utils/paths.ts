@@ -1,8 +1,8 @@
 import path from 'node:path';
 
-import type { ResolvedConfig } from '../types/config';
+import type { ResolvedConfig } from '@/types/config';
 
-const TEMPLATE_BASE_DIR = path.resolve(__dirname, '..', '..', 'templates', 'base');
+const TEMPLATE_BASE_DIR = path.resolve(__dirname, '..', '..', '..', 'templates', 'base');
 
 export interface ScaffoldPaths {
   templateDir: string;
@@ -20,3 +20,4 @@ export const resolveScaffoldPaths = (config: ResolvedConfig): ScaffoldPaths => {
     targetDir,
   };
 };
+

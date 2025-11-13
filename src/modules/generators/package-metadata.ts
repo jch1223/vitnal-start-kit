@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import type { ResolvedConfig } from '../types/config';
+import type { ResolvedConfig } from '@/types/config';
 
 interface PackageJson {
   name?: string;
@@ -26,3 +26,4 @@ export const updatePackageJsonMetadata = async (
 
   await writeFile(packageJsonPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
 };
+

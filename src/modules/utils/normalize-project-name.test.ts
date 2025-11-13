@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeProjectName } from './normalize-project-name';
+import { normalizeProjectName } from '@/modules/utils/normalize-project-name';
 
 describe('normalizeProjectName', () => {
   it('정상적인 프로젝트 이름을 반환해야 합니다', () => {
@@ -19,3 +19,4 @@ describe('normalizeProjectName', () => {
     expect(() => normalizeProjectName('\t\n')).toThrow('Project name must not be empty.');
   });
 });
+

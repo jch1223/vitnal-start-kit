@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { render } from 'ejs';
 
-import type { ProjectOptions } from '../types/options';
+import type { ProjectOptions } from '@/types/options';
 
 interface ReadmeData {
   projectName: string;
@@ -18,7 +18,7 @@ export const generateReadme = async (
   projectName: string,
   options: ProjectOptions,
 ): Promise<void> => {
-  const templatePath = path.resolve(__dirname, '..', '..', 'templates', 'README.template.md');
+  const templatePath = path.resolve(__dirname, '..', '..', '..', 'templates', 'README.template.md');
   const outputPath = path.join(targetDir, 'README.md');
 
   // 템플릿 파일 읽기
@@ -35,3 +35,4 @@ export const generateReadme = async (
   // README.md 파일로 저장
   await writeFile(outputPath, rendered, 'utf-8');
 };
+

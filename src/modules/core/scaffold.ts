@@ -1,13 +1,11 @@
 import ora from 'ora';
 
-import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from './filesystem';
-import { installOptionalDependencies } from './installer';
-import { updatePackageJsonMetadata } from './package-metadata';
-import { resolveScaffoldPaths } from './paths';
-import { generateReadme } from './readme';
-import { installAndInitializeTaskmaster } from './taskmaster';
-
-import type { ResolvedConfig } from '../types/config';
+import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs';
+import { updatePackageJsonMetadata, generateReadme } from '@/modules/generators';
+import { installOptionalDependencies } from '@/modules/install';
+import { installAndInitializeTaskmaster } from '@/modules/integrations';
+import { resolveScaffoldPaths } from '@/modules/utils';
+import type { ResolvedConfig } from '@/types/config';
 
 /**
  * `create-vitnal` 프로젝트 스캐폴딩 흐름을 총괄하는 함수입니다.
@@ -59,3 +57,4 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   // TODO: 새 프로젝트 디렉터리에서 npm으로 의존성을 설치합니다.
   // TODO: 옵션별 스크립트를 실행한 뒤 README 요약을 생성합니다.
 };
+
