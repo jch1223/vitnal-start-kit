@@ -12,6 +12,7 @@ dist/
 
 # Build outputs
 storybook-static/
+vitnal-e2e-test/
 
 # Environment variables
 .env

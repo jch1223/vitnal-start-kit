@@ -55,6 +55,18 @@ jobs:
         with:
           bun-version: latest
 
+      # Bun 캐시 설정 (로컬 환경과 동일한 성능을 위해)
+      # 모든 템플릿의 package.json을 포함하여 캐시 키 생성
+      # 새로운 템플릿이 추가되어도 자동으로 캐시 키에 반영됨
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('templates/**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       # 의존성 설치
       - name: Install dependencies
         run: npm ci

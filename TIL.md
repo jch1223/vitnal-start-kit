@@ -8,6 +8,6 @@
 
 ### e2e 테스트 bunjs 사용
 
-- 문제: ci에서 e2e 테스트 실행시 [1분이상 소요](https://github.com/jch1223/vitnal-start-kit/actions/runs/19324138282)되는 문제가 있었음.
+- 문제: ci에서 e2e 테스트 실행시 소요 시간이 오래 걸리는 문제가 있었음.
 - 해결: bunjs와 성능비교하여 개선 시도
-- 결과: 1분에서 ([약 40초](https://github.com/jch1223/vitnal-start-kit/actions/runs/19338690338))로 약 33% 속도 개선
+- 결과: [1분 15초](https://github.com/jch1223/vitnal-start-kit/actions/runs/19348965692)에서 ([1분 2초](https://github.com/jch1223/vitnal-start-kit/actions/runs/19348961187))로 약 17% 속도 개선

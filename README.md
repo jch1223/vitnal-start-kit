@@ -76,6 +76,14 @@ my-app/
 - `npm run format` - 코드 포맷팅
 - `npm run storybook` - Storybook 실행
 
+### 개발 스크립트
+
+- `npm run build` - TypeScript 컴파일
+- `npm run test` - 유닛 테스트 실행 (Vitest)
+- `npm run test:e2e` - E2E 테스트 실행 (Bun)
+- `npm run lint` - 코드 린팅
+- `npm run format` - 코드 포맷팅
+
 ## 🎯 옵션 설명
 
 ### React Query
