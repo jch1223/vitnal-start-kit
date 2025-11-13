@@ -31,4 +31,3 @@ export const resolveOptionalPackages = (options: ProjectOptions): DependencyBuck
     devDependencies: Array.from(devDependencySet).sort(),
   };
 };
-

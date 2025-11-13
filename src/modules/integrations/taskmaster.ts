@@ -45,4 +45,3 @@ export const installAndInitializeTaskmaster = async (targetDir: string): Promise
     throw error;
   }
 };
-

@@ -49,4 +49,3 @@ export const promptForOptions = async (): Promise<ProjectOptions> => {
     taskmaster: answers.taskmaster,
   };
 };
-

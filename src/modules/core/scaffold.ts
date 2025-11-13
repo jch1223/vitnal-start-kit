@@ -57,4 +57,3 @@ export const createProject = async (config: ResolvedConfig): Promise<void> => {
   // TODO: 새 프로젝트 디렉터리에서 npm으로 의존성을 설치합니다.
   // TODO: 옵션별 스크립트를 실행한 뒤 README 요약을 생성합니다.
 };
-

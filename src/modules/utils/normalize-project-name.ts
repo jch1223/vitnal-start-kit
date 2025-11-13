@@ -10,4 +10,3 @@ export const normalizeProjectName = (projectName: string): string => {
 
   return normalizedName;
 };
-

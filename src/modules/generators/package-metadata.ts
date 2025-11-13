@@ -26,4 +26,3 @@ export const updatePackageJsonMetadata = async (
 
   await writeFile(packageJsonPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
 };
-

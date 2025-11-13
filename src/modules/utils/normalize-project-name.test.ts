@@ -19,4 +19,3 @@ describe('normalizeProjectName', () => {
     expect(() => normalizeProjectName('\t\n')).toThrow('Project name must not be empty.');
   });
 });
-

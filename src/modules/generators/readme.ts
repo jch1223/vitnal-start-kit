@@ -35,4 +35,3 @@ export const generateReadme = async (
   // README.md 파일로 저장
   await writeFile(outputPath, rendered, 'utf-8');
 };
-

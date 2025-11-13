@@ -20,4 +20,3 @@ export const resolveScaffoldPaths = (config: ResolvedConfig): ScaffoldPaths => {
     targetDir,
   };
 };
-

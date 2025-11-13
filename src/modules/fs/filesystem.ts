@@ -28,4 +28,3 @@ export const copyTemplateDirectory = async (
 ): Promise<void> => {
   await cp(sourceDir, targetDir, { recursive: true });
 };
-

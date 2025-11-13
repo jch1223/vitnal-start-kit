@@ -95,4 +95,3 @@ describe('resolveOptionalPackages', () => {
     expect(result.dependencies).toEqual(['@tanstack/react-query', 'zustand']);
   });
 });
-

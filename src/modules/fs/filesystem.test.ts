@@ -74,4 +74,3 @@ describe('copyTemplateDirectory', () => {
     expect(vol.existsSync('/target')).toBe(true);
   });
 });
-
