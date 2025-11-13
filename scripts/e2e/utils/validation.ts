@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import path from 'node:path';
 
 import { REQUIRED_FILES, TEST_PROJECT_DIR } from '@e2e/config';

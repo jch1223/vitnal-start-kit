@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import { TEST_PROJECT_DIR } from '@e2e/config';
 
 /**

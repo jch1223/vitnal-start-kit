@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import { PROJECT_ROOT, TEST_PROJECT_NAME } from '@e2e/config';
 import { safeEndStdin, safeWriteStdin } from '@e2e/utils/stream';
 
