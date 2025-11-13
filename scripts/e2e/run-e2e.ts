@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 import { execa } from 'execa';
 import fs from 'fs-extra';
@@ -197,3 +197,4 @@ runE2ETest().catch((error) => {
   console.error('E2E 테스트 실행 중 오류 발생:', error);
   process.exit(1);
 });
+

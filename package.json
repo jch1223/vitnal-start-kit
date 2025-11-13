@@ -23,7 +23,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "npx bun run --bun scripts/e2e/run-e2e.mjs",
+    "test:e2e": "bun run scripts/e2e/run-e2e.ts",
     "prepublishOnly": "npm run test && npm run lint"
   },
   "repository": {
