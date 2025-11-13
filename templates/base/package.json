@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "lint:fix": "npm run format:fix && npm run lint -- --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:storybook": "cross-env STORYBOOK_VITEST=true vitest run --project=storybook",

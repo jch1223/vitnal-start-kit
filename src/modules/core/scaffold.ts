@@ -1,13 +1,11 @@
 import ora from 'ora';
 
-import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from './filesystem';
-import { installOptionalDependencies } from './installer';
-import { updatePackageJsonMetadata } from './package-metadata';
-import { resolveScaffoldPaths } from './paths';
-import { generateReadme } from './readme';
-import { installAndInitializeTaskmaster } from './taskmaster';
-
-import type { ResolvedConfig } from '../types/config';
+import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs';
+import { updatePackageJsonMetadata, generateReadme } from '@/modules/generators';
+import { installOptionalDependencies } from '@/modules/install';
+import { installAndInitializeTaskmaster } from '@/modules/integrations';
+import { resolveScaffoldPaths } from '@/modules/utils';
+import type { ResolvedConfig } from '@/types/config';
 
 /**
  * `create-vitnal` 프로젝트 스캐폴딩 흐름을 총괄하는 함수입니다.

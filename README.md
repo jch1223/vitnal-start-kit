@@ -3,7 +3,6 @@
 > 빠르고 편리하게 React + TypeScript 프로젝트를 시작하세요
 
 [![npm version](https://img.shields.io/npm/v/create-vitnal-start-kit.svg)](https://www.npmjs.com/package/create-vitnal-start-kit)
-[![npm downloads](https://img.shields.io/npm/dm/create-vitnal-start-kit.svg)](https://www.npmjs.com/package/create-vitnal-start-kit)
 
 Vitnal Start Kit은 Vite 기반의 React + TypeScript 프로젝트를 몇 초 만에 생성할 수 있는 CLI 도구입니다. TailwindCSS, Vitest, Storybook 등이 포함된 opinionated한 기본 설정을 제공합니다.
 

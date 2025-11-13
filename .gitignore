@@ -10,6 +10,9 @@ dev-debug.log
 node_modules/
 dist/
 
+# Build outputs
+storybook-static/
+
 # Environment variables
 .env
 

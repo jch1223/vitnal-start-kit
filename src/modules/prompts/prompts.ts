@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 
-import type { ProjectOptions, StateManagementOption } from '../types/options';
+import type { ProjectOptions, StateManagementOption } from '@/types/options';
 
 type PromptAnswers = {
   reactQuery: boolean;
@@ -28,14 +28,18 @@ export const promptForOptions = async (): Promise<ProjectOptions> => {
       type: 'list',
       name: 'stateManagement',
       message: '어떤 클라이언트 상태 관리 라이브러리를 사용하시겠습니까?',
-      choices: ['None', 'Jotai', 'Zustand'],
-      default: 'None',
+      choices: [
+        { name: '없음', value: 'none' },
+        { name: 'Jotai', value: 'jotai' },
+        { name: 'Zustand', value: 'zustand' },
+      ],
+      default: 'none',
     },
     {
       type: 'confirm',
       name: 'taskmaster',
-      message: 'Taskmaster (AI 작업 관리 도구)를 자동으로 설치하고 초기화할까요?',
-      default: true,
+      message: 'Task Master AI를 사용하여 작업 관리를 하시겠습니까?',
+      default: false,
     },
   ]);
 

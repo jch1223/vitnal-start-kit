@@ -1,4 +1,4 @@
-import type { ProjectOptions } from './options';
+import type { ProjectOptions } from '@/types/options';
 
 export interface ResolvedConfig {
   projectName: string;
