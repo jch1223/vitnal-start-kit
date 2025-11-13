@@ -135,8 +135,9 @@ const runNpmCommands = async () => {
   }
   console.log('✓ npm run build 완료\n');
 
-  console.log('🧪 npm run test 실행 중...');
-  const testResult = await execa('npm', ['run', 'test'], {
+  // 기본 프로젝트만 실행 (Storybook 프로젝트는 CI에서 별도로 실행)
+  console.log('🧪 npm run test 실행 중... (기본 프로젝트만)');
+  const testResult = await execa('npm', ['run', 'test', '--', '--project=default'], {
     cwd: TEST_PROJECT_DIR,
     stdio: 'inherit',
   });
