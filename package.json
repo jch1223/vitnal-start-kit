@@ -13,17 +13,18 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "build": "bun bun.build.ts",
+    "build:tsc": "tsc",
+    "typecheck": "bun --bun tsc --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "npm run format:fix && npm run lint -- --fix",
     "format": "prettier --check \"src/**/*.ts\"",
     "format:fix": "prettier --write \"src/**/*.ts\"",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "npx bun run --bun scripts/e2e/run-e2e.ts",
+    "test": "bun x vitest run",
+    "test:watch": "bun x vitest",
+    "test:ui": "bun x vitest --ui",
+    "test:coverage": "bun x vitest run --coverage",
+    "test:e2e": "bun run --bun scripts/e2e/run-e2e.ts",
     "prepublishOnly": "npm run test && npm run lint"
   },
   "repository": {
