@@ -58,12 +58,12 @@ const validateProjectStructure = async () => {
 };
 
 /**
- * create-vitnal 명령을 실행하고 프롬프트에 자동으로 응답합니다.
+ * create-vitnal-start-kit 명령을 실행하고 프롬프트에 자동으로 응답합니다.
  */
 const runCreateCommand = async () => {
   console.log('🔨 프로젝트 생성 중...\n');
 
-  const cliProcess = execa('node', ['dist/cli.js', 'create', TEST_PROJECT_NAME], {
+  const cliProcess = execa('node', ['dist/cli.js', TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
     stdio: ['pipe', 'inherit', 'inherit'], // stdout/stderr는 실시간 출력하여 ora 스피너 표시
   });
@@ -156,7 +156,7 @@ const runE2ETest = async () => {
 
     console.log('✓ CLI 빌드 완료\n');
 
-    // 3. create-vitnal 명령 실행
+    // 3. create-vitnal-start-kit 명령 실행
     await runCreateCommand();
 
     // 4. 생성된 프로젝트 파일 구조 검증
