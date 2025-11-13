@@ -2,11 +2,11 @@
 
 > 빠르고 편리하게 React + TypeScript 프로젝트를 시작하세요
 
-[![npm version](https://img.shields.io/npm/v/create-vitnal-start-kit.svg)](https://www.npmjs.com/package/create-vitnal-start-kit)
+[![npm version](https://img.shields.io/npm/v/create-vsk.svg)](https://www.npmjs.com/package/create-vsk)
 
-Vitnal Start Kit은 Vite 기반의 React + TypeScript 프로젝트를 몇 초 만에 생성할 수 있는 CLI 도구입니다. TailwindCSS, Vitest, Storybook 등이 포함된 opinionated한 기본 설정을 제공합니다.
+Vitnal Start Kit (VSK)은 Vite 기반의 React + TypeScript 프로젝트를 몇 초 만에 생성할 수 있는 CLI 도구입니다. TailwindCSS, Vitest, Storybook 등이 포함된 opinionated한 기본 설정을 제공합니다.
 
-📦 [npm 패키지](https://www.npmjs.com/package/create-vitnal-start-kit) | 🐛 [이슈 리포트](https://github.com/jch1223/vitnal-start-kit/issues)
+📦 [npm 패키지](https://www.npmjs.com/package/create-vsk) | 🐛 [이슈 리포트](https://github.com/jch1223/vitnal-start-kit/issues)
 
 ## ✨ 주요 기능
 
@@ -23,13 +23,13 @@ Vitnal Start Kit은 Vite 기반의 React + TypeScript 프로젝트를 몇 초 �
 ### 설치
 
 ```bash
-npm create vitnal-start-kit@latest my-app
+npm create vsk@latest my-app
 ```
 
 또는
 
 ```bash
-npx create-vitnal-start-kit my-app
+npx create-vsk my-app
 ```
 
 ### 사용 방법
@@ -94,7 +94,7 @@ AI 기반 작업 관리 도구를 자동으로 설치하고 초기화합니다. 
 
 ## 📖 문서
 
-- [npm 패키지](https://www.npmjs.com/package/create-vitnal-start-kit)
+- [npm 패키지](https://www.npmjs.com/package/create-vsk)
 - [기여 가이드](./CONTRIBUTING.md)
 - [이슈 리포트](https://github.com/jch1223/vitnal-start-kit/issues)
 

@@ -58,7 +58,7 @@ const validateProjectStructure = async () => {
 };
 
 /**
- * create-vitnal-start-kit 명령을 실행하고 프롬프트에 자동으로 응답합니다.
+ * create-vsk 명령을 실행하고 프롬프트에 자동으로 응답합니다.
  */
 const runCreateCommand = async () => {
   console.log('🔨 프로젝트 생성 중...\n');
@@ -174,7 +174,7 @@ const runE2ETest = async () => {
 
     console.log('✓ CLI 빌드 완료\n');
 
-    // 3. create-vitnal-start-kit 명령 실행
+    // 3. create-vsk 명령 실행
     await runCreateCommand();
 
     // 4. 생성된 프로젝트 파일 구조 검증

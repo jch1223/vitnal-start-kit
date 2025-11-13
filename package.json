@@ -1,11 +1,11 @@
 {
-  "name": "create-vitnal-start-kit",
-  "version": "1.1.1",
+  "name": "create-vsk",
+  "version": "0.1.0",
   "description": "CLI to bootstrap a React + TypeScript project with opinionated defaults.",
   "type": "commonjs",
   "main": "dist/cli.js",
   "bin": {
-    "create-vitnal-start-kit": "dist/cli.js"
+    "create-vsk": "dist/cli.js"
   },
   "files": [
     "dist",

@@ -24,7 +24,7 @@ const executeCreateCommand = async (projectName: string): Promise<void> => {
 const program = new Command();
 
 program
-  .name('create-vitnal-start-kit')
+  .name('create-vsk')
   .description('Bootstrap a Vitnal React + TypeScript project with curated defaults.')
   .version(packageJson.version ?? '0.0.0')
   .argument('[project-name]', 'The name of the project directory to create')
@@ -36,8 +36,8 @@ program
       console.error('Error: Project name is required');
       console.error('');
       console.error('Usage:');
-      console.error('  npm create vitnal-start-kit@latest <project-name>');
-      console.error('  npx create-vitnal-start-kit <project-name>');
+      console.error('  npm create vsk@latest <project-name>');
+      console.error('  npx create-vsk <project-name>');
       process.exit(1);
     }
 
