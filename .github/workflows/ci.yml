@@ -12,21 +12,17 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
 
-    # 매트릭스 전략: 여러 Node.js 버전에서 테스트하여 호환성 확인
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
       # 저장소 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
       # Node.js 환경 설정 및 npm 캐시 활성화 (빌드 속도 향상)
-      - name: Setup Node.js ${{ matrix.node-version }}
+      # Node.js 20.x LTS 사용 (최신 안정 버전)
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20.x'
           cache: 'npm'
 
       # package-lock.json 기반으로 정확한 의존성 설치 (CI 환경에 적합)
