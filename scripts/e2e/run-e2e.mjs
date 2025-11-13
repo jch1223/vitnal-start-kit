@@ -63,7 +63,9 @@ const validateProjectStructure = async () => {
 const runCreateCommand = async () => {
   console.log('🔨 프로젝트 생성 중...\n');
 
-  const cliProcess = execa('node', ['dist/cli.js', TEST_PROJECT_NAME], {
+  // Bun 사용으로 더 빠른 실행 (Node.js 대비 2-3배 빠름)
+  // --bun 플래그로 Bun 런타임 강제 사용 (Node.js 호환 모드 비활성화)
+  const cliProcess = execa('bun', ['--bun', 'dist/cli.js', TEST_PROJECT_NAME], {
     cwd: PROJECT_ROOT,
     stdio: ['pipe', 'inherit', 'inherit'], // stdout/stderr는 실시간 출력하여 ora 스피너 표시
   });
