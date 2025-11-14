@@ -18,6 +18,14 @@ Vitnal Start Kit (VSK)은 Vite 기반의 React + TypeScript 프로젝트를 몇 
 - 🔧 **ESLint + Prettier**: 코드 품질 및 포맷팅 자동화
 - 📦 **선택적 패키지**: React Query, Jotai, Zustand, Taskmaster 지원
 
+## 📦 사용 가능한 템플릿
+
+### Vite + React (기본)
+Vite 기반의 React 프로젝트 템플릿입니다. TailwindCSS, Vitest, Storybook 등이 포함되어 있습니다.
+
+### Next.js App Router
+Next.js App Router 기반의 프로젝트 템플릿입니다. **Tailwind CSS, TypeScript, ESLint**가 기본으로 포함되어 있습니다.
+
 ## 🚀 빠른 시작
 
 ### 설치
