@@ -1,1 +1,1 @@
-export { promptForOptions } from '@/modules/prompts/prompts';
+export { promptForOptions } from '@/modules/prompts/prompts.js';

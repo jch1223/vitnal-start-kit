@@ -2,7 +2,7 @@
   "name": "create-vsk",
   "version": "0.1.0",
   "description": "CLI to bootstrap a React + TypeScript project with opinionated defaults.",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/cli.js",
   "bin": {
     "create-vsk": "dist/cli.js"
@@ -13,7 +13,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "npm run format:fix && npm run lint -- --fix",
@@ -60,6 +60,7 @@
     "eslint-plugin-import": "^2.32.0",
     "memfs": "^4.51.0",
     "prettier": "^3.6.2",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "vitest": "^4.0.8"
   },

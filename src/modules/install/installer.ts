@@ -1,8 +1,8 @@
 import ora from 'ora';
 
-import { resolveOptionalPackages } from '@/modules/install/dependencies';
-import { runCommand } from '@/modules/install/process';
-import type { ProjectOptions } from '@/types/options';
+import { resolveOptionalPackages } from '@/modules/install/dependencies.js';
+import { runCommand } from '@/modules/install/process.js';
+import type { ProjectOptions } from '@/types/options.js';
 
 /**
  * 사용자 선택 옵션에 따라 추가 패키지를 설치합니다.

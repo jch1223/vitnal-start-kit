@@ -1,6 +1,6 @@
 import ora from 'ora';
 
-import { runCommand } from '@/modules/install';
+import { runCommand } from '@/modules/install/index.js';
 
 /**
  * Taskmaster를 초기화합니다.
