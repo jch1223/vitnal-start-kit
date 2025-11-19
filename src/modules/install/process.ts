@@ -29,13 +29,21 @@ export const runCommand = (
       }
       reject(
         new Error(
-          `명령어 '${command} ${args.join(' ')}' 실행이 실패했습니다. (exit code: ${code})`,
+          `명령어 '${command} ${args.join(' ')}' 실행이 실패했습니다. (exit code: ${code})\n` +
+            `작업 디렉터리: ${options.cwd}\n` +
+            `패키지가 설치되지 않았거나 실행 파일을 찾을 수 없습니다.`,
         ),
       );
     });
 
     child.on('error', (error) => {
-      reject(error);
+      reject(
+        new Error(
+          `명령어 '${command} ${args.join(' ')}' 실행 중 오류 발생: ${error.message}\n` +
+            `작업 디렉터리: ${options.cwd}\n` +
+            `실행 파일을 찾을 수 없거나 권한 문제일 수 있습니다.`,
+        ),
+      );
     });
   });
 };
