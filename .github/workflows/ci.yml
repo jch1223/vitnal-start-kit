@@ -26,9 +26,11 @@ jobs:
           cache: 'npm'
 
       # 의존성 설치 (optional dependencies 포함)
-      # rollup의 네이티브 바이너리를 포함한 optional dependencies 설치
+      # npm 버그로 인한 rollup 네이티브 바이너리 누락 문제 해결을 위해
+      # package-lock.json과 node_modules 삭제 후 재설치
       - name: Install dependencies
         run: |
+          rm -rf node_modules package-lock.json
           npm install --include=optional
 
       # ESLint를 통한 코드 품질 검사
@@ -83,9 +85,11 @@ jobs:
             ${{ runner.os }}-bun-
 
       # 의존성 설치 (optional dependencies 포함)
-      # rollup의 네이티브 바이너리를 포함한 optional dependencies 설치
+      # npm 버그로 인한 rollup 네이티브 바이너리 누락 문제 해결을 위해
+      # package-lock.json과 node_modules 삭제 후 재설치
       - name: Install dependencies
         run: |
+          rm -rf node_modules package-lock.json
           npm install --include=optional
 
       # E2E 테스트 실행 (실제 프로젝트 생성 시나리오 검증)
