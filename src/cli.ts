@@ -2,12 +2,12 @@
 
 import { Command } from 'commander';
 
-import { createProject } from '@/modules/core';
-import { promptForOptions } from '@/modules/prompts';
-import { normalizeProjectName } from '@/modules/utils';
-import type { ResolvedConfig } from '@/types/config';
+import { createProject } from '@/modules/core/index.js';
+import { promptForOptions } from '@/modules/prompts/index.js';
+import { normalizeProjectName } from '@/modules/utils/index.js';
+import type { ResolvedConfig } from '@/types/config.js';
 
-import packageJson from '../package.json';
+import packageJson from '../package.json' with { type: 'json' };
 
 const executeCreateCommand = async (projectName: string): Promise<void> => {
   const normalizedName = normalizeProjectName(projectName);
