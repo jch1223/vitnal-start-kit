@@ -20,15 +20,16 @@ export const installAndInitializeTaskmaster = async (targetDir: string): Promise
     process.env.VITEST === 'true' ||
     process.env.E2E_TEST === 'true';
 
-  const initArgs = isNonInteractive
-    ? ['task-master', 'init', '--yes'] // E2E 테스트: 비대화형 모드
-    : ['task-master', 'init']; // 일반 사용자: 대화형 프롬프트
-
   // 비대화형 모드일 때만 스피너 사용 (대화형 모드에서는 프롬프트가 보여야 함)
   const spinner = isNonInteractive ? ora('Taskmaster 초기 설정을 진행합니다...').start() : null;
 
   try {
-    // npx는 로컬에 설치된 패키지를 우선 사용하므로, 설치 후 바로 실행 가능
+    // npx --package를 사용하여 명시적으로 task-master-ai 패키지 지정
+    // 이렇게 하면 npm의 실행 파일 해석 문제를 방지할 수 있습니다
+    const initArgs = isNonInteractive
+      ? ['--package', 'task-master-ai', 'task-master', 'init', '--yes'] // E2E 테스트: 비대화형 모드
+      : ['--package', 'task-master-ai', 'task-master', 'init']; // 일반 사용자: 대화형 프롬프트
+
     await runCommand('npx', initArgs, { cwd: targetDir });
 
     if (spinner) {
