@@ -1,11 +1,17 @@
 name: Publish
 
-# Publish 워크플로우: GitHub Releases 생성 시에만 실행
-# GitHub에서 Releases를 생성하면 자동으로 npm에 배포됩니다
-# 방법: GitHub 저장소 → Releases → "Draft a new release" → 태그 선택 및 릴리스 노트 작성 → "Publish release"
+# Publish 워크플로우: 태그 푸시 또는 GitHub Releases 생성 시 실행
+# 방법 1 (권장): 메인 브랜치에서 직접 태그 푸시
+#   git tag v1.0.0
+#   git push origin v1.0.0
+# 방법 2: GitHub Releases 생성
+#   GitHub 저장소 → Releases → "Draft a new release" → 태그 선택 및 릴리스 노트 작성 → "Publish release"
 on:
+  push:
+    tags:
+      - '*.*.*' # v1.0.0, v1.2.3 등의 시맨틱 버저닝 태그
   release:
-    types: [published] # GitHub Releases가 생성될 때만 실행
+    types: [published] # GitHub Releases가 생성될 때도 실행
 
 jobs:
   test:
@@ -121,15 +127,24 @@ jobs:
 
     steps:
       # 저장소 코드 체크아웃 (package.json, templates, README.md 등 필요)
+      # 태그 푸시 이벤트인 경우 해당 태그를 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || github.ref }}
 
-      # GitHub Release에서 버전 추출 및 package.json 업데이트
-      - name: Extract version from release
+      # 태그에서 버전 추출 및 package.json 업데이트
+      - name: Extract version from tag
         id: extract_version
         run: |
-          # GitHub Releases에서 태그 이름 가져오기
-          VERSION="${{ github.event.release.tag_name }}"
+          # 태그 푸시 이벤트인 경우 github.ref 사용 (refs/tags/v1.0.0)
+          # GitHub Releases 이벤트인 경우 github.event.release.tag_name 사용
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            # refs/tags/v1.0.0 -> v1.0.0
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
           # 'v' 접두사가 있으면 제거, 없으면 그대로 유지 (v1.0.1 -> 1.0.1, 1.0.1 -> 1.0.1)
           VERSION="${VERSION#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -150,9 +165,12 @@ jobs:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Clean install dependencies
+        run: rm -rf node_modules package-lock.json && npm install
+
       # 의존성 설치 (prepublishOnly 스크립트 실행을 위해 필요)
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       # build job에서 생성한 빌드 결과물 다운로드
       - name: Download build artifacts
