@@ -57,7 +57,7 @@ module.exports = [
           pathGroupsExcludedImportTypes: ['builtin'],
         },
       ],
-      'import/no-unresolved': 'error',
+      'import/no-unresolved': ['error', { caseSensitive: false }],
     },
   },
 ];
