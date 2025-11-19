@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 'lts/*'
           cache: 'npm'
 
         # package-lock.json 삭제 후 의존성 설치
@@ -56,7 +56,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 'lts/*'
           cache: 'npm'
 
       # Bun 설치 (E2E 테스트 속도 향상을 위해 사용)
@@ -100,7 +100,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 'lts/*'
           cache: 'npm'
 
       # 의존성 설치
@@ -162,7 +162,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 'lts/*'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Clean install dependencies
