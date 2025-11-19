@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeProjectName } from '@/modules/utils/normalize-project-name';
+import { normalizeProjectName } from '@/modules/utils/normalize-project-name.js';
 
 describe('normalizeProjectName', () => {
   it('정상적인 프로젝트 이름을 반환해야 합니다', () => {

@@ -1,1 +1,1 @@
-export { createProject } from '@/modules/core/scaffold';
+export { createProject } from '@/modules/core/scaffold.js';

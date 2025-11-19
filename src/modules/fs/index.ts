@@ -1,1 +1,1 @@
-export { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs/filesystem';
+export { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs/filesystem.js';

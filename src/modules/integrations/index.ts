@@ -1,1 +1,1 @@
-export { installAndInitializeTaskmaster } from '@/modules/integrations/taskmaster';
+export { installAndInitializeTaskmaster } from '@/modules/integrations/taskmaster.js';
