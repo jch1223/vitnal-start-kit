@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 
-import type { ProjectOptions, StateManagementOption } from '@/types/options';
+import type { ProjectOptions, StateManagementOption } from '@/types/options.js';
 
 type PromptAnswers = {
   reactQuery: boolean;

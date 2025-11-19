@@ -1,7 +1,7 @@
 import { vol } from 'memfs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs/filesystem';
+import { copyTemplateDirectory, ensureTargetDirectoryAvailable } from '@/modules/fs/filesystem.js';
 
 // memfs를 사용하여 파일 시스템 모킹
 vi.mock('node:fs/promises', async () => {

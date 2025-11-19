@@ -1,4 +1,4 @@
-import type { ProjectOptions } from '@/types/options';
+import type { ProjectOptions } from '@/types/options.js';
 
 export interface DependencyBuckets {
   dependencies: string[];

@@ -1,7 +1,10 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import type { ResolvedConfig } from '@/types/config';
+import type { ResolvedConfig } from '@/types/config.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const TEMPLATE_BASE_DIR = path.resolve(__dirname, '..', '..', '..', 'templates', 'base');
 
 export interface ScaffoldPaths {

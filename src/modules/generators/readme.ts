@@ -1,9 +1,10 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { render } from 'ejs';
 
-import type { ProjectOptions } from '@/types/options';
+import type { ProjectOptions } from '@/types/options.js';
 
 interface ReadmeData {
   projectName: string;
@@ -18,6 +19,8 @@ export const generateReadme = async (
   projectName: string,
   options: ProjectOptions,
 ): Promise<void> => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   const templatePath = path.resolve(__dirname, '..', '..', '..', 'templates', 'README.template.md');
   const outputPath = path.join(targetDir, 'README.md');
 

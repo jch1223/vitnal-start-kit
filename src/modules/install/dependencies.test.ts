@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveOptionalPackages } from '@/modules/install/dependencies';
-import type { ProjectOptions } from '@/types/options';
+import { resolveOptionalPackages } from '@/modules/install/dependencies.js';
+import type { ProjectOptions } from '@/types/options.js';
 
 describe('resolveOptionalPackages', () => {
   it('옵션이 없으면 빈 배열을 반환해야 합니다', () => {

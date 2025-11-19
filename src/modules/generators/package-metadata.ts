@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import type { ResolvedConfig } from '@/types/config';
+import type { ResolvedConfig } from '@/types/config.js';
 
 interface PackageJson {
   name?: string;
