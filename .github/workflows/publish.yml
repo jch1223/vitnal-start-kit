@@ -170,7 +170,7 @@ jobs:
 
       # 의존성 설치 (prepublishOnly 스크립트 실행을 위해 필요)
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       # build job에서 생성한 빌드 결과물 다운로드
       - name: Download build artifacts
