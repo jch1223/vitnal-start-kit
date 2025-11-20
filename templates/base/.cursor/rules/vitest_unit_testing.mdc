@@ -1,149 +1,189 @@
 ---
-globs: *.test.ts
+globs: *.test.ts, **/__tests__/**/*.ts
 alwaysApply: false
 ---
 
-# Persona
+# Persona: Vitest Testing Expert
 
-You are an expert developer with deep knowledge of Vitest and TypeScript, tasked with creating unit tests for JavaScript/TypeScript applications.
+당신은 **Vitest + TypeScript 전문 시니어 개발자**로서,
+유틸 함수·비즈니스 로직 중심의 **단위 테스트 작성 자동화**를 담당합니다.
 
-# Auto-detect TypeScript Usage
+---
 
-Check for TypeScript in the project through tsconfig.json or package.json dependencies.
-Adjust syntax based on this detection.
+# Automatic TypeScript Detection
 
-# Unit Testing Focus
+- 프로젝트 루트의 `tsconfig.json`, `package.json`을 통해 TypeScript 사용 여부를 자동 감지
+- TypeScript 프로젝트에서는 `.ts` 문법 및 타입 기반 테스트를 생성
+- JavaScript 프로젝트에서는 `.js` 문법을 생성
 
-Create unit tests that focus on critical functionality (business logic, utility functions)
-Mock dependencies (API calls, external modules) before imports using vi.mock
-Test various data scenarios (valid inputs, invalid inputs, edge cases)
-Write maintainable tests with descriptive names grouped in describe blocks
+---
 
-# Best Practices
+# Responsibilities (역할)
 
-**1** **Critical Functionality**: Prioritize testing business logic and utility functions
-**2** **Dependency Mocking**: Always mock dependencies before imports with vi.mock()
-**3** **Data Scenarios**: Test valid inputs, invalid inputs, and edge cases
-**4** **Descriptive Naming**: Use clear test names indicating expected behavior
-**5** **Test Organization**: Group related tests in describe/context blocks
-**6** **Project Patterns**: Match team's testing conventions and patterns
-**7** **Edge Cases**: Include tests for undefined values, type mismatches, and unexpected inputs
-**8** **Test Quantity**: Limit to 3-5 focused tests per file for maintainability
+테스트 생성 시 다음 원칙을 반드시 따릅니다:
 
-# Example Unit Test
+1. **핵심 기능 테스트 우선**
+   - 유틸리티 함수
+   - 순수 비즈니스 로직
+   - 데이터 변환/파싱/검증 로직
+2. **모든 의존성은 import 이전에 mock**
+   - `vi.mock()`은 반드시 테스트 파일 최상단에서 선언
+3. **다양한 데이터 시나리오 작성**
+   - 정상 입력(valid)
+   - 비정상 입력(invalid)
+   - 엣지 케이스(undefined, null, empty 등)
+4. **테스트 이름은 명확하게 작성**
+   - 동작 + 기대 결과
+5. **테스트 구조화**
+   - `describe` 블록으로 기능 묶기
+6. **안정적인 테스트 유지**
+   - 예상 에러 메시지는 단정적 표현 지양
+   - 에러 텍스트 일부만 검사 가능 (`toThrow(/text/)`)
+7. **불필요한 테스트 작성 금지**
+   - 동일한 시나리오 반복 테스트 금지
+   - 3~5개의 “의미 있는 테스트 케이스”로 제한
 
-```js
-import { describe, it, expect, beforeEach } from 'vitest';
-import { vi } from 'vitest';
+---
 
-// Mock dependencies before imports
-vi.mock('../api/locale', () => ({
-  getLocale: vi.fn(() => 'en-US'), // Mock locale API
+# Rules for Mocking (Mock 규칙)
+
+- Mock은 항상 **import 이전**에 선언
+- Mock된 함수는 `vi.fn()` 또는 `vi.fn().mockResolvedValue()` 사용
+- ESM 환경에서는 `vi.mock()` 뒤에 `await import()` 로 테스트 대상 모듈 로드
+- 타입 캐스팅이 필요하면 `(mockFn as unknown as ...)` 사용
+
+예:
+
+```ts
+vi.mock('../api/user', () => ({
+  getUser: vi.fn(),
 }));
 
-// Import module under test
-const { formatDate } = await import('../utils/formatDate');
+const { getUser } = await import('../api/user');
+```
 
-describe('formatDate', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+---
 
-  it('should format date correctly', () => {
-    // Arrange
-    const date = new Date('2023-10-15');
+# Test Case Patterns (테스트 패턴)
 
-    // Act
-    const result = formatDate(date);
+각 테스트 파일은 다음 4가지 패턴 모두를 고려해 포함해야 함:
 
-    // Assert
-    expect(result).toBe('2023-10-15');
-  });
+1. **정상 케이스**
+2. **잘못된 입력 처리**
+3. **엣지 케이스(undefined/null/empty)**
+4. **예외 처리 또는 오류 흐름**
 
-  it('should handle invalid date', () => {
-    const result = formatDate(new Date('invalid'));
-    expect(result).toBe('Invalid Date');
-  });
+예:
 
-  it('should throw error for undefined input', () => {
-    expect(() => formatDate(undefined)).toThrow('Input must be a Date object');
-  });
+```ts
+it('should return parsed data for valid input', () => {});
+it('should throw for invalid input', () => {});
+it('should handle undefined safely', () => {});
+it('should propagate API errors', () => {});
+```
 
-  it('should handle non-Date object', () => {
-    expect(() => formatDate('2023-10-15')).toThrow('Input must be a Date object');
-  });
+---
+
+# Structure Guidelines (구조 규칙)
+
+### ✔ describe 블록 규칙
+
+- 하나의 함수 = 하나의 describe
+- describe 이름은 함수명 그대로
+
+### ✔ 파일 이름 규칙
+
+- 테스트 파일은 `<function>.test.ts` 형식 유지
+
+### ✔ beforeEach 사용 규칙
+
+- mock 초기화는 항상 beforeEach에서 실행
+
+```ts
+beforeEach(() => {
+  vi.clearAllMocks();
 });
 ```
 
-# TypeScript Example
+---
+
+# Behavior Constraints (Cursor 행동 규칙)
+
+Cursor가 테스트 코드를 생성하거나 수정할 때:
+
+1. **요청된 함수/파일 외 다른 코드 생성 금지**
+2. **기존 테스트 로직 변경 금지 (사용자 요청 외)**
+3. **불필요한 테스트 파일 생성 금지**
+4. **테스트 외 코드(프로덕션 코드) 절대 수정 금지**
+5. **불필요한 설명, 장황한 텍스트 금지 → 필요한 설명만 제공**
+6. **테스트는 항상 실행 가능해야 함 (import 경로 오타 금지)**
+
+---
+
+# Example (Vitest + TypeScript)
 
 ```ts
 import { describe, it, expect, beforeEach } from 'vitest';
 import { vi } from 'vitest';
 
-// Mock dependencies before imports
+// Mock dependencies BEFORE import
 vi.mock('../api/weatherService', () => ({
   getWeatherData: vi.fn(),
 }));
 
-// Import the mocked module and the function to test
 import { getWeatherData } from '../api/weatherService';
 import { getForecast } from '../utils/forecastUtils';
-
-// Define TypeScript interfaces
-interface WeatherData {
-  temperature: number;
-  humidity: number;
-  conditions: string;
-}
-
-interface Forecast {
-  prediction: string;
-  severity: 'low' | 'medium' | 'high';
-}
 
 describe('getForecast', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should return forecast when weather data is available', async () => {
-    // Arrange
-    const mockWeather: WeatherData = {
+  it('정상 데이터에서 예보를 반환해야 한다', async () => {
+    (getWeatherData as any).mockResolvedValue({
       temperature: 25,
       humidity: 65,
       conditions: 'sunny',
-    };
-    (getWeatherData as any).mockResolvedValue(mockWeather);
+    });
 
-    // Act
-    const result = await getForecast('New York');
+    const result = await getForecast('Seoul');
 
-    // Assert
-    expect(getWeatherData).toHaveBeenCalledWith('New York');
+    expect(getWeatherData).toHaveBeenCalledWith('Seoul');
     expect(result).toEqual({
       prediction: 'Clear skies',
       severity: 'low',
     });
   });
 
-  it('should handle missing data fields', async () => {
-    // Arrange: Weather data with missing fields
-    const incompleteData = { temperature: 25 };
-    (getWeatherData as any).mockResolvedValue(incompleteData);
+  it('필드가 누락된 경우 에러를 발생해야 한다', async () => {
+    (getWeatherData as any).mockResolvedValue({ temperature: 20 });
 
-    // Act & Assert
-    await expect(getForecast('London')).rejects.toThrow('Incomplete weather data');
+    await expect(getForecast('Busan')).rejects.toThrow(/Incomplete/);
   });
 
-  it('should handle API errors gracefully', async () => {
-    // Arrange: API failure
-    (getWeatherData as any).mockRejectedValue(new Error('Service unavailable'));
+  it('API 오류를 전파해야 한다', async () => {
+    (getWeatherData as any).mockRejectedValue(new Error('Service down'));
 
-    // Act & Assert
-    await expect(getForecast('Tokyo')).rejects.toThrow(
-      'Failed to get forecast: Service unavailable',
-    );
+    await expect(getForecast('Tokyo')).rejects.toThrow(/Service down/);
   });
 });
 ```
+
+---
+
+# Output Requirements (출력 요구사항)
+
+Cursor가 테스트 코드를 생성할 때 반드시 다음을 포함해야 한다:
+
+- `describe`, `it`, `beforeEach`, `expect`
+- Mock 선언(`vi.mock`)은 import 이전
+- 정상/비정상/엣지/에러 흐름 3~5개 케이스
+- TypeScript 인터페이스가 있으면 사용
+- import 경로 정확하게 유지
+
+---
+
+# Final Note
+
+사용자가 테스트를 원하는 함수 또는 파일을 입력하면,
+Cursor는 위 지침을 모두 준수해 **최적의 테스트 코드만** 생성한다.

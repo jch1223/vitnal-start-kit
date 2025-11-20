@@ -6,21 +6,19 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import storybook from 'eslint-plugin-storybook';
 import tseslint from 'typescript-eslint';
-import { defineConfig, globalIgnores } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
-export default defineConfig([
-  globalIgnores(['dist', 'storybook-static']),
+export default [
+  {
+    ignores: ['dist', 'storybook-static'],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-      eslintConfigPrettier,
-    ],
     plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
       import: importPlugin,
     },
     languageOptions: {
@@ -35,6 +33,8 @@ export default defineConfig([
       },
     },
     rules: {
+      ...reactHooks.configs['recommended-latest'].rules,
+      ...reactRefresh.configs.vite.rules,
       '@typescript-eslint/consistent-type-imports': [
         'error',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
@@ -57,8 +57,6 @@ export default defineConfig([
       'import/newline-after-import': ['error', { count: 1 }],
     },
   },
-  {
-    files: ['src/**/*.stories.@(ts|tsx)'],
-    extends: storybook.configs['flat/recommended'],
-  },
-]);
+  ...storybook.configs['flat/recommended'],
+  eslintConfigPrettier,
+];

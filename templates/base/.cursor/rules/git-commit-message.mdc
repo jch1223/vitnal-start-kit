@@ -1,76 +1,75 @@
 ---
-description: Rule to suggest a Conventional Commit message along with a work summary when completing a task in Task Master.
+description: Task Master에서 작업을 완료할 때 작업 요약과 함께 표준 커밋 메시지를 제안하는 규칙.
 globs: **/*
 ---
 
-# Task Master Completion & Commit Strategy
+# 커밋 전략
 
-When completing a task using `task-master-ai` (`complete_task`) or wrapping up a unit of work, you must follow this procedure and format.
+`task-master-ai`(`complete_task`)를 사용하여 작업을 완료하거나 작업 단위를 마무리할 때는 반드시 다음 절차와 형식을 따라야 합니다.
 
-## 1. Trigger Condition
+## 1. 트리거 조건
 
-This rule activates when:
+이 규칙은 다음 조건에서 활성화됩니다:
 
-- The `complete_task` function of the `task_master` tool is called.
-- The user requests a midpoint check or finalization of a task currently managed by Task Master.
+- `task_master` 도구의 `complete_task` 함수가 호출될 때.
+- 사용자가 태스크 마스터가 현재 관리 중인 태스크의 중간 점검 또는 최종 완료를 요청할 때.
 
-## 2. Analysis Process
+## 2. 분석 프로세스
 
-1.  **Task Context**: Check the title and description of the completed task.
-2.  **Code Changes**: Analyze the actual files and logic modified while performing the task.
-3.  **Commit Type**: Determine the commit type based on the nature of the changes (`feat`, `fix`, `refactor`, `chore`, etc.).
+1.  **태스크 컨텍스트**: 완료된 태스크의 제목과 설명을 확인합니다.
+2.  **코드 변경 사항**: 작업 수행 중 수정된 실제 파일 및 로직을 분석합니다.
+3.  **커밋 유형**: 변경 사항의 성격(`feat`, `fix`, `refactor`, `chore` 등)에 따라 커밋 유형을 결정합니다.
 
-## 3. Response Format
+## 3. 응답 형식
 
-Use the following template when reporting task completion:
+작업 완료 보고 시 다음 템플릿을 사용하십시오:
 
-### ✅ Task Completed: [Task ID/Name]
+### ✅ 작업 완료: [작업 ID/이름]
 
-> _A brief statement confirming the successful completion of the task._
+> _작업의 성공적인 완료를 확인하는 간결한 진술._
 
-### 📝 Work Summary
+### 📝 작업 요약
 
-- **[Key Change 1]**: (e.g., Implemented `UserProfile` component UI)
-- **[Key Change 2]**: (e.g., Added API integration and error handling)
-  _(Summarize by mapping Task Master's detailed requirements to the actual code changes)_
+- **[주요 변경점 1]**: (예: `UserProfile` 컴포넌트 UI 구현)
+- **[주요 변경점 2]**: (예: API 통합 및 오류 처리 추가)
+  _(태스크 마스터의 상세 요구사항을 실제 코드 변경 사항에 매핑하여 요약)_
 
-### 🚀 Recommended Commit
+### 🚀 권장 커밋
 
 ```bash
 git add .
 git commit -m "type(scope): description"
 ```
 
-## 4\. Commit Message Guidelines
+## 4\. 커밋 메시지 가이드라인
 
-- **Type**:
-  - `feat`: New features (when adding functionality in Task Master)
-  - `fix`: Bug fixes
-  - `refactor`: Code structure improvements without functional changes
-  - `chore`: Configuration changes, package installation, etc.
-- **Scope**: The Task Master task name or affected module name (e.g., `auth`, `ui`, `api`)
-- **Description**: Concisely describe "what" and "why" (in English or the project's language convention).
+- **유형**:
+  - `feat`: 신규 기능 (Task Master에 기능 추가 시)
+  - `fix`: 버그 수정
+  - `refactor`: 기능 변경 없이 코드 구조 개선
+  - `chore`: 설정 변경, 패키지 설치 등
+- **범위**: 태스크 마스터 태스크명 또는 영향받는 모듈명 (예: `auth`, `ui`, `api`)
+- **설명**: “무엇을”과 “왜”를 간결하게 기술 (영어 또는 프로젝트 언어 관례에 따름).
 
-## 5\. Example
+## 5\. 예시
 
-**User**: "Finished the login UI work. Mark it as complete."
+**사용자**: “로그인 UI 작업 완료. 완료로 표시해 주세요.”
+**AI 응답**:
+(`complete_task` 호출 후)
 
-**AI Response**:
-(After calling `complete_task`)
+### ✅ 작업 완료: 로그인 UI 구현
 
-### ✅ Task Completed: Implement Login UI
+로그인 화면 게시 및 양식 검증 로직 구현 완료.
 
-Login screen publishing and form validation logic implementation are complete.
+### 📝 작업 요약
 
-### 📝 Work Summary
+- **LoginPage.tsx**: 이메일/비밀번호 입력 양식 UI 구현 (Tailwind 적용).
+- **useLoginForm.ts**: React Hook Form + Zod 검증 로직 추가.
+- **routes.ts**: 로그인 페이지 라우팅 구성.
 
-- **LoginPage.tsx**: Implemented email/password input form UI (Applied Tailwind).
-- **useLoginForm.ts**: Added React Hook Form + Zod validation logic.
-- **routes.ts**: Configured routing for the login page.
-
-### 🚀 Recommended Commit
+### 🚀 권장 커밋
 
 ```bash
 git add .
-git commit -m "feat(auth): implement login ui and validation"
+git commit -m "feat: 로그인 UI 및 검증 구현"
 ```

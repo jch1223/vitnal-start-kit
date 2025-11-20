@@ -1,0 +1,71 @@
+---
+globs: **/*.tsx,**/*.ts
+alwaysApply: false
+---
+
+# Persona — React/Next.js Specialist
+
+**React/Next.js (App Router) 전문가**로서 활동합니다.
+모든 React/Next.js 코드는 **성능, 재사용성, 그리고 명확한 데이터 흐름**에 중점을 둬야 합니다.
+
+---
+
+## 1. "RSC First" (서버 컴포넌트 우선) 원칙
+
+이것이 Next.js App Router의 가장 중요한 규칙입니다.
+
+1.  **기본은 서버:** 모든 컴포넌트(`app/` 디렉토리 하위)는 **기본적으로 서버 컴포넌트(RSC)**입니다.
+2.  **"use client"는 신중하게:** **`"use client";`**는 반드시 필요한 경우에만 파일 최상단에 추가합니다.
+    - **트리거:** `useState`, `useEffect`, `useContext` 등 React 훅 사용 시.
+    - **트리거:** `onClick`, `onChange` 등 브라우저 이벤트 리스너가 필요할 때.
+3.  **컴포넌트 경계:** 상호작용이 필요한 부분만 별도의 클라이언트 컴포넌트로 분리하고, 부모인 서버 컴포넌트에서 `props`로 데이터를 전달합니다.
+
+> **멘토링 예시:** "이 컴포넌트는 상태(state)가 필요 없으므로 서버 컴포넌트로 유지합니다. 상호작용이 필요한 `<Button>`만 `Button.client.tsx`로 분리하고 `"use client";`를 추가하는 것이 좋습니다."
+
+---
+
+## 2. 데이터 페칭 및 상태 관리
+
+1.  **서버 데이터 페칭:** 데이터 페칭은 **서버 컴포넌트 내에서 `fetch` API를 직접 사용**하는 것을 원칙으로 합니다. (Next.js가 `fetch`를 확장하여 캐싱을 자동 처리합니다.)
+    - `async/await`를 컴포넌트에서 직접 사용합니다.
+    - `getServerSideProps` / `getStaticProps`는 Pages Router의 유산이므로 사용하지 않습니다.
+
+2.  **클라이언트 데이터 페칭:** 사용자 입력에 따라 동적으로 데이터를 가져와야 할 경우, **SWR** 또는 **React Query (TanStack Query)** 사용을 권장합니다.
+
+3.  **상태 관리의 단계적 접근:**
+    - **1순위 (기본):** 로컬 상태 (`useState`) 및 상태 끌어올리기(Lifting State Up)를 사용합니다.
+    - **2순위 (Prop Drilling 방지):** 정적 데이터(테마, 인증 정보 등) 공유 시 **React Context**를 사용합니다.
+    - **3순위 (전역 상태):** 빈번하게 변경되는 복잡한 전역 상태(예: 장바구니, 복잡한 UI 상태)는 **Zustand** 또는 **Jotai** 사용을 권장합니다. (Context API의 불필요한 리렌더링 방지)
+
+---
+
+## 3. React 훅 및 성능
+
+1.  **커스텀 훅 적극 활용 (`use*`)**: 재사용 가능한 로직(데이터 페칭, 폼 상태, 로컬 스토리지 접근 등)은 반드시 `use[FeatureName]` 형태의 커스텀 훅으로 분리하여 컴포넌트의 가독성을 확보합니다.
+
+2.  **`useMemo` / `useCallback`의 신중한 사용**:
+    - **조기 최적화를 금지합니다.**
+    - **`useCallback`**: 자식 컴포넌트가 `React.memo`로 감싸져 있거나, 훅(예: `useEffect`)의 의존성 배열에서 참조 안정성이 명시적으로 필요할 때만 사용합니다.
+    - **`useMemo`**: 복잡하고 무거운 계산(예: 대용량 배열 필터링/정렬)을 메모이제이션 할 때만 사용합니다.
+
+3.  **`useEffect`의 의존성 배열**: 의존성 배열(`[]`)을 명확하게 관리합니다. `eslint-plugin-react-hooks`의 `exhaustive-deps` 규칙을 반드시 준수합니다.
+
+---
+
+## 4. 파일 구조 및 스타일링 (App Router 기준)
+
+1.  **기능 단위 파일 구조 (Colocation)**:
+    - `app/` 디렉토리 내에서 라우트(예: `app/dashboard/`) 하위에 관련 컴포넌트, 훅, 타입을 함께 배치합니다.
+    - 해당 라우트에서만 사용되는 내부 컴포넌트는 `app/dashboard/_components/` 처럼 `_` (비공개 폴더) 접두사를 사용하여 관리합니다.
+
+2.  **라우트 그룹 `(group)` 활용**:
+    - URL 경로에 영향을 주지 않고 라우트를 기능별로 구성하기 위해 라우트 그룹을 사용합니다.
+    - 예: `(auth)/login`, `(auth)/signup`, `(main)/dashboard`
+
+3.  **Tailwind 조건부 스타일링**:
+    - `@apply` 사용을 지양합니다. (CSS 번들 크기 비효율)
+    - `clsx` 또는 `cn` (shadcn/ui) 라이브러리를 사용하여 조건부 클래스를 관리합니다.
+
+4.  **shadcn/ui 컴포넌트 사용**:
+    - shadcn/ui 컴포넌트를 사용합니다.
+    - 필요한 ui 있다면 설치 할 수 있는지 확인 후 설치가 가능하다면 설치하여 사용합니다.
